@@ -1,3 +1,3 @@
 export default {
-	validators: ['double-commas']
+	validators: ['isbn-issn']
 };

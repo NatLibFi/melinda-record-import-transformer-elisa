@@ -35,7 +35,7 @@
 	"dependencies": {
 		"marc-record-js": "https://github.com/natlibfi-arlehiko/marc-record-js",
 		"marc-record-serializers": "https://github.com/natlibfi/marc-record-serializers#feature-to-aleph-sequential",
-		"@natlibfi/marc-record-validators-melinda": "^2.0.0",
+		"@natlibfi/marc-record-validators-melinda": "^2.1.0",
 		"@natlibfi/melinda-record-import-commons": "^1.1.3"
 	},
 	"devDependencies": {

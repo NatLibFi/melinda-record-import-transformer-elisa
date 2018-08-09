@@ -1,6 +1,8 @@
 # Elisa record transformer for the Melinda record batch import system  [![Build Status](https://travis-ci.org/NatLibFi/melinda-record-import-transformer-elisa.svg)](https://travis-ci.org/NatLibFi/melinda-record-import-transformer-elisa) [![Test Coverage](https://codeclimate.com/github/NatLibFi/melinda-record-import-transformer-elisa/badges/coverage.svg)](https://codeclimate.com/github/NatLibFi/melinda-record-import-transformer-elisa/coverage)
 
-Elisa record transformer for the Melinda record batch import system. Consumes records as represented by Helmet's [Sierra ILS](https://sandbox.iii.com/iii/sierra-api/swagger/index.html)
+Elisa record transformer for the Melinda record batch import system. Consumes records in ONIX for Books version 3 format.
+
+**Requires [melinda-elisa-ellibs-eresource-scripts](https://github.com/NatLibFi/melinda-elisa-ellibs-eresource-scripts) for conversion!**
 
 ## License and copyright
 
