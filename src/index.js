@@ -33,7 +33,6 @@ import os from 'os';
 import fs from 'fs';
 import path from 'path';
 import {spawn} from 'child_process';
-import MarcRecord from 'marc-record-js';
 import {MARCXML} from 'marc-record-serializers';
 import validateFactory from '@natlibfi/marc-record-validators-melinda';
 import {CommonUtils, TransformerUtils as Utils} from '@natlibfi/melinda-record-import-commons';
@@ -85,7 +84,7 @@ async function start() {
 				const tempFile = path.resolve(os.tmpdir(), Date.now().toString());
 
 				fs.writeFileSync(tempFile, data);
-				
+
 				const proc = spawn(process.env.CONVERSION_SCRIPT_PATH, ['-M', '-f', tempFile]);
 				const recordStream = new MARCXML.Reader(proc.stdout);
 
@@ -98,7 +97,7 @@ async function start() {
 						fs.unlinkSync(tempFile);
 					}
 
-					resolve(records)
+					resolve(records);
 				});
 
 				function handleError(err) {
