@@ -29,19 +29,12 @@
 
 'use strict';
 
-import os from 'os';
-import fs from 'fs';
-import path from 'path';
-import {spawn} from 'child_process';
-import {MARCXML} from 'marc-record-serializers';
-import validateFactory from '@natlibfi/marc-record-validators-melinda';
+import {transformCallback as transform} from './functions';
 import {CommonUtils, TransformerUtils as Utils} from '@natlibfi/melinda-record-import-commons';
-import config from './config';
 
 start();
 
 async function start() {
-	let validate;
 	const logger = Utils.createLogger();
 
 	Utils.registerSignalHandlers();
@@ -51,8 +44,6 @@ async function start() {
 	const stopHealthCheckService = Utils.startHealthCheckService(process.env.HEALTH_CHECK_PORT);
 
 	try {
-		validate = validateFactory(config.validators);
-
 		await Utils.startTransformation(transform);
 		stopHealthCheckService();
 		process.exit();
@@ -60,54 +51,5 @@ async function start() {
 		stopHealthCheckService();
 		logger.error(err);
 		process.exit(-1);
-	}
-
-	async function transform(response) {
-		const data = await response.text();
-		const records = await parseData(data);
-		const validationResults = await Promise.all(records.map(r => validate(r, {
-			fix: true,
-			validateFixes: true
-		})));
-
-		return records.reduce((acc, record, index) => {
-			return acc.concat({
-				record,
-				failed: validationResults[index].failed,
-				messages: validationResults[index].validators
-			});
-		}, []);
-
-		async function parseData(data) {
-			return new Promise((resolve, reject) => {
-				const records = [];
-				const tempFile = path.resolve(os.tmpdir(), Date.now().toString());
-
-				fs.writeFileSync(tempFile, data);
-
-				const proc = spawn(process.env.CONVERSION_SCRIPT_PATH, ['-M', '-f', tempFile]);
-				const recordStream = new MARCXML.Reader(proc.stdout);
-
-				proc.on('error', handleError);
-
-				recordStream.on('error', handleError);
-				recordStream.on('data', r => records.push(r));
-				recordStream.on('end', () => {
-					if (fs.existsSync(tempFile)) {
-						fs.unlinkSync(tempFile);
-					}
-
-					resolve(records);
-				});
-
-				function handleError(err) {
-					if (fs.existsSync(tempFile)) {
-						fs.unlinkSync(tempFile);
-					}
-
-					reject(err);
-				}
-			});
-		}
 	}
 }
