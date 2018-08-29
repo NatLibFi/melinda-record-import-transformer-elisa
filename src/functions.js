@@ -33,7 +33,7 @@ import path from 'path';
 import {spawn} from 'child_process';
 import {MARCXML} from 'marc-record-serializers';
 import createValidateFunction from './validate';
-import {TransformerUtils} from '@natlibfi/melinda-record-import-commons'
+import {TransformerUtils} from '@natlibfi/melinda-record-import-commons';
 
 const CONVERSION_SCRIPT_PATH = process.env.CONVERSION_SCRIPT_PATH || 'melinda-elisa-ellibs-eresource-scripts/elisa_metadata_konversio.pl';
 
@@ -98,6 +98,5 @@ export async function transformCallback(response) {
 	const data = await response.text();
 	const records = await transform(data);
 	const validate = await createValidateFunction();
-  return TransformerUtils.runValidate(validate, records, true);
-
+	return TransformerUtils.runValidate(validate, records, true);
 }

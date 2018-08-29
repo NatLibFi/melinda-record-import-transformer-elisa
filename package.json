@@ -29,11 +29,9 @@
 		"clean": "rimraf build dist",
 		"build:transpile": "babel src --source-maps --out-dir=dist --minified",
 		"build": "npm run build:transpile && npm run check-deps",
-		"watch": "cross-env DEBUG=1 NODE_ENV=debug nodemon --watch src --exec 'npm test && babel-node src/index.js'",
-		"publish-to-npm": "npm install && npm test && npm run coverage && npm publish --access=public"
+		"watch": "cross-env DEBUG=1 NODE_ENV=debug nodemon --watch src --exec 'npm test && babel-node src/index.js'"
 	},
 	"dependencies": {
-		"@natlibfi/marc-record": "^1.0.0",
 		"@natlibfi/marc-record-validate": "^2.0.0",
 		"@natlibfi/marc-record-validators-melinda": "^2.3.0",
 		"@natlibfi/melinda-record-import-commons": "^1.4.0",
