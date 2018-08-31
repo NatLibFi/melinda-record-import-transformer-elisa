@@ -29,8 +29,9 @@
 
 'use strict';
 
-import {transformCallback as transform} from './functions';
-import {CommonUtils, TransformerUtils as Utils} from '@natlibfi/melinda-record-import-commons';
+import transform from './transform';
+import createValidateFunction from './validate';
+import {TransformerUtils as Utils} from '@natlibfi/melinda-record-import-commons';
 
 start();
 
@@ -39,17 +40,22 @@ async function start() {
 
 	Utils.registerSignalHandlers();
 	Utils.checkEnv();
-	CommonUtils.checkEnv(['CONVERSION_SCRIPT_PATH']);
 
 	const stopHealthCheckService = Utils.startHealthCheckService(process.env.HEALTH_CHECK_PORT);
 
 	try {
-		await Utils.startTransformation(transform);
+		await Utils.startTransformation(transformCallback);
 		stopHealthCheckService();
 		process.exit();
 	} catch (err) {
 		stopHealthCheckService();
 		logger.error(err);
 		process.exit(-1);
+	}
+
+	async function transformCallback(response) {
+		const records = await transform(response.body);
+		const validate = await createValidateFunction();
+		return Utils.runValidate(validate, records, true);
 	}
 }

@@ -2,8 +2,6 @@
 
 Elisa record transformer for the Melinda record batch import system. Consumes records in ONIX for Books version 3 format.
 
-**Requires [melinda-elisa-ellibs-eresource-scripts](https://github.com/NatLibFi/melinda-elisa-ellibs-eresource-scripts) for conversion!**
-
 ## CLI
 ```sh
 $ npm install && npm run build

@@ -27,7 +27,8 @@
 */
 
 import fs from 'fs';
-import {transform, validate} from './functions';
+import transform from './transform';
+import createValidateFunction from './validate';
 
 run();
 
@@ -43,12 +44,13 @@ async function run() {
 		}
 
 		if (process.argv.length === 4 && ['-v', '-f'].includes(process.argv[2])) {
+			const validate = await createValidateFunction();
 			const records = await processFile(process.argv[3]);
 			const results = await validate(records, process.argv[2] === '-f');
 
 			console.log(JSON.stringify(results, undefined, 2));
 		} else {
-			const records = await processFile(process.argv[2]);
+			const records = await processFile(process.argv[2]);			
 			console.log(JSON.stringify(records, undefined, 2));
 		}
 
@@ -59,7 +61,6 @@ async function run() {
 	}
 
 	async function processFile(file) {
-		const data = fs.readFileSync(file, 'utf8');
-		return transform(data);
+		return transform(fs.createReadStream(file));
 	}
 }

@@ -32,11 +32,13 @@
 		"watch": "cross-env DEBUG=1 NODE_ENV=debug nodemon --watch src --exec 'npm test && babel-node src/index.js'"
 	},
 	"dependencies": {
-		"@natlibfi/marc-record-validate": "^2.0.0",
-		"@natlibfi/marc-record-validators-melinda": "^2.3.0",
+		"@natlibfi/marc-record": "^1.1.0",
+		"@natlibfi/marc-record-validate": "^3.0.0",
+		"@natlibfi/marc-record-validators-melinda": "^3.0.0",
 		"@natlibfi/melinda-record-import-commons": "^1.4.0",
-		"marc-record-js": "^0.3.2",
 		"marc-record-serializers": "git+https://github.com/natlibfi/marc-record-serializers.git#feature-to-aleph-sequential",
+		"moment": "^2.22.2",
+		"sax-stream": "^1.2.3",
 		"xml-formatter": "^1.0.1"
 	},
 	"devDependencies": {

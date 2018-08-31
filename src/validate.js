@@ -32,8 +32,22 @@ import validateFactory from '@natlibfi/marc-record-validate';
 import {IsbnIssn, ItemLanguage} from '@natlibfi/marc-record-validators-melinda';
 
 export default async () => {
-	return validateFactory([
+	const validate = await validateFactory([
 		await IsbnIssn(),
 		await ItemLanguage(/^520$/)
 	]);
+
+	return async (records, fix = false) => {
+		const opts = fix ? {fix: true, validateFixes: true} : {fix: false};
+		const results = await Promise.all(
+			records.map(r => validate(r, opts))
+		);
+
+		return results.map(result => ({
+			record: result.record,
+			failed: !result.valid,
+			messages: result.report
+		}));
+	};
 };
+
