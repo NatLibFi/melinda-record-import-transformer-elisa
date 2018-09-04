@@ -33,13 +33,13 @@
 	},
 	"dependencies": {
 		"@natlibfi/marc-record": "^1.1.0",
+		"@natlibfi/marc-record-serializers": "^1.0.2",
 		"@natlibfi/marc-record-validate": "^3.0.0",
 		"@natlibfi/marc-record-validators-melinda": "^3.0.0",
 		"@natlibfi/melinda-record-import-commons": "^1.4.0",
-		"marc-record-serializers": "git+https://github.com/natlibfi/marc-record-serializers.git#feature-to-aleph-sequential",
 		"moment": "^2.22.2",
 		"sax-stream": "^1.2.3",
-		"xml-formatter": "^1.0.1"
+		"xmlfmt": "^1.0.0"
 	},
 	"devDependencies": {
 		"babel-cli": "^6.26.0",
@@ -47,7 +47,7 @@
 		"babel-preset-env": "^1.6.1",
 		"babel-register": "^6.26.0",
 		"cross-env": "^5.2.0",
-		"eslint": "^5.4.0",
+		"eslint": "^5.5.0",
 		"eslint-config-xo": "^0.24.2",
 		"eslint-plugin-import": "^2.14.0",
 		"nodemon": "^1.18.3",

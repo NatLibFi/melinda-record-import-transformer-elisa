@@ -32,6 +32,7 @@
 import moment from 'moment';
 import saxStream from 'sax-stream';
 import { MarcRecord } from '@natlibfi/marc-record';
+import {TransformerUtils as Utils} from '@natlibfi/melinda-record-import-commons';
 
 const ENCODING_LEVEL_MAP = {
 	'01': '3',
@@ -44,10 +45,13 @@ const ENCODING_LEVEL_MAP = {
 };
 const ISIL_MAP = {
 	'Elisa Kirja': 'FI-Elisa',
-	Ellibs: 'FI-Ellibs'
+	Ellibs: 'FI-Ellibs',
+	'Kirjavälitys Oy': 'FI-KV'
 };
 
 export default async stream => {
+	const logger = Utils.createLogger();
+
 	return new Promise((resolve, reject) => {
 		const records = [];
 		const xmlStream = stream.pipe(saxStream({
@@ -61,10 +65,7 @@ export default async stream => {
 			resolve(records);
 		});
 		xmlStream.on('data', node => {
-			//			if (records.length == 0) {
 			records.push(transformToMarc(node));
-			//			}
-
 		});
 	});
 
@@ -90,7 +91,22 @@ export default async stream => {
 		const language = getLanguage();
 		const isil = getISIL();
 
+		logger.log('debug', `languageRole:${languageRole}`);
+		logger.log('debug', `recordReference:${recordReference}`);
+		logger.log('debug', `notificationType:${notificationType}`);
+		logger.log('debug', `supplier:${supplier}`);
+		logger.log('debug', `isbn:${isbn}, gtin:${gtin}, proprietaryId:${proprietaryId}`);
+		logger.log('debug', `textType:${textType}`);
+		logger.log('debug', `form:${form}, formDetail:${formDetail}`);
+		logger.log('debug', `titleType:${titleType}, titleLevel:${titleLevel}, title:${title}`);
+		logger.log('debug', `contributors:${JSON.stringify(contributors)}`);
+		logger.log('debug', `publisher:${publisher}, publishingDate:${publishingDate}, publishingStatus:${publishingStatus}, publicationCountry:${publicationCountry}`);
+		logger.log('debug', `language:${language}`);
+		logger.log('debug', `isil:${isil}`);
+		logger.log('debug', `summary:${summary}`);
+
 		record.insertField({ tag: '003', value: isil });
+
 		record.insertField(create006({ 0: 'm', 6: 'o', 9: 'h' }));
 		record.insertField(create008());
 
@@ -290,13 +306,16 @@ export default async stream => {
 		}
 
 		function parseContributors() {
-			const list = getNodes(['DescriptiveDetail', 'Contributor']).map(n => {
+			const list = getNodes(['DescriptiveDetail', 'Contributor'])
+			.filter(n => n)
+			.map(n => {
 				return {
 					name: getNodeValue('PersonNameInverted', n),
 					role: getNodeValue('ContributorRole', n),
 					sequence: getNodeValue('SequenceNumber', n)
 				};
-			});
+			})
+			.filter(n => n.name);
 
 			list.sort((a, b) => Number(a.sequence) - Number(b.sequence));
 			return list;
@@ -412,7 +431,7 @@ export default async stream => {
 			contributors
 				.filter(c => ['A01', 'E07'].includes(c.role))
 				.map(c => {
-					if (pattern.test(c.name)) {						
+					if (pattern.test(c.name)) {
 						return {
 							name: c.name.replace(pattern, ''),
 							role: 'toimittaja'
@@ -427,7 +446,7 @@ export default async stream => {
 				.forEach((contributor, index) => {
 					const { name, role } = contributor;
 
-					/* No a actual name */
+					/* Not a actual name */
 					if (/, Useita/i.test(name)) {
 						const f245 = record.get(/^245$/).shift();
 
@@ -531,14 +550,21 @@ export default async stream => {
 			return getNodeValue(['DescriptiveDetail', 'Language', 'LanguageCode']);
 		}
 
+		/**
+		* TODO: Fetch ISIL from HTTP service instead (And cache for reuse)
+		*/
 		function getISIL() {
 			return ISIL_MAP[supplier];
 		}
 
 		function getNodeValue(elements, ctx = node) {
 			const target = [].concat(elements).reduce((ptr, name) => {
-				if (ptr && ptr.children) {
-					return ptr.children[name];
+				if (ptr) {
+					if (Array.isArray(ptr) && ptr[0].children) {
+						return ptr[0].children[name];
+					}
+
+					return ptr.children ? ptr.children[name] : undefined;
 				}
 
 				return undefined;
