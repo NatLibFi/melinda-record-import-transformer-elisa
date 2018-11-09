@@ -57,7 +57,7 @@ async function run() {
 				console.log(JSON.stringify(results, undefined, 2));
 
 				if (asXML) {
-					outputXML(results.filter(r => r.record).map(r => r.record));
+					outputXML(results.filter(r => !r.failed && r.record).map(r => r.record));
 				}
 			} else {
 				const records = await processFile(file);
