@@ -1,17 +1,17 @@
 {
-	"name": "@natlibfi/melinda-record-import-transformer-elisa",
-	"description": "Elisa record transformer for the Melinda record batch import system",
+	"name": "@natlibfi/melinda-record-import-transformer-onix",
+	"description": "ONIX record transformer for the Melinda record batch import system",
 	"author": {
 		"name": "The National Library of Finland"
 	},
 	"keywords": [],
-	"homepage": "https://github.com/natlibfi/melinda-record-import-transformer-elisa",
+	"homepage": "https://github.com/natlibfi/melinda-record-import-transformer-onix",
 	"bugs": {
-		"url": "https://github.com/natlibfi/melinda-record-import-transformer-elisa/issues"
+		"url": "https://github.com/natlibfi/melinda-record-import-transformer-onix/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:natlibfi/melinda-record-import-transformer-elisa.git"
+		"url": "git@github.com:natlibfi/melinda-record-import-transformer-onix.git"
 	},
 	"license": "AGPL-3.0+",
 	"version": "1.0.0",
