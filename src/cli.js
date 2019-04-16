@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
 *
 * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -27,16 +26,15 @@
 *
 */
 
-'use strict';
-
-import transform from './transform';
+import transformCallback from './transform';
 import createValidator from './validate';
 import {Transformer} from '@natlibfi/melinda-record-import-commons';
-const {startTransformer} = Transformer;
+
+const {runCLI} = Transformer;
 
 run();
 
 async function run() {
-	const validate = await createValidator();
-	startTransformer(transform, validate);
+	const validateCallback = await createValidator();
+	runCLI({name: 'melinda-record-import-transformer-helmet', transformCallback, validateCallback});
 }
