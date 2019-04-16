@@ -36,5 +36,5 @@ run();
 
 async function run() {
 	const validateCallback = await createValidator();
-	runCLI({name: 'melinda-record-import-transformer-helmet', transformCallback, validateCallback});
+	runCLI({name: 'melinda-record-import-transformer-onix', transformCallback, validateCallback});
 }
