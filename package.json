@@ -16,7 +16,7 @@
 	"license": "AGPL-3.0+",
 	"version": "1.0.0",
 	"main": "./dist/index.js",
-	"bin": "./dist/transform-cli.js",
+	"bin": "./dist/cli.js",
 	"engines": {
 		"node": ">=8"
 	},
