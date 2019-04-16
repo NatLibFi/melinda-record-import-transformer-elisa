@@ -31,7 +31,7 @@
 
 import moment from 'moment';
 import saxStream from 'sax-stream';
-import { MarcRecord } from '@natlibfi/marc-record';
+import {MarcRecord} from '@natlibfi/marc-record';
 import {TransformerUtils as Utils} from '@natlibfi/melinda-record-import-commons';
 
 const ENCODING_LEVEL_MAP = {
@@ -81,12 +81,12 @@ export default async stream => {
 			'SupplierName'
 		]);
 
-		const { isbn, gtin, proprietaryId } = parseProductIdentifiers();
-		const { textType, summary } = parseCollateralDetail();
-		const { form, formDetail } = parseProductForm();
-		const { titleType, titleLevel, title } = parseTitleDetail();
+		const {isbn, gtin, proprietaryId} = parseProductIdentifiers();
+		const {textType, summary} = parseCollateralDetail();
+		const {form, formDetail} = parseProductForm();
+		const {titleType, titleLevel, title} = parseTitleDetail();
 		const contributors = parseContributors();
-		const { publisher, publishingDate, publishingStatus, publicationCountry } = parsePublishingDetail();
+		const {publisher, publishingDate, publishingStatus, publicationCountry} = parsePublishingDetail();
 
 		const language = getLanguage();
 		const isil = getISIL();
@@ -105,56 +105,56 @@ export default async stream => {
 		logger.log('debug', `isil:${isil}`);
 		logger.log('debug', `summary:${summary}`);
 
-		record.insertField({ tag: '003', value: isil });
+		record.insertField({tag: '003', value: isil});
 
-		record.insertField(create006({ 0: 'm', 6: 'o', 9: 'h' }));
+		record.insertField(create006({0: 'm', 6: 'o', 9: 'h'}));
 		record.insertField(create008());
 
 		record.insertField({
 			tag: '035', subfields: [
-				{ code: 'a', value: `(${isil})${proprietaryId}` }
+				{code: 'a', value: `(${isil})${proprietaryId}`}
 			]
 		});
 
 		record.insertField({
 			tag: '037', ind1: '3', subfields: [
-				{ code: 'a', value: recordReference }
+				{code: 'a', value: recordReference}
 			]
 		});
 
 		record.insertField({
 			tag: '300', subfields: [
-				{ code: 'a', value: '1 verkkoaineisto' }
+				{code: 'a', value: '1 verkkoaineisto'}
 			]
 		});
 
 		record.insertField({
 			tag: '337', subfields: [
-				{ code: 'a', value: 'tietokonekäyttöinen' },
-				{ code: 'b', value: 'c' },
-				{ code: '2', value: 'rdamedia' }
+				{code: 'a', value: 'tietokonekäyttöinen'},
+				{code: 'b', value: 'c'},
+				{code: '2', value: 'rdamedia'}
 			]
 		});
 
 		record.insertField({
 			tag: '338', subfields: [
-				{ code: 'a', value: 'verkkoaineisto' },
-				{ code: 'b', value: 'cr' },
-				{ code: '2', value: 'rdacarrier' }
+				{code: 'a', value: 'verkkoaineisto'},
+				{code: 'b', value: 'cr'},
+				{code: '2', value: 'rdacarrier'}
 			]
 		});
 
 		record.insertField({
 			tag: '344', subfields: [
-				{ code: 'a', value: 'digitaalinen' },
-				{ code: '2', value: 'rda' }
+				{code: 'a', value: 'digitaalinen'},
+				{code: '2', value: 'rda'}
 			]
 		});
 
 		if (textType === '03' && summary) {
 			record.insertField({
 				tag: '520,', subfields: [
-					{ code: 'a', value: summary }
+					{code: 'a', value: summary}
 				]
 			});
 		}
@@ -162,7 +162,7 @@ export default async stream => {
 		if (isbn) {
 			record.insertField({
 				tag: '020', subfields: [
-					{ code: 'a', value: isbn }
+					{code: 'a', value: isbn}
 				]
 			});
 		}
@@ -170,17 +170,17 @@ export default async stream => {
 		if (gtin) {
 			record.insertField({
 				tag: '020', ind1: '3', subfields: [
-					{ code: 'a', value: gtin }
+					{code: 'a', value: gtin}
 				]
 			});
 		}
 
 		if (languageRole === '01') {
-			update008({ 35: language[0], 36: language[1], 37: language[2] });
+			update008({35: language[0], 36: language[1], 37: language[2]});
 
 			record.insertField({
 				tag: '041', subfields: [
-					{ code: 'a', value: language }
+					{code: 'a', value: language}
 				]
 			});
 		}
@@ -189,7 +189,7 @@ export default async stream => {
 			if (titleType === '02') {
 				record.insertField({
 					tag: '222', ind2: '0', subfields: [
-						{ code: 'x', value: title }
+						{code: 'x', value: title}
 					]
 				});
 			}
@@ -202,7 +202,7 @@ export default async stream => {
 				case '06':
 					record.insertField({
 						tag: '242', ind1: '1', subfields: [
-							{ code: 'a', value: title }
+							{code: 'a', value: title}
 						]
 					});
 					break;
@@ -213,7 +213,7 @@ export default async stream => {
 				case '08':
 					record.insertField({
 						tag: '247', ind1: '1', ind2: '0', subfields: [
-							{ code: 'a', value: title }
+							{code: 'a', value: title}
 						]
 					});
 					break;
@@ -225,12 +225,12 @@ export default async stream => {
 		if (publisher) {
 			const field = {
 				tag: '264', ind2: '1', subfields: [
-					{ code: 'b', value: publisher }
+					{code: 'b', value: publisher}
 				]
 			};
 
 			if (publishingDate) {
-				field.subfields.push({ code: 'c', value: publishingDate });
+				field.subfields.push({code: 'c', value: publishingDate});
 			}
 
 			record.insertField(field);
@@ -254,18 +254,18 @@ export default async stream => {
 
 				switch (getNodeValue('ProductIDType', n)) {
 					case '03':
-						return Object.assign(acc, { gtin: value });
+						return Object.assign(acc, {gtin: value});
 					case '01':
-						return Object.assign(acc, { proprietaryId: value });
+						return Object.assign(acc, {proprietaryId: value});
 					case '15':
-						return Object.assign(acc, { isbn: value });
+						return Object.assign(acc, {isbn: value});
 					case '02':
 						/* Prefer ISBN-13 */
 						if ('isbn' in acc) {
 							return acc;
 						}
 
-						return Object.assign(acc, { isbn: value });
+						return Object.assign(acc, {isbn: value});
 					default:
 						return acc;
 				}
@@ -307,15 +307,15 @@ export default async stream => {
 
 		function parseContributors() {
 			const list = getNodes(['DescriptiveDetail', 'Contributor'])
-			.filter(n => n)
-			.map(n => {
-				return {
-					name: getNodeValue('PersonNameInverted', n),
-					role: getNodeValue('ContributorRole', n),
-					sequence: getNodeValue('SequenceNumber', n)
-				};
-			})
-			.filter(n => n.name);
+				.filter(n => n)
+				.map(n => {
+					return {
+						name: getNodeValue('PersonNameInverted', n),
+						role: getNodeValue('ContributorRole', n),
+						sequence: getNodeValue('SequenceNumber', n)
+					};
+				})
+				.filter(n => n.name);
 
 			list.sort((a, b) => Number(a.sequence) - Number(b.sequence));
 			return list;
@@ -339,7 +339,7 @@ export default async stream => {
 		}
 
 		function create245() {
-			const field = { tag: '245', ind1: '1', ind2: '0' };
+			const field = {tag: '245', ind1: '1', ind2: '0'};
 			const pattern = /:\s+|!+|\?+|\s+[–-–] /;
 			const result = pattern.exec(title);
 
@@ -349,23 +349,23 @@ export default async stream => {
 
 				if (end.trimEnd().length > 0) {
 					field.subfields = [
-						{ code: 'a', value: `${start} :` },
-						{ code: 'b', value: end }
+						{code: 'a', value: `${start} :`},
+						{code: 'b', value: end}
 					];
 
 					return field;
 				}
 
-				field.subfields = [{ code: 'a', value: start }];
+				field.subfields = [{code: 'a', value: start}];
 				return field;
 			}
 
-			field.subfields = [{ code: 'a', value: title }];
+			field.subfields = [{code: 'a', value: title}];
 			return field;
 		}
 
 		function create246() {
-			const field = { tag: '246', subfields: [{ code: 'a', value: title }] };
+			const field = {tag: '246', subfields: [{code: 'a', value: title}]};
 			switch (titleType) {
 				case '04':
 					field.ind1 = '1';
@@ -396,32 +396,32 @@ export default async stream => {
 		}
 
 		function handleAudio() {
-			record.leader = createLeader({ 6: 'i', 7: 'm' });
-			record.insertField({ tag: '007', value: 'sz|uunnnnnuneu' });
-			record.insertField({ tag: '007', value: 'cr|nnannnuuuuu' });
+			record.leader = createLeader({6: 'i', 7: 'm'});
+			record.insertField({tag: '007', value: 'sz|uunnnnnuneu'});
+			record.insertField({tag: '007', value: 'cr|nnannnuuuuu'});
 
-			update008({ 0: 'm', 23: 'o', 26: 'z' });
+			update008({0: 'm', 23: 'o', 26: 'z'});
 
 			record.insertField({
 				tag: '336', subfields: [
-					{ code: 'a', value: 'puhe' },
-					{ code: 'b', value: 'spw' },
-					{ code: '2', value: 'rdacontent' }
+					{code: 'a', value: 'puhe'},
+					{code: 'b', value: 'spw'},
+					{code: '2', value: 'rdacontent'}
 				]
 			});
 
 			record.insertField({
 				tag: '347', subfields: [
-					{ code: 'a', value: 'äänitiedosto' },
-					{ code: 'b', value: 'MP3' },
-					{ code: '2', value: 'rda' }
+					{code: 'a', value: 'äänitiedosto'},
+					{code: 'b', value: 'MP3'},
+					{code: '2', value: 'rda'}
 				]
 			});
 
 			record.insertField({
 				tag: '655', ind2: '7', subfields: [
-					{ code: 'a', value: 'äänikirjat' },
-					{ code: '2', value: 'ysa' }
+					{code: 'a', value: 'äänikirjat'},
+					{code: '2', value: 'ysa'}
 				]
 			});
 		}
@@ -444,7 +444,7 @@ export default async stream => {
 					};
 				})
 				.forEach((contributor, index) => {
-					const { name, role } = contributor;
+					const {name, role} = contributor;
 
 					/* Not a actual name */
 					if (/, Useita/i.test(name)) {
@@ -453,51 +453,49 @@ export default async stream => {
 						if (f245) {
 							f245.ind1 = '0';
 						}
+					} else if (index === 0) {
+						record.insertField({
+							tag: '100', ind1: '1', subfields: [
+								{code: 'a', value: name},
+								{code: 'e', value: role}
+							]
+						});
 					} else {
-						if (index === 0) {
-							record.insertField({
-								tag: '100', ind1: '1', subfields: [
-									{ code: 'a', value: name },
-									{ code: 'e', value: role }
-								]
-							});
-						} else {
-							record.insertField({
-								tag: '700', ind1: '1', subfields: [
-									{ code: 'a', value: name },
-									{ code: 'e', value: role }
-								]
-							});
-						}
+						record.insertField({
+							tag: '700', ind1: '1', subfields: [
+								{code: 'a', value: name},
+								{code: 'e', value: role}
+							]
+						});
 					}
 				});
 		}
 
 		function handleText(format) {
-			record.leader = createLeader({ 6: 'a', 7: 'm' });
-			record.insertField({ tag: '007', value: 'cr||||||||||||' });
+			record.leader = createLeader({6: 'a', 7: 'm'});
+			record.insertField({tag: '007', value: 'cr||||||||||||'});
 
-			update008({ 6: 's', 23: 'o' });
+			update008({6: 's', 23: 'o'});
 
 			const f020 = record.get(/^020$/).shift();
 
 			if (f020) {
-				f020.subfields.push({ code: 'q', value: format });
+				f020.subfields.push({code: 'q', value: format});
 			}
 
 			record.insertField({
 				tag: '336', subfields: [
-					{ code: 'a', value: 'teksti' },
-					{ code: 'b', value: 'txt' },
-					{ code: '2', value: 'rdacontent' }
+					{code: 'a', value: 'teksti'},
+					{code: 'b', value: 'txt'},
+					{code: '2', value: 'rdacontent'}
 				]
 			});
 
 			record.insertField({
 				tag: '347', subfields: [
-					{ code: 'a', value: 'tekstitiedosto' },
-					{ code: 'b', value: format },
-					{ code: '2', value: 'rda' }
+					{code: 'a', value: 'tekstitiedosto'},
+					{code: 'b', value: format},
+					{code: '2', value: 'rda'}
 				]
 			});
 		}
@@ -534,7 +532,7 @@ export default async stream => {
 			const publishingYear = publishingDate ? publishingDate.slice(0, 4) : '^^^^';
 			const value = `${date}|${publishingYear}||||^^^|||||^|||||^||||||||||`;
 
-			return { tag: '008', value };
+			return {tag: '008', value};
 		}
 
 		function update008(mappings) {
@@ -550,7 +548,7 @@ export default async stream => {
 			return getNodeValue(['DescriptiveDetail', 'Language', 'LanguageCode']);
 		}
 
-		//TODO: Fetch ISIL from HTTP service instead (And cache for reuse)
+		// TODO: Fetch ISIL from HTTP service instead (And cache for reuse)
 		function getISIL() {
 			return ISIL_MAP[supplier];
 		}
