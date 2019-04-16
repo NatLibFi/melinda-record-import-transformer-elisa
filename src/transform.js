@@ -27,7 +27,7 @@
 *
 */
 
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars, no-warning-comments */
 
 import moment from 'moment';
 import saxStream from 'sax-stream';
@@ -550,9 +550,7 @@ export default async stream => {
 			return getNodeValue(['DescriptiveDetail', 'Language', 'LanguageCode']);
 		}
 
-		/**
-		* TODO: Fetch ISIL from HTTP service instead (And cache for reuse)
-		*/
+		//TODO: Fetch ISIL from HTTP service instead (And cache for reuse)
 		function getISIL() {
 			return ISIL_MAP[supplier];
 		}
