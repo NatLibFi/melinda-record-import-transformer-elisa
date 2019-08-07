@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
 *
 * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -27,12 +26,10 @@
 *
 */
 
-/* eslint-disable no-unused-vars, no-warning-comments */
-
 import moment from 'moment';
 import saxStream from 'sax-stream';
 import {MarcRecord} from '@natlibfi/marc-record';
-import {TransformerUtils as Utils} from '@natlibfi/melinda-record-import-commons';
+import {Utils} from '@natlibfi/melinda-commons';
 
 const ENCODING_LEVEL_MAP = {
 	'01': '3',
@@ -50,7 +47,8 @@ const ISIL_MAP = {
 };
 
 export default async stream => {
-	const logger = Utils.createLogger();
+	const {createLogger} = Utils;
+	const logger = createLogger();
 
 	return new Promise((resolve, reject) => {
 		const records = [];
@@ -347,7 +345,7 @@ export default async stream => {
 				const start = title.slice(0, result.index);
 				const end = title.slice(result.index + result[0].length);
 
-				if (end.trimEnd().length > 0) {
+				if (end.replace(/\s+$/, '').length > 0) {
 					field.subfields = [
 						{code: 'a', value: `${start} :`},
 						{code: 'b', value: end}
