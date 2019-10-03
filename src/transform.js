@@ -358,20 +358,6 @@ export default async stream => {
 			}, {});
 		}
 
-		function hasFalse02ProductIDType(node) {
-			return getNodes('ProductIdentifier').reduce((acc, n) => {
-				const value = getNodeValue('IDValue', n);
-
-				switch (getNodeValue('ProductIDType', n)) {
-					case '02':
-						/* False isbn-10 should be dropped */
-
-					default:
-						return true;
-				}
-			}, {});
-		}
-
 		function parseCollateralDetail() {
 			return {
 				summary: getNodeValue(['CollateralDetail', 'TextContent', 'Text']),
