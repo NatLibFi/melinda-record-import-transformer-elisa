@@ -26,6 +26,7 @@
 *
 */
 
+import http from 'http';
 import moment from 'moment';
 import saxStream from 'sax-stream';
 import {MarcRecord} from '@natlibfi/marc-record';
@@ -42,7 +43,7 @@ const ENCODING_LEVEL_MAP = {
 };
 const ISIL_MAP = {
 	'Elisa Kirja': 'FI-Elisa',
-	Ellibs: 'FI-Ellibs',
+	'Ellibs Oy': 'FI-Ellibs',
 	'Kirjavälitys Oy': 'FI-KV'
 };
 
@@ -63,13 +64,17 @@ export default async stream => {
 			resolve(records);
 		});
 		xmlStream.on('data', node => {
-			records.push(transformToMarc(node));
+			if (dropRecord(node)) {
+				logger.log('info', `dropped record with recordReference: ${node.children['RecordReference'].value}`);
+			} else {
+				records.push(transformToMarc(node));
+			}
 		});
 	});
 
 	function transformToMarc(node) {
 		const record = new MarcRecord();
-		const languageRole = getNodeValue(['DescriptiveDetail', 'Language', 'LanguageCode']);
+		const languageRole = getNodeValue(['DescriptiveDetail', 'Language', 'LanguageRole']);
 		const recordReference = getNodeValue('RecordReference');
 		const notificationType = getNodeValue('NotificationType');
 		const supplier = getNodeValue([
@@ -108,11 +113,13 @@ export default async stream => {
 		record.insertField(create006({0: 'm', 6: 'o', 9: 'h'}));
 		record.insertField(create008());
 
-		record.insertField({
-			tag: '035', subfields: [
-				{code: 'a', value: `(${isil})${proprietaryId}`}
-			]
-		});
+		if (proprietaryId) {
+			record.insertField({
+				tag: '035', subfields: [
+					{code: 'a', value: `(${isil})${proprietaryId}`}
+				]
+			});
+		}
 
 		record.insertField({
 			tag: '037', ind1: '3', subfields: [
@@ -149,7 +156,8 @@ export default async stream => {
 			]
 		});
 
-		if (textType === '03' && summary) {
+		/* placeholder */
+		if (false && textType === '03' && summary) {
 			record.insertField({
 				tag: '520,', subfields: [
 					{code: 'a', value: summary}
@@ -163,11 +171,9 @@ export default async stream => {
 					{code: 'a', value: isbn}
 				]
 			});
-		}
-
-		if (gtin) {
+		} else if (gtin) {
 			record.insertField({
-				tag: '020', ind1: '3', subfields: [
+				tag: '024', ind1: '3', subfields: [
 					{code: 'a', value: gtin}
 				]
 			});
@@ -238,13 +244,95 @@ export default async stream => {
 
 		if (form === 'AJ' && formDetail === 'A103') {
 			handleAudio();
-		} else if (form === 'EB' && formDetail === 'E101') {
+		} else if ((form === 'EB' || form === 'ED') && formDetail === 'E101') {
 			handleText('EPUB');
-		} else if (form === 'EB' && formDetail === 'E107') {
+		} else if ((form === 'EB' || form === 'ED') && formDetail === 'E107') {
 			handleText('PDF');
 		}
 
+		record.insertField({
+			tag: '040', subfields: [
+				{code: 'a', value: isil},
+				{code: 'b', value: language},
+				{code: 'e', value: 'rda'},
+				{code: 'd', value: 'FI-NL'}
+			]
+		});
+
+		record.insertField({
+			tag: '042', subfields: [
+				{code: 'a', value: 'finb'}
+			]
+		});
+
+		record.insertField({
+			tag: 'LOW', subfields: [
+				{code: 'a', value: 'FIKKA'}
+			]
+		});
+		
+		record.insertField({
+			tag: '506', ind1: '1', subfields: [
+				{code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa'},
+				{code: 'f', value: 'Online access with authorization.'},
+				{code: '2', value: 'star'},
+				{code: '5', value: 'FI-Vapaa'},
+				{code: '9', value: 'FENNI<KEEP>'}
+			]
+		});
+
+		record.insertField({
+			tag: '540', subfields: [
+				{code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
+				{code: 'b', value: 'Kansalliskirjasto;'},
+				{code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
+				{code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433 '},
+				{code: '5', value: 'FI-Vapaa'},
+				{code: '9', value: 'FENNI<KEEP>'}
+			]
+		});
+
+		(async() => { 
+			const URN = await createURN();
+			record.insertField({
+				tag: '856', ind1: '4', ind2: '0', subfields: [
+					{code: 'u', value: URN},
+					{code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
+					{code: '5', value: 'FI-Vapaa'}
+				]
+			});
+		})()
+
+		record.insertField({
+			tag: '884', subfields: [
+				{code: 'a', value: 'ONIX3 to MARC transformation'},
+				{code: 'g', value: moment().format('YYYYMMDD')},
+				{code: 'k', value: isil},
+				{code: 'q', value: 'FI-NL'}
+				
+			]
+		});
+
 		return record;
+
+		function createURN() {
+			if (isbn) {
+				return Promise.resolve('http://urn.fi/URN:ISBN:' + isbn);
+			} else {
+				return new Promise((resolve, reject) => {
+		   			http.get('http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn', (resp) => {
+               			const data = [];
+
+                		resp.on('data', (chunk) => data.push(chunk));
+
+                		resp.on('end', () => resolve(data.join('')));
+
+                	}).on("error", (err) => {
+						reject(err);
+					})
+				});
+			}
+		}
 
 		function parseProductIdentifiers() {
 			return getNodes('ProductIdentifier').reduce((acc, n) => {
@@ -270,14 +358,27 @@ export default async stream => {
 			}, {});
 		}
 
+		function hasFalse02ProductIDType(node) {
+			return getNodes('ProductIdentifier').reduce((acc, n) => {
+				const value = getNodeValue('IDValue', n);
+
+				switch (getNodeValue('ProductIDType', n)) {
+					case '02':
+						/* False isbn-10 should be dropped */
+
+					default:
+						return true;
+				}
+			}, {});
+		}
+
 		function parseCollateralDetail() {
 			return {
 				summary: getNodeValue(['CollateralDetail', 'TextContent', 'Text']),
 				textType: getNodeValue([
 					'CollateralDetail',
 					'TextContent',
-					'TextType',
-					'Text'
+					'TextType'
 				])
 			};
 		}
@@ -338,28 +439,34 @@ export default async stream => {
 
 		function create245() {
 			const field = {tag: '245', ind1: '1', ind2: '0'};
-			const pattern = /:\s+|!+|\?+|\s+[–-–] /;
-			const result = pattern.exec(title);
+			const results = [/\s+[\u2013\u2014-]\s+/.exec(title),/:\s+|\.+/.exec(title),/!+|\?+/.exec(title)];
+			const slices = {start: "", end: ""};
 
-			if (result) {
-				const start = title.slice(0, result.index);
-				const end = title.slice(result.index + result[0].length);
-
-				if (end.replace(/\s+$/, '').length > 0) {
-					field.subfields = [
-						{code: 'a', value: `${start} :`},
-						{code: 'b', value: end}
-					];
-
-					return field;
-				}
-
-				field.subfields = [{code: 'a', value: start}];
-				return field;
+			if (results[0]) {
+				/* space dash space found */
+				slices.start = title.slice(0, results[0].index);
+				slices.end = title.slice(results[0].index + results[0][0].length);		
+			} else if (results[1]) {
+				/* . or : found */
+				slices.start = title.slice(0, results[1].index);
+				slices.end = title.slice(results[1].index + results[1][0].length);
+			} else if (results[2]) {
+				/* ? or ! found */
+				slices.start = title.slice(0, results[2].index+1);
+				slices.end = title.slice(results[2].index+1 + results[2][0].length);
 			}
-
+			
+			if (slices.end.replace(/\s+$/, '').length > 0) {
+				/* end is not empty, slice the title */
+				field.subfields = [
+					{code: 'a', value: `${slices.start} :`},
+					{code: 'b', value: slices.end}
+				];
+				return field;
+			} else {
 			field.subfields = [{code: 'a', value: title}];
 			return field;
+			}
 		}
 
 		function create246() {
@@ -395,7 +502,7 @@ export default async stream => {
 
 		function handleAudio() {
 			record.leader = createLeader({6: 'i', 7: 'm'});
-			record.insertField({tag: '007', value: 'sz|uunnnnnuneu'});
+			record.insertField({tag: '007', value: 'sr|uunnnnnuneu'});
 			record.insertField({tag: '007', value: 'cr|nnannnuuuuu'});
 
 			update008({0: 'm', 23: 'o', 26: 'z'});
@@ -409,17 +516,10 @@ export default async stream => {
 			});
 
 			record.insertField({
-				tag: '347', subfields: [
-					{code: 'a', value: 'äänitiedosto'},
-					{code: 'b', value: 'MP3'},
-					{code: '2', value: 'rda'}
-				]
-			});
-
-			record.insertField({
 				tag: '655', ind2: '7', subfields: [
 					{code: 'a', value: 'äänikirjat'},
-					{code: '2', value: 'ysa'}
+					{code: '2', value: 'slm/fin'},
+					{code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'},
 				]
 			});
 		}
@@ -557,14 +657,13 @@ export default async stream => {
 					if (Array.isArray(ptr) && ptr[0].children) {
 						return ptr[0].children[name];
 					}
-
 					return ptr.children ? ptr.children[name] : undefined;
 				}
 
 				return undefined;
 			}, ctx);
 
-			return target ? target.value : undefined;
+			return Array.isArray(target) ? target[0].value : (target ? target.value : undefined);
 		}
 
 		function getNodes(elements, ctx = node) {
@@ -580,5 +679,26 @@ export default async stream => {
 				return buf;
 			}, str.split('')).join('');
 		}
+	}
+
+	function dropRecord(node) {
+		return node.children['ProductIdentifier'].reduce((acc, n) => {
+			if (acc) {
+				return true;
+			}
+
+			const value = n.children['IDValue'].value;
+			switch (n.children['ProductIDType'].value) {
+				case '02':
+					if (!(value.startsWith('951') || value.startsWith('952'))) {
+						return true;
+					} else {
+						return false;
+					}
+
+				default:
+					return false;
+			}
+		}, false);
 	}
 };

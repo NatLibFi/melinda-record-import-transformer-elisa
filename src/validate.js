@@ -29,11 +29,13 @@
 
 /* eslint-disable new-cap */
 import validateFactory from '@natlibfi/marc-record-validate';
-import {IsbnIssn, ItemLanguage} from '@natlibfi/marc-record-validators-melinda';
+import {IsbnIssn, ItemLanguage, EndingPunctuation, EmptyFields} from '@natlibfi/marc-record-validators-melinda';
 
 export default async () => {
 	return validateFactory([
-		await IsbnIssn(),
+		await EndingPunctuation(),
+		await EmptyFields(),
+		await IsbnIssn({hyphenateISBN: true}),
 		await ItemLanguage(/^520$/)
 	]);
 };
