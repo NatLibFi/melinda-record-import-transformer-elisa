@@ -26,7 +26,7 @@
 *
 */
 
-import http from 'http';
+import fetch from 'node-fetch';
 import moment from 'moment';
 import saxStream from 'sax-stream';
 import {MarcRecord} from '@natlibfi/marc-record';
@@ -46,6 +46,8 @@ const ISIL_MAP = {
 	'Ellibs Oy': 'FI-Ellibs',
 	'Kirjavälitys Oy': 'FI-KV'
 };
+
+const URN_GENERATOR_URL = 'http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn';
 
 export default async stream => {
 	const {createLogger} = Utils;
@@ -164,14 +166,14 @@ export default async stream => {
 		});
 
 		/*
-    If (textType === '03' && summary) {
-      record.insertField({
-        tag: '520,',
-        subfields: [
-          { code: 'a', value: summary }
-        ]
-      })
-    } */
+    	If (textType === '03' && summary) {
+      		record.insertField({
+        		tag: '520,',
+        		subfields: [
+          			{code: 'a', value: summary }
+        		]
+      		})
+    	} */
 
 		if (isbn) {
 			record.insertField({
@@ -350,18 +352,9 @@ export default async stream => {
 			if (isbn) {
 				return Promise.resolve('http://urn.fi/URN:ISBN:' + isbn);
 			}
-
-			return new Promise((resolve, reject) => {
-				http.get('http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn', resp => {
-					const data = [];
-
-					resp.on('data', chunk => data.push(chunk));
-
-					resp.on('end', () => resolve(data.join('')));
-				}).on('error', err => {
-					reject(err);
-				});
-			});
+			return fetch(URN_GENERATOR_URL)
+			.then(res => res.text())
+			.then(body => console.log(body));
 		}
 
 		function parseProductIdentifiers() {
@@ -455,6 +448,7 @@ export default async stream => {
 
 		function create245() {
 			const field = {tag: '245', ind1: '1', ind2: '0'};
+			/* First searched pattern is [space][en dash|em dash|dash][space] */
 			const results = [/\s+[\u2013\u2014-]\s+/.exec(title), /:\s+|\.+/.exec(title), /!+|\?+/.exec(title)];
 			const slices = {start: '', end: ''};
 
@@ -710,23 +704,14 @@ export default async stream => {
 	}
 
 	function dropRecord(node) {
-		return node.children.ProductIdentifier.reduce((acc, n) => {
-			if (acc) {
-				return true;
-			}
-
+		return node.children.ProductIdentifier.some((n) => {
 			const value = n.children.IDValue.value;
-			switch (n.children.ProductIDType.value) {
-				case '02':
-					if (!(value.startsWith('951') || value.startsWith('952'))) {
-						return true;
-					}
-
-					return false;
-
-				default:
-					return false;
+			if (n.children.ProductIDType.value == '02') {
+				if (!(value.startsWith('951') || value.startsWith('952'))) {
+					return true;
+				}
 			}
-		}, false);
+			return false;
+		});
 	}
 };
