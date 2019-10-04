@@ -347,14 +347,14 @@ export default async stream => {
 
 		return record;
 
-		function createURN() {
+		async function createURN() {
 			if (isbn) {
-				return Promise.resolve('http://urn.fi/URN:ISBN:' + isbn);
+				return 'http://urn.fi/URN:ISBN:' + isbn;
 			}
 
-			return fetch(URN_GENERATOR_URL)
-				.then(res => res.text())
-				.then(body => body);
+			const response = await fetch(URN_GENERATOR_URL);
+			const body = await response.text();
+			return body;
 		}
 
 		function parseProductIdentifiers() {
