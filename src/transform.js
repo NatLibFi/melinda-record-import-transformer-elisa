@@ -322,13 +322,12 @@ export default async stream => {
 		});
 
 		(async () => {
-			const URN = await createURN();
 			record.insertField({
 				tag: '856',
 				ind1: '4',
 				ind2: '0',
 				subfields: [
-					{code: 'u', value: URN},
+					{code: 'u', value: await createURN()},
 					{code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
 					{code: '5', value: 'FI-Vapaa'}
 				]
@@ -352,9 +351,10 @@ export default async stream => {
 			if (isbn) {
 				return Promise.resolve('http://urn.fi/URN:ISBN:' + isbn);
 			}
+
 			return fetch(URN_GENERATOR_URL)
-			.then(res => res.text())
-			.then(body => console.log(body));
+				.then(res => res.text())
+				.then(body => body);
 		}
 
 		function parseProductIdentifiers() {
@@ -704,13 +704,14 @@ export default async stream => {
 	}
 
 	function dropRecord(node) {
-		return node.children.ProductIdentifier.some((n) => {
+		return node.children.ProductIdentifier.some(n => {
 			const value = n.children.IDValue.value;
-			if (n.children.ProductIDType.value == '02') {
+			if (n.children.ProductIDType.value === '02') {
 				if (!(value.startsWith('951') || value.startsWith('952'))) {
 					return true;
 				}
 			}
+
 			return false;
 		});
 	}
