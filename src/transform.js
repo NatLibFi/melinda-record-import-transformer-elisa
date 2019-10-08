@@ -26,7 +26,6 @@
 *
 */
 
-import fetch from 'node-fetch';
 import moment from 'moment';
 import saxStream from 'sax-stream';
 import {MarcRecord} from '@natlibfi/marc-record';
@@ -46,8 +45,6 @@ const ISIL_MAP = {
 	'Ellibs Oy': 'FI-Ellibs',
 	'Kirjavälitys Oy': 'FI-KV'
 };
-
-const URN_GENERATOR_URL = 'http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn';
 
 export default async stream => {
 	const {createLogger} = Utils;
@@ -301,7 +298,7 @@ export default async stream => {
 			tag: '506',
 			ind1: '1',
 			subfields: [
-				{code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa'},
+				{code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
 				{code: 'f', value: 'Online access with authorization.'},
 				{code: '2', value: 'star'},
 				{code: '5', value: 'FI-Vapaa'},
@@ -315,24 +312,22 @@ export default async stream => {
 				{code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
 				{code: 'b', value: 'Kansalliskirjasto;'},
 				{code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
-				{code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433 '},
+				{code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
 				{code: '5', value: 'FI-Vapaa'},
 				{code: '9', value: 'FENNI<KEEP>'}
 			]
 		});
 
-		(async () => {
-			record.insertField({
-				tag: '856',
-				ind1: '4',
-				ind2: '0',
-				subfields: [
-					{code: 'u', value: await createURN()},
-					{code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
-					{code: '5', value: 'FI-Vapaa'}
-				]
-			});
-		})();
+		record.insertField({
+			tag: '856',
+			ind1: '4',
+			ind2: '0',
+			subfields: [
+				{code: 'u', value: 'URN'},
+				{code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
+				{code: '5', value: 'FI-Vapaa'}
+			]
+		});
 
 		record.insertField({
 			tag: '884',
@@ -346,16 +341,6 @@ export default async stream => {
 		});
 
 		return record;
-
-		async function createURN() {
-			if (isbn) {
-				return 'http://urn.fi/URN:ISBN:' + isbn;
-			}
-
-			const response = await fetch(URN_GENERATOR_URL);
-			const body = await response.text();
-			return body;
-		}
 
 		function parseProductIdentifiers() {
 			return getNodes('ProductIdentifier').reduce((acc, n) => {
@@ -523,6 +508,21 @@ export default async stream => {
 					{code: 'a', value: 'puhe'},
 					{code: 'b', value: 'spw'},
 					{code: '2', value: 'rdacontent'}
+				]
+			});
+
+			record.insertField({
+				tag: '347', subfields: [
+					{code: 'a', value: 'äänitiedosto'},
+					{code: 'b', value: 'MP3'},
+					{code: '2', value: 'rda'}
+				]
+			});
+
+			record.insertField({
+				tag: '500', subfields: [
+					{code: 'a', value: 'Äänikirja.'},
+					{code: '9', value: 'FENNI<KEEP>'}
 				]
 			});
 
