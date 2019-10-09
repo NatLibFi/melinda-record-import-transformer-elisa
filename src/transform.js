@@ -107,8 +107,6 @@ export default async stream => {
 		logger.log('debug', `isil:${isil}`);
 		logger.log('debug', `summary:${summary}`);
 
-		record.insertField({tag: '003', value: isil});
-
 		record.insertField(create006({0: 'm', 6: 'o', 9: 'h'}));
 		record.insertField(create008());
 
