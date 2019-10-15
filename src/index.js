@@ -37,5 +37,5 @@ const {startTransformer} = Transformer;
 run();
 
 async function run() {
-    startTransformer(transform);
+	startTransformer(transform);
 }

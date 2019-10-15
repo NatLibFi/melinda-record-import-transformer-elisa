@@ -51,7 +51,7 @@ const ISIL_MAP = {
 	'Kirjavälitys Oy': 'FI-KV'
 };
 
-export default function (stream, {validate = false , fix = false} = args) {
+export default function (stream, {validate = false, fix = false}) {
 	MarcRecord.setValidationOptions({subfieldValues: false});
 	const Emitter = new TransformEmitter();
 	const logger = createLogger();
@@ -59,7 +59,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 
 	readStream(stream);
 	return Emitter;
-	
+
 	async function readStream(stream) {
 		const promises = [];
 		try {
@@ -73,7 +73,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 				promises.push(transform(node));
 				async function transform(value) {
 					const result = await convertRecord(value, validate, fix);
-					//console.log(result);
+					// Console.log(result);
 					Emitter.emit('record', result);
 				}
 			});
@@ -99,17 +99,17 @@ export default function (stream, {validate = false , fix = false} = args) {
 				'Supplier',
 				'SupplierName'
 			]);
-	
+
 			const {isbn, gtin, proprietaryId} = parseProductIdentifiers();
 			const {textType, summary} = parseCollateralDetail();
 			const {form, formDetail} = parseProductForm();
 			const {titleType, titleLevel, title} = parseTitleDetail();
 			const contributors = parseContributors();
 			const {publisher, publishingDate, publishingStatus, publicationCountry} = parsePublishingDetail();
-	
+
 			const language = getLanguage();
 			const isil = getISIL();
-	
+
 			logger.log('debug', `languageRole:${languageRole}`);
 			logger.log('debug', `recordReference:${recordReference}`);
 			logger.log('debug', `notificationType:${notificationType}`);
@@ -123,10 +123,10 @@ export default function (stream, {validate = false , fix = false} = args) {
 			logger.log('debug', `language:${language}`);
 			logger.log('debug', `isil:${isil}`);
 			logger.log('debug', `summary:${summary}`);
-	
+
 			record.insertField(create006({0: 'm', 6: 'o', 9: 'h'}));
 			record.insertField(create008());
-	
+
 			if (proprietaryId) {
 				record.insertField({
 					tag: '035',
@@ -135,7 +135,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 					]
 				});
 			}
-	
+
 			record.insertField({
 				tag: '037',
 				ind1: '3',
@@ -143,14 +143,14 @@ export default function (stream, {validate = false , fix = false} = args) {
 					{code: 'a', value: recordReference}
 				]
 			});
-	
+
 			record.insertField({
 				tag: '300',
 				subfields: [
 					{code: 'a', value: '1 verkkoaineisto'}
 				]
 			});
-	
+
 			record.insertField({
 				tag: '337',
 				subfields: [
@@ -159,7 +159,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 					{code: '2', value: 'rdamedia'}
 				]
 			});
-	
+
 			record.insertField({
 				tag: '338',
 				subfields: [
@@ -168,7 +168,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 					{code: '2', value: 'rdacarrier'}
 				]
 			});
-	
+
 			record.insertField({
 				tag: '344',
 				subfields: [
@@ -176,17 +176,17 @@ export default function (stream, {validate = false , fix = false} = args) {
 					{code: '2', value: 'rda'}
 				]
 			});
-	
+
 			/*
 			If (textType === '03' && summary) {
 				  record.insertField({
 					tag: '520,',
 					subfields: [
 						  {code: 'a', value: summary }
-					]onsole.log("error" + errorEvent); 
+					]onsole.log("error" + errorEvent);
 				  })
 			} */
-	
+
 			if (isbn) {
 				record.insertField({
 					tag: '020',
@@ -203,10 +203,10 @@ export default function (stream, {validate = false , fix = false} = args) {
 					]
 				});
 			}
-	
+
 			if (languageRole === '01') {
 				update008({35: language[0], 36: language[1], 37: language[2]});
-	
+
 				record.insertField({
 					tag: '041',
 					subfields: [
@@ -214,7 +214,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 					]
 				});
 			}
-	
+
 			if (['00', '02', '01', '03'].includes(titleType)) {
 				if (titleType === '02') {
 					record.insertField({
@@ -225,7 +225,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 						]
 					});
 				}
-	
+
 				record.insertField(create245());
 			} else if (['04', '05', '10', '11', '12', '13'].includes(titleType)) {
 				record.insertField(create246());
@@ -258,7 +258,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 						break;
 				}
 			}
-	
+
 			if (publisher) {
 				const field = {
 					tag: '264',
@@ -267,16 +267,16 @@ export default function (stream, {validate = false , fix = false} = args) {
 						{code: 'b', value: publisher}
 					]
 				};
-	
+
 				if (publishingDate) {
 					field.subfields.push({code: 'c', value: publishingDate});
 				}
-	
+
 				record.insertField(field);
 			}
-	
+
 			handleContributors();
-	
+
 			if (form === 'AJ' && formDetail === 'A103') {
 				handleAudio();
 			} else if ((form === 'EB' || form === 'ED') && formDetail === 'E101') {
@@ -284,7 +284,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 			} else if ((form === 'EB' || form === 'ED') && formDetail === 'E107') {
 				handleText('PDF');
 			}
-	
+
 			record.insertField({
 				tag: '040',
 				subfields: [
@@ -294,21 +294,21 @@ export default function (stream, {validate = false , fix = false} = args) {
 					{code: 'd', value: 'FI-NL'}
 				]
 			});
-	
+
 			record.insertField({
 				tag: '042',
 				subfields: [
 					{code: 'a', value: 'finb'}
 				]
 			});
-	
+
 			record.insertField({
 				tag: 'LOW',
 				subfields: [
 					{code: 'a', value: 'FIKKA'}
 				]
 			});
-	
+
 			record.insertField({
 				tag: '506',
 				ind1: '1',
@@ -320,7 +320,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 					{code: '9', value: 'FENNI<KEEP>'}
 				]
 			});
-	
+
 			record.insertField({
 				tag: '540',
 				subfields: [
@@ -332,7 +332,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 					{code: '9', value: 'FENNI<KEEP>'}
 				]
 			});
-	
+
 			record.insertField({
 				tag: '856',
 				ind1: '4',
@@ -343,7 +343,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 					{code: '5', value: 'FI-Vapaa'}
 				]
 			});
-	
+
 			record.insertField({
 				tag: '884',
 				subfields: [
@@ -351,16 +351,16 @@ export default function (stream, {validate = false , fix = false} = args) {
 					{code: 'g', value: moment().format('YYYYMMDD')},
 					{code: 'k', value: isil},
 					{code: 'q', value: 'FI-NL'}
-	
+
 				]
 			});
-	
+
 			return record;
-	
+
 			function parseProductIdentifiers() {
 				return getNodes('ProductIdentifier').reduce((acc, n) => {
 					const value = getNodeValue('IDValue', n);
-	
+
 					switch (getNodeValue('ProductIDType', n)) {
 						case '03':
 							return Object.assign(acc, {gtin: value});
@@ -373,14 +373,14 @@ export default function (stream, {validate = false , fix = false} = args) {
 							if ('isbn' in acc) {
 								return acc;
 							}
-	
+
 							return Object.assign(acc, {isbn: value});
 						default:
 							return acc;
 					}
 				}, {});
 			}
-	
+
 			function parseCollateralDetail() {
 				return {
 					summary: getNodeValue(['CollateralDetail', 'TextContent', 'Text']),
@@ -391,14 +391,14 @@ export default function (stream, {validate = false , fix = false} = args) {
 					])
 				};
 			}
-	
+
 			function parseProductForm() {
 				return {
 					form: getNodeValue(['DescriptiveDetail', 'ProductForm']),
 					formDetail: getNodeValue(['DescriptiveDetail', 'ProductFormDetail'])
 				};
 			}
-	
+
 			function parseTitleDetail() {
 				return {
 					titleType: getNodeValue([
@@ -412,7 +412,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 					])
 				};
 			}
-	
+
 			function parseContributors() {
 				const list = getNodes(['DescriptiveDetail', 'Contributor'])
 					.filter(n => n)
@@ -424,11 +424,11 @@ export default function (stream, {validate = false , fix = false} = args) {
 						};
 					})
 					.filter(n => n.name);
-	
+
 				list.sort((a, b) => Number(a.sequence) - Number(b.sequence));
 				return list;
 			}
-	
+
 			function parsePublishingDetail() {
 				return {
 					publisher: getNodeValue([
@@ -445,13 +445,13 @@ export default function (stream, {validate = false , fix = false} = args) {
 					])
 				};
 			}
-	
+
 			function create245() {
 				const field = {tag: '245', ind1: '1', ind2: '0'};
 				/* First searched pattern is [space][en dash|em dash|dash][space] */
 				const results = [/\s+[\u2013\u2014-]\s+/.exec(title), /:\s+|\.+/.exec(title), /!+|\?+/.exec(title)];
 				const slices = {start: '', end: ''};
-	
+
 				if (results[0]) {
 					/* Space dash space found */
 					slices.start = title.slice(0, results[0].index);
@@ -465,7 +465,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 					slices.start = title.slice(0, results[2].index + 1);
 					slices.end = title.slice(results[2].index + 1 + results[2][0].length);
 				}
-	
+
 				if (slices.end.replace(/\s+$/, '').length > 0) {
 					/* End is not empty, slice the title */
 					field.subfields = [
@@ -474,11 +474,11 @@ export default function (stream, {validate = false , fix = false} = args) {
 					];
 					return field;
 				}
-	
+
 				field.subfields = [{code: 'a', value: title}];
 				return field;
 			}
-	
+
 			function create246() {
 				const field = {tag: '246', subfields: [{code: 'a', value: title}]};
 				switch (titleType) {
@@ -506,17 +506,17 @@ export default function (stream, {validate = false , fix = false} = args) {
 					default:
 						break;
 				}
-	
+
 				return field;
 			}
-	
+
 			function handleAudio() {
 				record.leader = createLeader({6: 'i', 7: 'm'});
 				record.insertField({tag: '007', value: 'sr|uunnnnnuneu'});
 				record.insertField({tag: '007', value: 'cr|nnannnuuuuu'});
-	
+
 				update008({0: 'm', 23: 'o', 26: 'z'});
-	
+
 				record.insertField({
 					tag: '336',
 					subfields: [
@@ -525,7 +525,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 						{code: '2', value: 'rdacontent'}
 					]
 				});
-	
+
 				record.insertField({
 					tag: '347', subfields: [
 						{code: 'a', value: 'äänitiedosto'},
@@ -533,14 +533,14 @@ export default function (stream, {validate = false , fix = false} = args) {
 						{code: '2', value: 'rda'}
 					]
 				});
-	
+
 				record.insertField({
 					tag: '500', subfields: [
 						{code: 'a', value: 'Äänikirja.'},
 						{code: '9', value: 'FENNI<KEEP>'}
 					]
 				});
-	
+
 				record.insertField({
 					tag: '655',
 					ind2: '7',
@@ -551,7 +551,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 					]
 				});
 			}
-	
+
 			function handleContributors() {
 				const pattern = /\s?\(toim\.\)|Toimittanut /;
 				contributors
@@ -563,7 +563,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 								role: 'toimittaja'
 							};
 						}
-	
+
 						return {
 							name: c.name,
 							role: c.role === 'A01' ? 'kirjoittaja' : 'lukija'
@@ -571,11 +571,11 @@ export default function (stream, {validate = false , fix = false} = args) {
 					})
 					.forEach((contributor, index) => {
 						const {name, role} = contributor;
-	
+
 						/* Not a actual name */
 						if (/, Useita/i.test(name)) {
 							const f245 = record.get(/^245$/).shift();
-	
+
 							if (f245) {
 								f245.ind1 = '0';
 							}
@@ -600,19 +600,19 @@ export default function (stream, {validate = false , fix = false} = args) {
 						}
 					});
 			}
-	
+
 			function handleText(format) {
 				record.leader = createLeader({6: 'a', 7: 'm'});
 				record.insertField({tag: '007', value: 'cr||||||||||||'});
-	
+
 				update008({6: 's', 23: 'o'});
-	
+
 				const f020 = record.get(/^020$/).shift();
-	
+
 				if (f020) {
 					f020.subfields.push({code: 'q', value: format});
 				}
-	
+
 				record.insertField({
 					tag: '336',
 					subfields: [
@@ -621,7 +621,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 						{code: '2', value: 'rdacontent'}
 					]
 				});
-	
+
 				record.insertField({
 					tag: '347',
 					subfields: [
@@ -631,15 +631,15 @@ export default function (stream, {validate = false , fix = false} = args) {
 					]
 				});
 			}
-	
+
 			function getEncodingLevel() {
 				if ([notificationType] in ENCODING_LEVEL_MAP) {
 					return ENCODING_LEVEL_MAP[notificationType];
 				}
-	
+
 				return '|';
 			}
-	
+
 			function createLeader(mappings) {
 				const fixedMappings = {
 					5: 'n',
@@ -647,69 +647,69 @@ export default function (stream, {validate = false , fix = false} = args) {
 					19: '^',
 					17: getEncodingLevel()
 				};
-	
+
 				return mapValuesToString(
 					'00000|||^a22000008i^4500',
 					Object.assign(mappings, fixedMappings)
 				);
 			}
-	
+
 			function create006(mappings) {
 				return {
 					tag: '006',
 					value: mapValuesToString('||||||||||||||||||', mappings)
 				};
 			}
-	
+
 			function create008() {
 				const date = moment().format('YYMMDD');
 				const publishingYear = publishingDate ? publishingDate.slice(0, 4) : '^^^^';
 				const value = `${date}|${publishingYear}||||^^^|||||^|||||^||||||||||`;
-	
+
 				return {tag: '008', value};
 			}
-	
+
 			function update008(mappings) {
 				const f008 = record.get(/^008$/).shift();
 				f008.value = mapValuesToString(f008.value, mappings);
 			}
-	
+
 			function getLanguage() {
 				if (summary && /Huom\. kirja on englanninkielinen/.test(summary)) {
 					return 'eng';
 				}
-	
+
 				return getNodeValue(['DescriptiveDetail', 'Language', 'LanguageCode']);
 			}
-	
+
 			// TODO: Fetch ISIL from HTTP service instead (And cache for reuse)
 			function getISIL() {
 				return ISIL_MAP[supplier];
 			}
-	
+
 			function getNodeValue(elements, ctx = node) {
 				const target = [].concat(elements).reduce((ptr, name) => {
 					if (ptr) {
 						if (Array.isArray(ptr) && ptr[0].children) {
 							return ptr[0].children[name];
 						}
-	
+
 						return ptr.children ? ptr.children[name] : undefined;
 					}
-	
+
 					return undefined;
 				}, ctx);
-	
+
 				return Array.isArray(target) ? target[0].value : (target ? target.value : undefined);
 			}
-	
+
 			function getNodes(elements, ctx = node) {
 				const target = [].concat(elements).reduce((ptr, name) => {
 					return ptr.children[name];
 				}, ctx);
 				return Array.isArray(target) ? target : [target];
 			}
-	
+
 			function mapValuesToString(str, mappings) {
 				return Object.keys(mappings).reduce((buf, index) => {
 					buf[index] = mappings[index];
@@ -717,7 +717,7 @@ export default function (stream, {validate = false , fix = false} = args) {
 				}, str.split('')).join('');
 			}
 		}
-	
+
 		function dropRecord(node) {
 			return node.children.ProductIdentifier.some(n => {
 				const value = n.children.IDValue.value;
@@ -726,22 +726,23 @@ export default function (stream, {validate = false , fix = false} = args) {
 						return true;
 					}
 				}
-	
+
 				return false;
 			});
 		}
 
 		if (dropRecord(onixRecord)) {
 			logger.log('info', `dropped record with recordReference: ${onixRecord.children.RecordReference.value}`);
-			return {failed: true};
+			return {failed: true, record: transformToMarc(onixRecord)};
 		}
+
 		const marcRecord = transformToMarc(onixRecord);
-			
+
 		if (validate === true || fix === true) {
-			return await validator(marcRecord, validate, fix);
+			return validator(marcRecord, validate, fix);
 		}
-		
+
 		return {failed: false, record: marcRecord};
 	}
-};
+}
 

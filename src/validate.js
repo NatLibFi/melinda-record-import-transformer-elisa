@@ -31,9 +31,8 @@
 
 import validateFactory from '@natlibfi/marc-record-validate';
 import {
-	IsbnIssn, ItemLanguage, EndingPunctuation, EmptyFields
+	IsbnIssn, ItemLanguage, EndingPunctuation, EmptyFields, Urn
 } from '@natlibfi/marc-record-validators-melinda';
-import {Urn} from '/home/sairanes/marc-record-validators-melinda/dist'
 
 export default async (record, fix, validateFixes) => {
 	const validate = validateFactory([
@@ -46,7 +45,6 @@ export default async (record, fix, validateFixes) => {
 
 	const opts = fix ? {fix, validateFixes} : {fix};
 	const result = await validate(record, opts);
-	//console.log(result.report);
 	return {
 		record: result.record,
 		failed: result.valid === false,

@@ -34,14 +34,14 @@ const {runCLI} = Transformer;
 run();
 
 async function run() {
-    const transformerSettings = {
-        name: 'melinda-record-import-transformer-onix',
-        yargsOptions: [
-            {option: 'v', conf: {alias: 'validate', default: false, type: 'boolean', describe: 'Validate records'}},
-            {option: 'f', conf: {alias: 'fix', default: false, type: 'boolean', describe: 'Validate & fix records'}}
-        ],
-        callback: transform
-    };
-    runCLI(transformerSettings);
+	const transformerSettings = {
+		name: 'melinda-record-import-transformer-onix',
+		yargsOptions: [
+			{option: 'v', conf: {alias: 'validate', default: false, type: 'boolean', describe: 'Validate records'}},
+			{option: 'f', conf: {alias: 'fix', default: false, type: 'boolean', describe: 'Validate & fix records'}}
+		],
+		callback: transform
+	};
+	runCLI(transformerSettings);
 }
 
