@@ -28,15 +28,28 @@
 */
 
 /* eslint-disable new-cap */
-import validateFactory from '@natlibfi/marc-record-validate';
-import {IsbnIssn, ItemLanguage, EndingPunctuation, EmptyFields, Urn} from '@natlibfi/marc-record-validators-melinda';
 
-export default async () => {
-	return validateFactory([
-		await EndingPunctuation(),
+import validateFactory from '@natlibfi/marc-record-validate';
+import {
+	IsbnIssn, ItemLanguage, EndingPunctuation, EmptyFields
+} from '@natlibfi/marc-record-validators-melinda';
+import {Urn} from '/home/sairanes/marc-record-validators-melinda/dist'
+
+export default async (record, fix, validateFixes) => {
+	const validate = validateFactory([
 		await IsbnIssn({hyphenateISBN: true}),
+		await EndingPunctuation(),
 		await ItemLanguage(/^520$/),
 		await Urn(),
 		await EmptyFields()
 	]);
+
+	const opts = fix ? {fix, validateFixes} : {fix};
+	const result = await validate(record, opts);
+	//console.log(result.report);
+	return {
+		record: result.record,
+		failed: result.valid === false,
+		messages: result.report
+	};
 };
