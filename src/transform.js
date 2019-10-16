@@ -25,7 +25,7 @@
 * for the JavaScript code in this file.
 *
 */
-
+import {chain} from 'stream-chain';
 import moment from 'moment';
 import saxStream from 'sax-stream';
 import {MarcRecord} from '@natlibfi/marc-record';
@@ -56,28 +56,24 @@ export default function (stream, {validate = false, fix = false}) {
 	const Emitter = new TransformEmitter();
 	const logger = createLogger();
 	logger.log('debug', 'Starting to send recordEvents');
-
 	readStream(stream);
 	return Emitter;
 
 	async function readStream(stream) {
-		const promises = [];
 		try {
-			const xmlStream = stream.pipe(saxStream({
-				strict: true, tag: 'Product'
-			}));
-			xmlStream.on('error', err => {
-				Emitter.emit('error', err);
-			});
-			xmlStream.on('data', async node => {
+			const promises = [];
+			const pipeline = chain([
+				stream,
+				saxStream({strict: true, tag: 'Product'})
+			]);
+			pipeline.on('data', async node => {
 				promises.push(transform(node));
 				async function transform(value) {
 					const result = await convertRecord(value, validate, fix);
-					// Console.log(result);
 					Emitter.emit('record', result);
 				}
 			});
-			xmlStream.on('end', async () => {
+			pipeline.on('end', async () => {
 				logger.log('debug', `Handled ${promises.length} recordEvents`);
 				await Promise.all(promises);
 				Emitter.emit('end', promises.length);
@@ -88,6 +84,32 @@ export default function (stream, {validate = false, fix = false}) {
 	}
 
 	async function convertRecord(onixRecord, validate, fix) {
+		if (dropRecord(onixRecord)) {
+			// Logger.log('info', `dropped record with recordReference: ${onixRecord.children.RecordReference.value}`);
+			return {failed: true, record: transformToMarc(onixRecord)};
+		}
+
+		const marcRecord = transformToMarc(onixRecord);
+
+		if (validate === true || fix === true) {
+			return validator(marcRecord, fix, validate);
+		}
+
+		return {failed: false, record: marcRecord};
+
+		function dropRecord(node) {
+			return node.children.ProductIdentifier.some(n => {
+				const value = n.children.IDValue.value;
+				if (n.children.ProductIDType.value === '02') {
+					if (!(value.startsWith('951') || value.startsWith('952'))) {
+						return true;
+					}
+				}
+
+				return false;
+			});
+		}
+
 		function transformToMarc(node) {
 			const record = new MarcRecord();
 			const languageRole = getNodeValue(['DescriptiveDetail', 'Language', 'LanguageRole']);
@@ -183,7 +205,7 @@ export default function (stream, {validate = false, fix = false}) {
 					tag: '520,',
 					subfields: [
 						  {code: 'a', value: summary }
-					]onsole.log("error" + errorEvent);
+					]
 				  })
 			} */
 
@@ -263,10 +285,14 @@ export default function (stream, {validate = false, fix = false}) {
 				const field = {
 					tag: '264',
 					ind2: '1',
-					subfields: [
-						{code: 'b', value: publisher}
-					]
+					subfields: []
 				};
+
+				if (publisher.endsWith(',')) {
+					field.subfields.push({code: 'b', value: publisher});
+				} else {
+					field.subfields.push({code: 'b', value: publisher + ','});
+				}
 
 				if (publishingDate) {
 					field.subfields.push({code: 'c', value: publishingDate});
@@ -306,6 +332,16 @@ export default function (stream, {validate = false, fix = false}) {
 				tag: 'LOW',
 				subfields: [
 					{code: 'a', value: 'FIKKA'}
+				]
+			});
+
+			record.insertField({
+				tag: '500',
+				ind1: ' ',
+				ind2: ' ',
+				subfields: [
+					{code: 'a', value: 'Koneellisesti tuotettu tietue.'},
+					{code: '9', value: 'FENNI<KEEP>'}
 				]
 			});
 
@@ -564,8 +600,15 @@ export default function (stream, {validate = false, fix = false}) {
 							};
 						}
 
+						if (c.name.endsWith(',')) {
+							return {
+								name: c.name,
+								role: c.role === 'A01' ? 'kirjoittaja' : 'lukija'
+							};
+						}
+
 						return {
-							name: c.name,
+							name: c.name + ',',
 							role: c.role === 'A01' ? 'kirjoittaja' : 'lukija'
 						};
 					})
@@ -717,32 +760,6 @@ export default function (stream, {validate = false, fix = false}) {
 				}, str.split('')).join('');
 			}
 		}
-
-		function dropRecord(node) {
-			return node.children.ProductIdentifier.some(n => {
-				const value = n.children.IDValue.value;
-				if (n.children.ProductIDType.value === '02') {
-					if (!(value.startsWith('951') || value.startsWith('952'))) {
-						return true;
-					}
-				}
-
-				return false;
-			});
-		}
-
-		if (dropRecord(onixRecord)) {
-			logger.log('info', `dropped record with recordReference: ${onixRecord.children.RecordReference.value}`);
-			return {failed: true, record: transformToMarc(onixRecord)};
-		}
-
-		const marcRecord = transformToMarc(onixRecord);
-
-		if (validate === true || fix === true) {
-			return validator(marcRecord, validate, fix);
-		}
-
-		return {failed: false, record: marcRecord};
 	}
 }
 

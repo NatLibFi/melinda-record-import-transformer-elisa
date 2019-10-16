@@ -31,14 +31,13 @@
 
 import validateFactory from '@natlibfi/marc-record-validate';
 import {
-	IsbnIssn, ItemLanguage, EndingPunctuation, EmptyFields, Urn
+	IsbnIssn, EndingPunctuation, EmptyFields, Urn
 } from '@natlibfi/marc-record-validators-melinda';
 
 export default async (record, fix, validateFixes) => {
 	const validate = validateFactory([
 		await IsbnIssn({hyphenateISBN: true}),
 		await EndingPunctuation(),
-		await ItemLanguage(/^520$/),
 		await Urn(),
 		await EmptyFields()
 	]);
