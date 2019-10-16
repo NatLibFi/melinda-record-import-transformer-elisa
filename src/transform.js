@@ -285,14 +285,8 @@ export default function (stream, {validate = false, fix = false}) {
 				const field = {
 					tag: '264',
 					ind2: '1',
-					subfields: []
+					subfields: [{code: 'b', value: publisher}]
 				};
-
-				if (publisher.endsWith(',')) {
-					field.subfields.push({code: 'b', value: publisher});
-				} else {
-					field.subfields.push({code: 'b', value: publisher + ','});
-				}
 
 				if (publishingDate) {
 					field.subfields.push({code: 'c', value: publishingDate});
@@ -366,17 +360,6 @@ export default function (stream, {validate = false, fix = false}) {
 					{code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
 					{code: '5', value: 'FI-Vapaa'},
 					{code: '9', value: 'FENNI<KEEP>'}
-				]
-			});
-
-			record.insertField({
-				tag: '856',
-				ind1: '4',
-				ind2: '0',
-				subfields: [
-					{code: 'u', value: 'URN'},
-					{code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
-					{code: '5', value: 'FI-Vapaa'}
 				]
 			});
 
@@ -600,15 +583,8 @@ export default function (stream, {validate = false, fix = false}) {
 							};
 						}
 
-						if (c.name.endsWith(',')) {
-							return {
-								name: c.name,
-								role: c.role === 'A01' ? 'kirjoittaja' : 'lukija'
-							};
-						}
-
 						return {
-							name: c.name + ',',
+							name: c.name,
 							role: c.role === 'A01' ? 'kirjoittaja' : 'lukija'
 						};
 					})
