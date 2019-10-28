@@ -28,12 +28,28 @@
 */
 
 /* eslint-disable new-cap */
-import validateFactory from '@natlibfi/marc-record-validate';
-import {IsbnIssn, ItemLanguage} from '@natlibfi/marc-record-validators-melinda';
 
-export default async () => {
-	return validateFactory([
-		await IsbnIssn(),
-		await ItemLanguage(/^520$/)
+import validateFactory from '@natlibfi/marc-record-validate';
+import {
+	IsbnIssn, EndingPunctuation, FieldExclusion, Urn, AccessRights
+} from '@natlibfi/marc-record-validators-melinda';
+
+export default async (record, fix, validateFixes) => {
+	const validate = validateFactory([
+		await IsbnIssn({hyphenateISBN: true}),
+		await EndingPunctuation(),
+		await Urn(),
+		await FieldExclusion([{
+			tag: /^520$/
+		}]),
+		await AccessRights()
 	]);
+
+	const opts = fix ? {fix, validateFixes} : {fix};
+	const result = await validate(record, opts);
+	return {
+		record: result.record,
+		failed: result.valid === false,
+		messages: result.report
+	};
 };
