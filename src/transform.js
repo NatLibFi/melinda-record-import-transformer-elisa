@@ -51,7 +51,7 @@ const ISIL_MAP = {
 	'Kirjavälitys Oy': 'FI-KV'
 };
 
-export default function (stream, {validate = false, fix = false}) {
+export default function (stream, {validate = true, fix = true}) {
 	MarcRecord.setValidationOptions({subfieldValues: false});
 	const Emitter = new TransformEmitter();
 	const logger = createLogger();
@@ -146,8 +146,8 @@ export default function (stream, {validate = false, fix = false}) {
 			logger.log('debug', `isil:${isil}`);
 			logger.log('debug', `summary:${summary}`);
 
-			record.insertField(create006({0: 'm', 6: 'o', 9: 'h'}));
 			record.insertField(create008());
+			update008({6: 's', 15: 'x', 16: 'x', 23: 'o'});
 
 			if (proprietaryId) {
 				record.insertField({
@@ -156,15 +156,24 @@ export default function (stream, {validate = false, fix = false}) {
 						{code: 'a', value: `(${isil})${proprietaryId}`}
 					]
 				});
+				record.insertField({
+					tag: '037',
+					ind1: '3',
+					subfields: [
+						{code: 'a', value: proprietaryId},
+						{code: 'b', value: supplier}
+					]
+				});
+			} else {
+				record.insertField({
+					tag: '037',
+					ind1: '3',
+					subfields: [
+						{code: 'a', value: recordReference},
+						{code: 'b', value: supplier}
+					]
+				});
 			}
-
-			record.insertField({
-				tag: '037',
-				ind1: '3',
-				subfields: [
-					{code: 'a', value: recordReference}
-				]
-			});
 
 			record.insertField({
 				tag: '300',
@@ -199,15 +208,14 @@ export default function (stream, {validate = false, fix = false}) {
 				]
 			});
 
-			/*
-			If (textType === '03' && summary) {
-				  record.insertField({
-					tag: '520,',
+			if (textType === '03' && summary) {
+				record.insertField({
+					tag: '520',
 					subfields: [
-						  {code: 'a', value: summary }
+						{code: 'a', value: summary}
 					]
-				  })
-			} */
+				});
+			}
 
 			if (isbn) {
 				record.insertField({
@@ -340,30 +348,6 @@ export default function (stream, {validate = false, fix = false}) {
 			});
 
 			record.insertField({
-				tag: '506',
-				ind1: '1',
-				subfields: [
-					{code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
-					{code: 'f', value: 'Online access with authorization.'},
-					{code: '2', value: 'star'},
-					{code: '5', value: 'FI-Vapaa'},
-					{code: '9', value: 'FENNI<KEEP>'}
-				]
-			});
-
-			record.insertField({
-				tag: '540',
-				subfields: [
-					{code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
-					{code: 'b', value: 'Kansalliskirjasto;'},
-					{code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
-					{code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
-					{code: '5', value: 'FI-Vapaa'},
-					{code: '9', value: 'FENNI<KEEP>'}
-				]
-			});
-
-			record.insertField({
 				tag: '884',
 				subfields: [
 					{code: 'a', value: 'ONIX3 to MARC transformation'},
@@ -468,7 +452,7 @@ export default function (stream, {validate = false, fix = false}) {
 			function create245() {
 				const field = {tag: '245', ind1: '1', ind2: '0'};
 				/* First searched pattern is [space][en dash|em dash|dash][space] */
-				const results = [/\s+[\u2013\u2014-]\s+/.exec(title), /:\s+|\.+/.exec(title), /!+|\?+/.exec(title)];
+				const results = [/\s+[\u2013\u2014-]\s+/.exec(title), /:\s+|[^.]\.[^.]/.exec(title), /!+|\?+/.exec(title)];
 				const slices = {start: '', end: ''};
 
 				if (results[0]) {
@@ -531,10 +515,15 @@ export default function (stream, {validate = false, fix = false}) {
 
 			function handleAudio() {
 				record.leader = createLeader({6: 'i', 7: 'm'});
+				record.insertField(create006({0: 'm', 6: 'o', 9: 'h'}));
 				record.insertField({tag: '007', value: 'sr|uunnnnnuneu'});
 				record.insertField({tag: '007', value: 'cr|nnannnuuuuu'});
 
-				update008({0: 'm', 23: 'o', 26: 'z'});
+				const f020 = record.get(/^020$/).shift();
+
+				if (f020) {
+					f020.subfields.push({code: 'q', value: 'MP3'});
+				}
 
 				record.insertField({
 					tag: '336',
@@ -622,9 +611,8 @@ export default function (stream, {validate = false, fix = false}) {
 
 			function handleText(format) {
 				record.leader = createLeader({6: 'a', 7: 'm'});
+				record.insertField(create006({0: 'm', 6: 'o', 9: 'd'}));
 				record.insertField({tag: '007', value: 'cr||||||||||||'});
-
-				update008({6: 's', 23: 'o'});
 
 				const f020 = record.get(/^020$/).shift();
 

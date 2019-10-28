@@ -31,7 +31,7 @@
 
 import validateFactory from '@natlibfi/marc-record-validate';
 import {
-	IsbnIssn, EndingPunctuation, EmptyFields, Urn
+	IsbnIssn, EndingPunctuation, FieldExclusion, Urn, AccessRights
 } from '@natlibfi/marc-record-validators-melinda';
 
 export default async (record, fix, validateFixes) => {
@@ -39,7 +39,10 @@ export default async (record, fix, validateFixes) => {
 		await IsbnIssn({hyphenateISBN: true}),
 		await EndingPunctuation(),
 		await Urn(),
-		await EmptyFields()
+		await FieldExclusion([{
+			tag: /^520$/
+		}]),
+		await AccessRights()
 	]);
 
 	const opts = fix ? {fix, validateFixes} : {fix};
