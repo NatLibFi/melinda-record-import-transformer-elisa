@@ -37,12 +37,12 @@ import {
 export default async (record, fix, validateFixes) => {
 	const validate = validateFactory([
 		await IsbnIssn({hyphenateISBN: true}),
-		await EndingPunctuation(),
 		await Urn(),
 		await FieldExclusion([{
 			tag: /^520$/
 		}]),
-		await AccessRights()
+		await AccessRights(),
+		await EndingPunctuation()
 	]);
 
 	const opts = fix ? {fix, validateFixes} : {fix};
