@@ -29,7 +29,6 @@
 
 /* eslint-disable new-cap */
 
-
 import validateFactory from '@natlibfi/marc-record-validate';
 import {
 	IsbnIssn, FieldExclusion, Urn, EndingPunctuation, AccessRights, ItemLanguage
