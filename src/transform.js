@@ -149,7 +149,12 @@ export default function (stream, {validate = true, fix = true}) {
 			logger.log('debug', `summary:${summary}`);
 
 			record.insertField(create008());
-			update008({6: 's', 15: 'x', 16: 'x', 23: 'o'});
+
+			if (publicationCountry) {
+				update008({6: 's', 15: publicationCountry[0].toLowerCase(), 16: publicationCountry[1].toLowerCase(), 23: 'o'});
+			} else {
+				update008({6: 's', 15: 'x', 16: 'x', 23: 'o'});
+			}
 
 			if (proprietaryId) {
 				record.insertField({
