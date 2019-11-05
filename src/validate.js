@@ -31,13 +31,14 @@
 
 import validateFactory from '@natlibfi/marc-record-validate';
 import {
-	IsbnIssn, EndingPunctuation, FieldExclusion, Urn, AccessRights
+	IsbnIssn, FieldExclusion, Urn, EndingPunctuation, AccessRights, ItemLanguage
 } from '@natlibfi/marc-record-validators-melinda';
 
-export default async (record, fix, validateFixes) => {
+export default async () => {
 	const validate = validateFactory([
 		await IsbnIssn({hyphenateISBN: true}),
 		await Urn(),
+		await ItemLanguage(/^520$/),
 		await FieldExclusion([{
 			tag: /^520$/
 		}]),
@@ -45,11 +46,13 @@ export default async (record, fix, validateFixes) => {
 		await EndingPunctuation()
 	]);
 
-	const opts = fix ? {fix, validateFixes} : {fix};
-	const result = await validate(record, opts);
-	return {
-		record: result.record,
-		failed: result.valid === false,
-		messages: result.report
+	return async (record, fix, validateFixes) => {
+		const opts = fix ? {fix, validateFixes} : {fix};
+		const result = await validate(record, opts);
+		return {
+			record: result.record,
+			failed: result.valid === false,
+			messages: result.report
+		};
 	};
 };

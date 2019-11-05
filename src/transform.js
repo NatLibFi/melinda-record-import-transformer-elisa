@@ -29,7 +29,7 @@ import {chain} from 'stream-chain';
 import moment from 'moment';
 import saxStream from 'sax-stream';
 import {MarcRecord} from '@natlibfi/marc-record';
-import validator from './validate';
+import createValidator from './validate';
 import {Utils} from '@natlibfi/melinda-commons';
 import {EventEmitter} from 'events';
 
@@ -55,11 +55,13 @@ export default function (stream, {validate = true, fix = true}) {
 	MarcRecord.setValidationOptions({subfieldValues: false});
 	const Emitter = new TransformEmitter();
 	const logger = createLogger();
+	let validator;
 	logger.log('debug', 'Starting to send recordEvents');
 	readStream(stream);
 	return Emitter;
 
 	async function readStream(stream) {
+		validator = await createValidator();
 		try {
 			const promises = [];
 			const pipeline = chain([
