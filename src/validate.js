@@ -31,7 +31,7 @@
 
 import validateFactory from '@natlibfi/marc-record-validate';
 import {
-	IsbnIssn, FieldExclusion, Urn, EndingPunctuation, AccessRights, ItemLanguage
+	IsbnIssn, FieldExclusion, Urn, EndingPunctuation, AccessRights, ItemLanguage, Punctuation
 } from '@natlibfi/marc-record-validators-melinda';
 
 export default async () => {
@@ -43,7 +43,8 @@ export default async () => {
 			tag: /^520$/
 		}]),
 		await AccessRights(),
-		await EndingPunctuation()
+		await EndingPunctuation(),
+		await Punctuation()
 	]);
 
 	return async (record, fix, validateFixes) => {
