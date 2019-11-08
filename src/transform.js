@@ -51,6 +51,13 @@ const ISIL_MAP = {
 	'Kirjavälitys Oy': 'FI-KV'
 };
 
+const SOURCE_MAP = {
+	'Elisa Kirja': 'MELINDA_RECORD_IMPORT_SOURCE1',
+	'Ellibs Oy': 'MELINDA_RECORD_IMPORT_SOURCE2',
+	'BoD': 'MELINDA_RECORD_IMPORT_SOURCE3',
+	'Kirjavälitys Oy': 'MELINDA_RECORD_IMPORT_SOURCE4'
+};
+
 export default function (stream, {validate = true, fix = true}) {
 	MarcRecord.setValidationOptions({subfieldValues: false});
 	const Emitter = new TransformEmitter();
@@ -133,6 +140,7 @@ export default function (stream, {validate = true, fix = true}) {
 
 			const language = getLanguage();
 			const isil = getISIL();
+			const source = getSource();
 
 			logger.log('debug', `languageRole:${languageRole}`);
 			logger.log('debug', `recordReference:${recordReference}`);
@@ -154,32 +162,6 @@ export default function (stream, {validate = true, fix = true}) {
 				update008({6: 's', 15: publicationCountry[0].toLowerCase(), 16: publicationCountry[1].toLowerCase(), 23: 'o'});
 			} else {
 				update008({6: 's', 15: 'x', 16: 'x', 23: 'o'});
-			}
-
-			if (proprietaryId) {
-				record.insertField({
-					tag: '035',
-					subfields: [
-						{code: 'a', value: `(${isil})${proprietaryId}`}
-					]
-				});
-				record.insertField({
-					tag: '037',
-					ind1: '3',
-					subfields: [
-						{code: 'a', value: proprietaryId},
-						{code: 'b', value: supplier}
-					]
-				});
-			} else {
-				record.insertField({
-					tag: '037',
-					ind1: '3',
-					subfields: [
-						{code: 'a', value: recordReference},
-						{code: 'b', value: supplier}
-					]
-				});
 			}
 
 			record.insertField({
@@ -359,7 +341,7 @@ export default function (stream, {validate = true, fix = true}) {
 				subfields: [
 					{code: 'a', value: 'ONIX3 to MARC transformation'},
 					{code: 'g', value: moment().format('YYYYMMDD')},
-					{code: 'k', value: isil},
+					{code: 'k', value: source},
 					{code: 'q', value: 'FI-NL'}
 
 				]
@@ -699,6 +681,10 @@ export default function (stream, {validate = true, fix = true}) {
 			// TODO: Fetch ISIL from HTTP service instead (And cache for reuse)
 			function getISIL() {
 				return ISIL_MAP[supplier];
+			}
+
+			function getSource() {
+				return SOURCE_MAP[supplier];
 			}
 
 			function getNodeValue(elements, ctx = node) {
