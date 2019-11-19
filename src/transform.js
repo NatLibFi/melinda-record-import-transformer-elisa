@@ -305,7 +305,6 @@ export default function (stream, {validate = true, fix = true}) {
 			record.insertField({
 				tag: '040',
 				subfields: [
-					{code: 'a', value: isil},
 					{code: 'b', value: language},
 					{code: 'e', value: 'rda'},
 					{code: 'd', value: 'FI-NL'}
@@ -439,7 +438,7 @@ export default function (stream, {validate = true, fix = true}) {
 			}
 
 			function create245() {
-				const field = {tag: '245', ind1: '1', ind2: '0'};
+				const field = {tag: '245', ind1: '0', ind2: '0'};
 				/* First searched pattern is [space][en dash|em dash|dash][space] */
 				const results = [/\s+[\u2013\u2014-]\s+/.exec(title), /:\s+|[^.]\.[^.]/.exec(title), /!+|\?+/.exec(title)];
 				const slices = {start: '', end: ''};
@@ -585,6 +584,11 @@ export default function (stream, {validate = true, fix = true}) {
 									{code: 'e', value: role}
 								]
 							});
+							const f245 = record.get(/^245$/).shift();
+
+							if (f245) {
+								f245.ind1 = '1';
+							}
 						} else {
 							record.insertField({
 								tag: '700',
@@ -660,7 +664,7 @@ export default function (stream, {validate = true, fix = true}) {
 			function create008() {
 				const date = moment().format('YYMMDD');
 				const publishingYear = publishingDate ? publishingDate.slice(0, 4) : '^^^^';
-				const value = `${date}|${publishingYear}||||^^^|||||^|||||^||||||||||`;
+				const value = `${date}|${publishingYear}^^^^^^^|||||^|||||^||||||||||`;
 
 				return {tag: '008', value};
 			}
