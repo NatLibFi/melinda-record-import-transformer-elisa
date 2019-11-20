@@ -664,7 +664,7 @@ export default function (stream, {validate = true, fix = true}) {
 			function create008() {
 				const date = moment().format('YYMMDD');
 				const publishingYear = publishingDate ? publishingDate.slice(0, 4) : '^^^^';
-				const value = `${date}|${publishingYear}^^^^^^^|||||^|||||^||||||||||`;
+				const value = `${date}|${publishingYear}^^^^^^^|||||^||||||||||||||||`;
 
 				return {tag: '008', value};
 			}
