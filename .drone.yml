@@ -24,6 +24,5 @@ steps:
     password:
       from_secret: docker_password
   when:
-    branch: [dev]  
-    #branch: [master, test]
+    branch: [master, test]
 event: [push, tag]
