@@ -28,25 +28,32 @@
 */
 
 /* eslint-disable new-cap */
+
 import validateFactory from '@natlibfi/marc-record-validate';
-import {IsbnIssn, ItemLanguage} from '@natlibfi/marc-record-validators-melinda';
+import {
+	IsbnIssn, FieldExclusion, Urn, EndingPunctuation, AccessRights, ItemLanguage, Punctuation
+} from '@natlibfi/marc-record-validators-melinda';
 
 export default async () => {
-	const validate = await validateFactory([
-		await IsbnIssn(),
-		await ItemLanguage(/^520$/)
+	const validate = validateFactory([
+		await IsbnIssn({hyphenateISBN: true}),
+		await Urn(),
+		await ItemLanguage(/^520$/),
+		await FieldExclusion([{
+			tag: /^520$/
+		}]),
+		await AccessRights(),
+		await EndingPunctuation(),
+		await Punctuation()
 	]);
 
-	return async (records, fix = false) => {
-		const opts = fix ? {fix: true, validateFixes: true} : {fix: false};
-		const results = await Promise.all(
-			records.map(r => validate(r, opts))
-		);
-
-		return results.map(result => ({
+	return async (record, fix, validateFixes) => {
+		const opts = fix ? {fix, validateFixes} : {fix};
+		const result = await validate(record, opts);
+		return {
 			record: result.record,
-			failed: !result.valid,
+			failed: result.valid === false,
 			messages: result.report
-		}));
+		};
 	};
 };
