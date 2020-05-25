@@ -39,9 +39,11 @@ export default async () => {
 		await IsbnIssn({hyphenateISBN: true}),
 		await Urn(),
 		await ItemLanguage(/^520$/),
-		await FieldExclusion([{
-			tag: /^520$/
-		}]),
+		await FieldExclusion([
+			{
+				tag: /^520$/
+			}
+		]),
 		await AccessRights(),
 		await EndingPunctuation(),
 		await Punctuation()

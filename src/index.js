@@ -27,8 +27,6 @@
 *
 */
 
-'use strict';
-
 import transform from './transform';
 import {Transformer} from '@natlibfi/melinda-record-import-commons/';
 

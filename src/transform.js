@@ -108,7 +108,7 @@ export default function (stream, {validate = true, fix = true}) {
 
 		function dropRecord(node) {
 			return node.children.ProductIdentifier.some(n => {
-				const value = n.children.IDValue.value;
+				const {value} = n.children.IDValue;
 				if (n.children.ProductIDType.value === '02') {
 					if (!(value.startsWith('951') || value.startsWith('952'))) {
 						return true;
@@ -121,7 +121,11 @@ export default function (stream, {validate = true, fix = true}) {
 
 		function transformToMarc(node) {
 			const record = new MarcRecord();
-			const languageRole = getNodeValue(['DescriptiveDetail', 'Language', 'LanguageRole']);
+			const languageRole = getNodeValue([
+				'DescriptiveDetail',
+				'Language',
+				'LanguageRole'
+			]);
 			const recordReference = getNodeValue('RecordReference');
 			const notificationType = getNodeValue('NotificationType');
 			const supplier = getNodeValue([
@@ -166,9 +170,7 @@ export default function (stream, {validate = true, fix = true}) {
 
 			record.insertField({
 				tag: '300',
-				subfields: [
-					{code: 'a', value: '1 verkkoaineisto'}
-				]
+				subfields: [{code: 'a', value: '1 verkkoaineisto'}]
 			});
 
 			record.insertField({
@@ -200,26 +202,20 @@ export default function (stream, {validate = true, fix = true}) {
 			if (textType === '03' && summary) {
 				record.insertField({
 					tag: '520',
-					subfields: [
-						{code: 'a', value: summary}
-					]
+					subfields: [{code: 'a', value: summary}]
 				});
 			}
 
 			if (isbn) {
 				record.insertField({
 					tag: '020',
-					subfields: [
-						{code: 'a', value: isbn}
-					]
+					subfields: [{code: 'a', value: isbn}]
 				});
 			} else if (gtin) {
 				record.insertField({
 					tag: '024',
 					ind1: '3',
-					subfields: [
-						{code: 'a', value: gtin}
-					]
+					subfields: [{code: 'a', value: gtin}]
 				});
 			}
 
@@ -228,25 +224,33 @@ export default function (stream, {validate = true, fix = true}) {
 
 				record.insertField({
 					tag: '041',
-					subfields: [
-						{code: 'a', value: language}
-					]
+					subfields: [{code: 'a', value: language}]
 				});
 			}
 
-			if (['00', '02', '01', '03'].includes(titleType)) {
+			if ([
+				'00',
+				'02',
+				'01',
+				'03'
+			].includes(titleType)) {
 				if (titleType === '02') {
 					record.insertField({
 						tag: '222',
 						ind2: '0',
-						subfields: [
-							{code: 'x', value: title}
-						]
+						subfields: [{code: 'x', value: title}]
 					});
 				}
 
 				record.insertField(create245());
-			} else if (['04', '05', '10', '11', '12', '13'].includes(titleType)) {
+			} else if ([
+				'04',
+				'05',
+				'10',
+				'11',
+				'12',
+				'13'
+			].includes(titleType)) {
 				record.insertField(create246());
 			} else {
 				switch (titleType) {
@@ -254,9 +258,7 @@ export default function (stream, {validate = true, fix = true}) {
 						record.insertField({
 							tag: '242',
 							ind1: '1',
-							subfields: [
-								{code: 'a', value: title}
-							]
+							subfields: [{code: 'a', value: title}]
 						});
 						break;
 					case '07':
@@ -268,9 +270,7 @@ export default function (stream, {validate = true, fix = true}) {
 							tag: '247',
 							ind1: '1',
 							ind2: '0',
-							subfields: [
-								{code: 'a', value: title}
-							]
+							subfields: [{code: 'a', value: title}]
 						});
 						break;
 					default:
@@ -313,16 +313,12 @@ export default function (stream, {validate = true, fix = true}) {
 
 			record.insertField({
 				tag: '042',
-				subfields: [
-					{code: 'a', value: 'finb'}
-				]
+				subfields: [{code: 'a', value: 'finb'}]
 			});
 
 			record.insertField({
 				tag: 'LOW',
-				subfields: [
-					{code: 'a', value: 'FIKKA'}
-				]
+				subfields: [{code: 'a', value: 'FIKKA'}]
 			});
 
 			record.insertField({
@@ -360,6 +356,7 @@ export default function (stream, {validate = true, fix = true}) {
 						case '15':
 							return Object.assign(acc, {isbn: value});
 						case '02':
+
 							/* Prefer ISBN-13 */
 							if ('isbn' in acc) {
 								return acc;
@@ -374,7 +371,11 @@ export default function (stream, {validate = true, fix = true}) {
 
 			function parseCollateralDetail() {
 				return {
-					summary: getNodeValue(['CollateralDetail', 'TextContent', 'Text']),
+					summary: getNodeValue([
+						'CollateralDetail',
+						'TextContent',
+						'Text'
+					]),
 					textType: getNodeValue([
 						'CollateralDetail',
 						'TextContent',
@@ -385,35 +386,50 @@ export default function (stream, {validate = true, fix = true}) {
 
 			function parseProductForm() {
 				return {
-					form: getNodeValue(['DescriptiveDetail', 'ProductForm']),
-					formDetail: getNodeValue(['DescriptiveDetail', 'ProductFormDetail'])
+					form: getNodeValue([
+						'DescriptiveDetail',
+						'ProductForm'
+					]),
+					formDetail: getNodeValue([
+						'DescriptiveDetail',
+						'ProductFormDetail'
+					])
 				};
 			}
 
 			function parseTitleDetail() {
 				return {
 					titleType: getNodeValue([
-						'DescriptiveDetail', 'TitleDetail', 'TitleType'
+						'DescriptiveDetail',
+						'TitleDetail',
+						'TitleType'
 					]),
 					title: getNodeValue([
-						'DescriptiveDetail', 'TitleDetail', 'TitleElement', 'TitleText'
+						'DescriptiveDetail',
+						'TitleDetail',
+						'TitleElement',
+						'TitleText'
 					]),
 					titleLevel: getNodeValue([
-						'DescriptiveDetail', 'TitleDetail', 'TitleElement', 'TitleElementLevel'
+						'DescriptiveDetail',
+						'TitleDetail',
+						'TitleElement',
+						'TitleElementLevel'
 					])
 				};
 			}
 
 			function parseContributors() {
-				const list = getNodes(['DescriptiveDetail', 'Contributor'])
+				const list = getNodes([
+					'DescriptiveDetail',
+					'Contributor'
+				])
 					.filter(n => n)
-					.map(n => {
-						return {
-							name: getNodeValue('PersonNameInverted', n),
-							role: getNodeValue('ContributorRole', n),
-							sequence: getNodeValue('SequenceNumber', n)
-						};
-					})
+					.map(n => ({
+						name: getNodeValue('PersonNameInverted', n),
+						role: getNodeValue('ContributorRole', n),
+						sequence: getNodeValue('SequenceNumber', n)
+					}))
 					.filter(n => n.name);
 
 				list.sort((a, b) => Number(a.sequence) - Number(b.sequence));
@@ -423,24 +439,35 @@ export default function (stream, {validate = true, fix = true}) {
 			function parsePublishingDetail() {
 				return {
 					publisher: getNodeValue([
-						'PublishingDetail', 'Publisher', 'PublisherName'
+						'PublishingDetail',
+						'Publisher',
+						'PublisherName'
 					]),
 					publishingDate: getNodeValue([
-						'PublishingDetail', 'PublishingDate', 'Date'
+						'PublishingDetail',
+						'PublishingDate',
+						'Date'
 					]),
 					publishingStatus: getNodeValue([
-						'PublishingDetail', 'PublishingStatus'
+						'PublishingDetail',
+						'PublishingStatus'
 					]),
 					publicationCountry: getNodeValue([
-						'PublishingDetail', 'CountryOfPublication'
+						'PublishingDetail',
+						'CountryOfPublication'
 					])
 				};
 			}
 
 			function create245() {
 				const field = {tag: '245', ind1: '0', ind2: '0'};
+
 				/* First searched pattern is [space][en dash|em dash|dash][space] */
-				const results = [/\s+[\u2013\u2014-]\s+/.exec(title), /:\s+|[^.]\.[^.]/.exec(title), /!+|\?+/.exec(title)];
+				const results = [
+					(/\s+[\u2013\u2014-]\s+/).exec(title),
+					(/:\s+|[^.]\.[^.]/).exec(title),
+					(/!+|\?+/).exec(title)
+				];
 				const slices = {start: '', end: ''};
 
 				if (results[0]) {
@@ -551,7 +578,10 @@ export default function (stream, {validate = true, fix = true}) {
 			function handleContributors() {
 				const pattern = /\s?\(toim\.\)|Toimittanut /;
 				contributors
-					.filter(c => ['A01', 'E07'].includes(c.role))
+					.filter(c => [
+						'A01',
+						'E07'
+					].includes(c.role))
 					.map(c => {
 						if (pattern.test(c.name)) {
 							return {
@@ -569,7 +599,7 @@ export default function (stream, {validate = true, fix = true}) {
 						const {name, role} = contributor;
 
 						/* Not a actual name */
-						if (/, Useita/i.test(name)) {
+						if ((/, Useita/i).test(name)) {
 							const f245 = record.get(/^245$/).shift();
 
 							if (f245) {
@@ -675,11 +705,15 @@ export default function (stream, {validate = true, fix = true}) {
 			}
 
 			function getLanguage() {
-				if (summary && /Huom\. kirja on englanninkielinen/.test(summary)) {
+				if (summary && (/Huom\. kirja on englanninkielinen/).test(summary)) {
 					return 'eng';
 				}
 
-				return getNodeValue(['DescriptiveDetail', 'Language', 'LanguageCode']);
+				return getNodeValue([
+					'DescriptiveDetail',
+					'Language',
+					'LanguageCode'
+				]);
 			}
 
 			// TODO: Fetch ISIL from HTTP service instead (And cache for reuse)
@@ -704,13 +738,11 @@ export default function (stream, {validate = true, fix = true}) {
 					return undefined;
 				}, ctx);
 
-				return Array.isArray(target) ? target[0].value : (target ? target.value : undefined);
+				return Array.isArray(target) ? target[0].value : target ? target.value : undefined;
 			}
 
 			function getNodes(elements, ctx = node) {
-				const target = [].concat(elements).reduce((ptr, name) => {
-					return ptr.children[name];
-				}, ctx);
+				const target = [].concat(elements).reduce((ptr, name) => ptr.children[name], ctx);
 				return Array.isArray(target) ? target : [target];
 			}
 
@@ -718,7 +750,8 @@ export default function (stream, {validate = true, fix = true}) {
 				return Object.keys(mappings).reduce((buf, index) => {
 					buf[index] = mappings[index];
 					return buf;
-				}, str.split('')).join('');
+				}, str.split(''))
+					.join('');
 			}
 		}
 	}
