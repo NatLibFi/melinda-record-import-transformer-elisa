@@ -31,16 +31,9 @@ import moment from 'moment';
 import {readdirSync} from 'fs';
 import {join as joinPath} from 'path';
 import fixtureFactory, {READERS} from '@natlibfi/fixura';
-import createConverter, {__RewireAPI__ as RewireAPI} from './convert';
+import createConverter, {__RewireAPI__ as RewireAPI} from './transform'; // eslint-disable-line import/named
 
 describe('transform/convert', () => {
-// ** ?? ->
-
-	function generateTimestamp() {
-		return moment().format('YYMMDD');
-	}
-
-	// <- **
 	const {expect} = chai;
 
 	const fixturesPath = joinPath(__dirname, '..', '..', 'test-fixtures', 'transform', 'convert');
