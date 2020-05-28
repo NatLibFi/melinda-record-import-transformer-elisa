@@ -33,7 +33,7 @@ import {MarcRecord} from '@natlibfi/marc-record';
 import {Utils} from '@natlibfi/melinda-commons';
 import {EventEmitter} from 'events';
 
-import convertRecord from './transform/convert';
+import convertRecord from './convert';
 
 // Import createValidator from './validate';
 
@@ -42,14 +42,16 @@ import createStreamParser, {toXML, ALWAYS as streamParserAlways} from 'xml-flow'
 import {Parser} from 'xml2js';
 // <---
 
+// This files former name: transform.js
+
 class TransformEmitter extends EventEmitter {}
 const {createLogger} = Utils;
 
-export default function (stream, {validate = true, fix = true}) {
+export default function (stream) { // ORIG:  (stream, {validate = true, fix = true})
 	MarcRecord.setValidationOptions({subfieldValues: false});
 	const Emitter = new TransformEmitter();
 	const logger = createLogger();
-	// Let validator;
+
 	logger.log('debug', 'Starting to send recordEvents');
 	readStream(stream);
 	return Emitter;
@@ -57,7 +59,7 @@ export default function (stream, {validate = true, fix = true}) {
 	async function readStream(stream) {
 		const promises = [];
 
-		createParser(stream, {
+		createStreamParser(stream, {
 			strict: true,
 			trim: false,
 			normalize: false,
@@ -79,7 +81,7 @@ export default function (stream, {validate = true, fix = true}) {
 				});
 
 				async function convertToObject() {
-					const str = toXml(node);
+					const str = toXML(node);
 					return toObject();
 
 					async function toObject() {

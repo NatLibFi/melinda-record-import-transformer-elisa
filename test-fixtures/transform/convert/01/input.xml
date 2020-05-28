@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ns.editeur.org/onix/3.0/reference http://intranet/onix/ONIX_BookProduct_3.0_reference.xsd"> <Header> <Sender> <SenderName>Elisa Kirja</SenderName>
+</Sender>
+ <Addressee> <AddresseeName>Kansalliskirjasto</AddresseeName>
+</Addressee>
+ <MessageNumber>5</MessageNumber>
+ <SentDateTime>20180824T1728</SentDateTime>
+</Header>
+
+<Product>
+<RecordReference>ElisaKirja95746</RecordReference>
+<NotificationType>03</NotificationType>
+<ProductIdentifier>
+<ProductIDType>01</ProductIDType>
+<IDTypeName>NID</IDTypeName>
+<IDValue>95746</IDValue>
+</ProductIdentifier>
+<ProductIdentifier>
+<ProductIDType>03</ProductIDType>
+<IDValue>9789526849638</IDValue>
+</ProductIdentifier>
+<ProductIdentifier>
+<ProductIDType>15</ProductIDType>
+<IDValue>9789526849638</IDValue>
+</ProductIdentifier>
+<DescriptiveDetail>
+<ProductComposition>00</ProductComposition>
+<ProductForm>EB</ProductForm>
+<ProductFormDetail>E107</ProductFormDetail>
+<TitleDetail>
+<TitleType>01</TitleType>
+<TitleElement>
+<TitleElementLevel>01</TitleElementLevel>
+<TitleText>Arktinen helmi – Wrangelinsaari (näköiskirja)</TitleText>
+</TitleElement>
+</TitleDetail>
+<Contributor>
+<ContributorRole>A01</ContributorRole><PersonNameInverted>Gorshkov, Sergey</PersonNameInverted></Contributor>
+<Language>
+<LanguageRole>01</LanguageRole>
+<LanguageCode>fin</LanguageCode>
+</Language>
+</DescriptiveDetail>
+<CollateralDetail>
+<TextContent>
+<TextType>03</TextType>
+<ContentAudience>00</ContentAudience>
+<Text textformat="02">Kirja vie lukijan ainutlaatuiseen maailmankolkkaan, Wrangelinsaarelle Pohjoiselle Jäämerelle. Se kertoo seikkaperäisesti saaren löytymisen historiasta ja kuljettaa seuraamaan saaren nykyisten asukkaiden elämää. Päähenkilöinä ovat pohjoisen luonnon eläimet: jääkarhut, naalit, tunturipöllöt, mursut ja lumihanhet. Kertoessaan arktisten alueiden kesyttömästä luonnosta kuvat pysäyttävät myös pohtimaan ekologisen tasapainon haurautta ja sen säilyttämisen välttämättömyyttä. Teos on osa Venäjän tunnetuimman luontokuvaajan kunnianhimoista kuvaushanketta halki kotimaansa pohjoisen napaseudun. Hänen tavoitteenaan on kulkea kuvaten Venäjän Pohjolaa idästä länteen, sen saaria, meriä ja rannikoita. Matka alkoi Wrangelinsaarelta.
+
+&quot;Wrangelinsaari on epätavallisimpia paikkoja maapallolla. Siellä aistii vielä luonnon alkuperäisen voiman henkäilyn.&quot;
+
+-Sergey Gorshkov-
+
+Sergey Gorshkov on Venäjän tunnetuin luontokuvaaja. Kansainvälisesti palkittu Gorshkov on myös voittanut kahdesti Venäjän vuoden luontokuvaajan tittelin ja on ensimmäinen venäläinen National Geographicin kuvaaja. Hänen teoksiaan ei ole aiemmin julkaistu suomeksi.  
+
+Tämä versio on painetun kirjan ulkoasun mukainen näköiskirja. Saatavilla on myös tabletin, miniläppärin tai älypuhelimen näyttöön paremmin istuva mobiilikirja.
+</Text>
+</TextContent>
+</CollateralDetail>
+<PublishingDetail>
+<Publisher>
+<PublishingRole>01</PublishingRole>
+<PublisherName>E-painos</PublisherName>
+</Publisher>
+<CountryOfPublication>FI</CountryOfPublication>
+<PublishingStatus>04</PublishingStatus>
+<PublishingDate>
+<PublishingDateRole>01</PublishingDateRole>
+<Date dateformat="05">2017</Date>
+</PublishingDate>
+</PublishingDetail>
+ <ProductSupply> <SupplyDetail> <Supplier> <SupplierRole>06</SupplierRole>
+ <SupplierName>Elisa Kirja</SupplierName>
+ <Website> <WebsiteLink>default</WebsiteLink>
+</Website>
+</Supplier>
+ <ProductAvailability>21</ProductAvailability>
+ <UnpricedItemType>02</UnpricedItemType>
+</SupplyDetail>
+</ProductSupply>
+</Product>
+</ONIXMessage>

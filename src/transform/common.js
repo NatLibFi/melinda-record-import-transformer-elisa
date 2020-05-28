@@ -26,14 +26,32 @@
 *
 */
 
-// import createStreamParser, {toXML, ALWAYS as streamParserAlways} from 'xml-flow';
-import xmlToObject from './common';
+import {Parser} from 'xml2js';
 
-run();
+export default async function xmlToObject(stream) { // Add: default
+	const str = await readToString();
+	return toObject();
 
-async function run() {
-	console.log('\n ********* makefixture.js  ******** \n ');
+	function readToString() {
+		return new Promise((resolve, reject) => {
+			const list = [];
 
-	const GetRecord = await xmlToObject(process.stdin); // {'OAI-PMH': {GetRecord}}
-	console.log(JSON.stringify(GetRecord[0].record, undefined, 2)); // ***Was***eslint-disable-line no-console
+			stream
+				.on('error', reject)
+				.on('data', chunk => list.push(chunk)) // ***Was***eslint-disable-line functional/immutable-data
+				.on('end', () => resolve(list.join('')));
+		});
+	}
+
+	function toObject() {
+		return new Promise((resolve, reject) => {
+			new Parser().parseString(str, (err, obj) => {
+				if (err) {
+					return reject(err);
+				}
+
+				resolve(obj);
+			});
+		});
+	}
 }
