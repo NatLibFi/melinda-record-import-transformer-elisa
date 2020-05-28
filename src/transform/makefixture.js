@@ -27,12 +27,12 @@
 */
 
 
-//import {xmlToObject} from './common';
+
 import createStreamParser, {toXML, ALWAYS as streamParserAlways} from 'xml-flow';
 
 run();
 
 async function run() {
-  const {'OAI-PMH': {GetRecord}} = await createStreamParser(process.stdin);  // ORIG:  sync function run() {const {'OAI-PMH': {GetRecord}} = await xmlToObject(process.stdin);
+  const {'OAI-PMH': {GetRecord}} = await createStreamParser(process.stdin);  
   console.log(JSON.stringify(GetRecord[0].record, undefined, 2)); // eslint-disable-line no-console
 }
