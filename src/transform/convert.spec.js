@@ -64,7 +64,7 @@ import fixtureFactory, {READERS} from '@natlibfi/fixura';
 
 import createConverter, {__RewireAPI__ as RewireAPI} from './convert'; // eslint-disable-line import/named
 
-console.log('\n ********* MOI: convert.spec.js  ******** \n ');
+console.log('\n ******* This comes from: convert.spec.js  \n ');
 
 describe('transform/convert', () => {
 	const {expect} = chai;
@@ -73,6 +73,7 @@ describe('transform/convert', () => {
 	// ALKUP: // const fixturesPath = joinPath(__dirname, '..', '..', 'test-fixtures', 'transform', 'convert');
 
 	console.log('*** fixturesPath/  convert.spec.js : ', fixturesPath);
+	console.log('Using file  input.xml ');
 
 	beforeEach(() => {
 		RewireAPI.__Rewire__('moment', () => moment('2020-01-01T00:00:00'));
@@ -93,11 +94,11 @@ describe('transform/convert', () => {
 			], reader: READERS.JSON});
 
 			const inputData = getFixture(['input.xml']); // *** ORIG:  ['input.json']
-
+			console.log('*** inputData: \n', inputData);
+			console.log('*** inputData[0]: \n', inputData[0]);
 			const expectedRecord = getFixture(['output.json']);
 
 			const convert = createConverter({
-
 				harvestSource: 'FOOBAR',
 
 				urnResolverUrl: 'http://foo.bar'

@@ -26,14 +26,15 @@
 *
 */
 
-// import createStreamParser, {toXML, ALWAYS as streamParserAlways} from 'xml-flow';
-import xmlToObject from './common';
+import {createParse} from './common';
 
 run();
 
 async function run() {
 	console.log('\n ********* makefixture.js  ******** \n ');
 
-	const GetRecord = await xmlToObject(process.stdin); // {'OAI-PMH': {GetRecord}}
+	const GetRecord = await createParse(process.stdin); //   // was: await xmlToObject
+
+	console.log('*** GET READY for output: ');
 	console.log(JSON.stringify(GetRecord[0].record, undefined, 2)); // ***Was***eslint-disable-line no-console
 }

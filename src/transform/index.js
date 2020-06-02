@@ -25,79 +25,54 @@
 * for the JavaScript code in this file.
 *
 */
-// import {chain} from 'stream-chain';
-// Import moment from 'moment';
-// import saxStream from 'sax-stream';
+
 import {MarcRecord} from '@natlibfi/marc-record';
-// Import createValidator from './validate';
 import {Utils} from '@natlibfi/melinda-commons';
+import {createParse} from './common';
 import {EventEmitter} from 'events';
-
 import convertRecord from './convert';
-
-// Import createValidator from './validate';
-
-// uudet moduulit -->
-import createStreamParser, {toXML, ALWAYS as streamParserAlways} from 'xml-flow';
-import {Parser} from 'xml2js';
-// <---
-
-// This files former name: transform.js
+import createValidator from './validate';
 
 class TransformEmitter extends EventEmitter {}
 const {createLogger} = Utils;
 
-export default function (stream) { // ORIG:  (stream, {validate = true, fix = true})
+export default async function (stream, {validate = true, fix = true}) { // ORIG:  (stream, {validate = true, fix = true})
 	MarcRecord.setValidationOptions({subfieldValues: false});
-	const Emitter = new TransformEmitter();
+	const validateRecord = await createValidator();
+	const emitter = new TransformEmitter();
 	const logger = createLogger();
+	const promises = [];
 
 	logger.log('debug', 'Starting to send recordEvents');
-	readStream(stream);
-	return Emitter;
 
-	async function readStream(stream) {
-		const promises = [];
-
-		createStreamParser(stream, {
-			strict: true,
-			trim: false,
-			normalize: false,
-			preserveMarkup: streamParserAlways,
-			simplifyNodes: false,
-			useArrays: streamParserAlways
+	createParse(stream)
+		.on('error', err => emitter.emit('error', err))
+		.on('end', async () => {
+			logger.log('debug', `Handled ${promises.length} recordEvents`);
+			await Promise.all(promises);
+			emitter.emit('end', promises.length);
 		})
-			.on('error', err => Emitter.emit('error', err))
-			.on('end', async () => {
-				logger.log('debug', `Handled ${promises.length} recordEvents`);
-				await Promise.all(promises);
-				Emitter.emit('end', promises.length);
-			})
-			.on('tag:record', async node => {
-				promises.push(async () => {
-					const obj = convertToObject();
-					const result = await convertRecord(obj);
-					Emitter.emit('record', result);
-				});
+		.on('record', async obj => {
+			promises.push(async () => {
+				const record = await convertRecord(obj);
 
-				async function convertToObject() {
-					const str = toXML(node);
-					return toObject();
+				if (validate === true || fix === true) {
+					const result = await validateRecord(record, fix);
 
-					async function toObject() {
-						return new Promise((resolve, reject) => {
-							new Parser().parseString(str, (err, obj) => {
-								if (err) {
-									return reject(err);
-								}
+					emitter.emit('record', result);
 
-								resolve(obj);
-							});
-						});
-					}
+					return;
 				}
+
+				emitter.emit('record', record);
 			});
-	}
-	// HERE WAS   async function convertRecord
+		});
+
+	return emitter;
+
+	// -> async function readStream ->
+
+// <- async function readStream <-
+// HERE WAS   async function convertRecord
 }
 

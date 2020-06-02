@@ -26,32 +26,60 @@
 *
 */
 
+import {EventEmitter} from 'events';
+import convertRecord from './convert';
+import {Utils} from '@natlibfi/melinda-commons';
+
+import createStreamParser, {toXML, ALWAYS as streamParserAlways} from 'xml-flow';
 import {Parser} from 'xml2js';
 
-export default async function xmlToObject(stream) { // Add: default
-	const str = await readToString();
-	return toObject();
+export function createParse(stream) {
+	const promises = [];
 
-	function readToString() {
-		return new Promise((resolve, reject) => {
-			const list = [];
+	class Emitter extends EventEmitter {}
+	const {createLogger} = Utils;
+	const emitter = new Emitter();
+	const logger = createLogger();
 
-			stream
-				.on('error', reject)
-				.on('data', chunk => list.push(chunk)) // ***Was***eslint-disable-line functional/immutable-data
-				.on('end', () => resolve(list.join('')));
-		});
-	}
-
-	function toObject() {
-		return new Promise((resolve, reject) => {
-			new Parser().parseString(str, (err, obj) => {
-				if (err) {
-					return reject(err);
-				}
-
-				resolve(obj);
+	createStreamParser(stream, {
+		strict: true,
+		trim: false,
+		normalize: false,
+		preserveMarkup: streamParserAlways,
+		simplifyNodes: false,
+		useArrays: streamParserAlways
+	})
+		.on('error', err => emitter.emit('error', err))
+		.on('end', async () => {
+			logger.log('debug', `Handled ${promises.length} recordEvents`);
+			await Promise.all(promises);
+			emitter.emit('end', promises.length);
+		})
+		.on('tag:record', async node => {
+			promises.push(async () => {
+				const obj = convertToObject();
+				const result = await convertRecord(obj);
+				emitter.emit('record', result);
 			});
+
+			async function convertToObject() {
+				const str = toXML(node);
+				return toObject();
+
+				async function toObject() {
+					return new Promise((resolve, reject) => {
+						new Parser().parseString(str, (err, obj) => {
+							if (err) {
+								return reject(err);
+							}
+
+							resolve(obj);
+						});
+					});
+				}
+			}
 		});
-	}
+
+	return emitter;
 }
+// <---

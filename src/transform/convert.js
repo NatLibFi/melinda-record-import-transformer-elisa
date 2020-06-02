@@ -59,7 +59,7 @@ import {Utils} from '@natlibfi/melinda-commons';
 
 import moment from 'moment';
 
-import createValidator from './../validate';
+// Import createValidator from './../validate';
 
 const {createLogger} = Utils;
 
@@ -86,26 +86,17 @@ const SOURCE_MAP = {
 	'Kirjavälitys Oy': 'MELINDA_RECORD_IMPORT_SOURCE4'
 };
 
-export default async function convertRecord(onixRecord, validate, fix) {
-	const logger = createLogger(); // Aaaaa
-	let validator;
-	validator = await createValidator();
-
-	// Logger.log('info', `MOI: ${onixRecord.children.RecordReference.value}`);
-	// console.log('MOI: ');
+export default async function convertRecord(onixRecord) { // , validate, fix
+	const logger = createLogger();
+	// Let validator;
+	// validator = await createValidator();
 
 	if (dropRecord(onixRecord)) {
 		// Logger.log('info', `dropped record with recordReference: ${onixRecord.children.RecordReference.value}`);
 		return {failed: true, record: transformToMarc(onixRecord)};
 	}
 
-	const marcRecord = transformToMarc(onixRecord);
-
-	if (validate === true || fix === true) {
-		return validator(marcRecord, fix, validate);
-	}
-
-	return {failed: false, record: marcRecord};
+	return transformToMarc(onixRecord);
 
 	function dropRecord(node) {
 		return node.children.ProductIdentifier.some(n => {
