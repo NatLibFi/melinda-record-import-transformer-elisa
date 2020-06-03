@@ -28,43 +28,61 @@
 
 import {createParse} from './common';
 
-run();
+// ->  added 3.6
+import convertRecord from './convert';
+import {MarcRecord} from '@natlibfi/marc-record';
+import Utils from '@natlibfi/melinda-commons';
+import EventEmitter from 'events';
+import createValidator from './validate';
 
-async function run(stream) {        // async function run() {
+class TransformEmitter extends EventEmitter {}
+const createLogger = Utils;
+// <- 3.6
+
+// Run();
+// async function run() {
+
+export default async function (stream, {validate = true, fix = true}) { // ORIG:  (stream, {validate = true, fix = true})
+	MarcRecord.setValidationOptions({subfieldValues: false});
+	const validateRecord = await createValidator();
+	const emitter = new TransformEmitter();
+	const logger = createLogger();
+	const promises = [];
 
 	console.log('\n *** now in makefixture.js  ******** \n ');
 
-			// ----> 3.6.2020
-			createParse(stream)
-			.on('error', err => emitter.emit('error', err))
-			.on('end', async () => {
-				logger.log('debug', `Handled ${promises.length} recordEvents`);
-				await Promise.all(promises);
-				emitter.emit('end', promises.length);
-			})
-			.on('record', async obj => {
-				promises.push(async () => {
-					const record = await convertRecord(obj);
+	// ----> added 3.6.2020
 
-					if (validate === true || fix === true) {
-						const result = await validateRecord(record, fix);
+	createParse(stream)
+		.on('error', err => emitter.emit('error', err))
+		.on('end', async () => {
+			logger.log('debug', `Handled ${promises.length} recordEvents`);
+			await Promise.all(promises);
+			emitter.emit('end', promises.length);
+		})
+		.on('record', async obj => {
+			promises.push(async () => {
+				const record = await convertRecord(obj);
 
-						emitter.emit('record', result);
+				if (validate === true || fix === true) {
+					const result = await validateRecord(record, fix);
 
-						return;
-					}
+					emitter.emit('record', result);
 
-					emitter.emit('record', record);
-					console.log(JSON.stringify(GetRecord[0].record, undefined, 2));
-				});
+					return;
+				}
+
+				emitter.emit('record', record);
+
+				console.log(JSON.stringify(GetRecord[0].Product, undefined, 2)); // Record
 			});
-			// <---- 3.6.2020
-
+		});
+	// <---- 3.6.2020
 
 	const GetRecord = await createParse(process.stdin); //   // was: await xmlToObject
 
-//	console.log('*** makefixture/GetRecord: \n', GetRecord);
-//	console.log('*** makefixture/GET READY for output: \n ');
-//	console.log(JSON.stringify(GetRecord[0].record, undefined, 2)); // ***Was***eslint-disable-line no-console
+	console.log('*** makefixture/GetRecord: \n', GetRecord);
+
+//	Console.log(JSON.stringify(GetRecord[0].record, undefined, 2)); // ***Was***eslint-disable-line no-console
 	// ALKUP:  (GetRecord[0].record, undefined, 2)
 }

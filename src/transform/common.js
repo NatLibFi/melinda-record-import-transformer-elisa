@@ -36,6 +36,8 @@ import {Parser} from 'xml2js';
 export function createParse(stream) {
 	const promises = [];
 
+	console.log('*** from common.js !!! \n');
+
 	class Emitter extends EventEmitter {}
 	const {createLogger} = Utils;
 	const emitter = new Emitter();
@@ -50,19 +52,25 @@ export function createParse(stream) {
 		useArrays: streamParserAlways
 	})
 		.on('error', err => emitter.emit('error', err))
+
 		.on('end', async () => {
 			logger.log('debug', `Handled ${promises.length} recordEvents`);
 			await Promise.all(promises);
 			emitter.emit('end', promises.length);
 		})
-		.on('tag:record', async node => {
+		.on('tag:Product', async node => { // Was: record
+			console.log('*** BINGO!');
+
 			promises.push(async () => {
 				const obj = convertToObject();
+				console.log('*** objs:', obj);
 				const result = await convertRecord(obj);
-				emitter.emit('record', result);
+				emitter.emit('record', result); // Was: record
+				console.log('*** MMM...');
 			});
 
 			async function convertToObject() {
+				console.log('*** AAAA!');
 				const str = toXML(node);
 				return toObject();
 

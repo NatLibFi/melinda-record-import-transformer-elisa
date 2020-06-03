@@ -73,7 +73,7 @@ describe('transform/convert', () => {
 	// ALKUP: // const fixturesPath = joinPath(__dirname, '..', '..', 'test-fixtures', 'transform', 'convert');
 
 	console.log('*** fixturesPath/  convert.spec.js : ', fixturesPath);
-	console.log('Using file  input.xml ');
+	console.log('*** Using file  input.xml ');
 
 	beforeEach(() => {
 		RewireAPI.__Rewire__('moment', () => moment('2020-01-01T00:00:00'));
