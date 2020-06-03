@@ -30,11 +30,41 @@ import {createParse} from './common';
 
 run();
 
-async function run() {
-	console.log('\n ********* makefixture.js  ******** \n ');
+async function run(stream) {        // async function run() {
+
+	console.log('\n *** now in makefixture.js  ******** \n ');
+
+			// ----> 3.6.2020
+			createParse(stream)
+			.on('error', err => emitter.emit('error', err))
+			.on('end', async () => {
+				logger.log('debug', `Handled ${promises.length} recordEvents`);
+				await Promise.all(promises);
+				emitter.emit('end', promises.length);
+			})
+			.on('record', async obj => {
+				promises.push(async () => {
+					const record = await convertRecord(obj);
+
+					if (validate === true || fix === true) {
+						const result = await validateRecord(record, fix);
+
+						emitter.emit('record', result);
+
+						return;
+					}
+
+					emitter.emit('record', record);
+					console.log(JSON.stringify(GetRecord[0].record, undefined, 2));
+				});
+			});
+			// <---- 3.6.2020
+
 
 	const GetRecord = await createParse(process.stdin); //   // was: await xmlToObject
 
-	console.log('*** GET READY for output: ');
-	console.log(JSON.stringify(GetRecord[0].record, undefined, 2)); // ***Was***eslint-disable-line no-console
+//	console.log('*** makefixture/GetRecord: \n', GetRecord);
+//	console.log('*** makefixture/GET READY for output: \n ');
+//	console.log(JSON.stringify(GetRecord[0].record, undefined, 2)); // ***Was***eslint-disable-line no-console
+	// ALKUP:  (GetRecord[0].record, undefined, 2)
 }
