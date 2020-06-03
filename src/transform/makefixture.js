@@ -39,28 +39,27 @@ class TransformEmitter extends EventEmitter {}
 const createLogger = Utils;
 // <- 3.6
 
-// Run();
-// async function run() {
+console.log('\n *** Start -  in makefixture.js  ******** \n ');
 
-export default async function (stream, {validate = true, fix = true}) { // ORIG:  (stream, {validate = true, fix = true})
+ // run();
+ // async function run() {
+
+export default async function (stream) { // ORIG:  (stream, {validate = true, fix = true})
+
+		
 	MarcRecord.setValidationOptions({subfieldValues: false});
 	const validateRecord = await createValidator();
 	const emitter = new TransformEmitter();
 	const logger = createLogger();
 	const promises = [];
 
-	console.log('\n *** now in makefixture.js  ******** \n ');
+	console.log('\n *** now in makefixture.js/default async  ******** \n ');
 
 	// ----> added 3.6.2020
 
 	createParse(stream)
 		.on('error', err => emitter.emit('error', err))
-		.on('end', async () => {
-			logger.log('debug', `Handled ${promises.length} recordEvents`);
-			await Promise.all(promises);
-			emitter.emit('end', promises.length);
-		})
-		.on('record', async obj => {
+		.on('Product', async obj => {  // record vai Product?
 			promises.push(async () => {
 				const record = await convertRecord(obj);
 
@@ -68,21 +67,24 @@ export default async function (stream, {validate = true, fix = true}) { // ORIG:
 					const result = await validateRecord(record, fix);
 
 					emitter.emit('record', result);
-
+						console.log('   ***   ');
+						
 					return;
 				}
 
 				emitter.emit('record', record);
 
-				console.log(JSON.stringify(GetRecord[0].Product, undefined, 2)); // Record
+				console.log(JSON.stringify(record, undefined, 2)); // record
 			});
 		});
 	// <---- 3.6.2020
 
-	const GetRecord = await createParse(process.stdin); //   // was: await xmlToObject
+	// POIS -> // const GetRecord = await createParse(process.stdin); //   // was: await xmlToObject
 
-	console.log('*** makefixture/GetRecord: \n', GetRecord);
+	console.log('*** makefixture/ending \n');
 
 //	Console.log(JSON.stringify(GetRecord[0].record, undefined, 2)); // ***Was***eslint-disable-line no-console
 	// ALKUP:  (GetRecord[0].record, undefined, 2)
-}
+}    
+
+
