@@ -27,48 +27,16 @@
 */
 
 import {createParse} from './common';
-
-// ->  added 3.6
-import convertRecord from './convert';
 import {MarcRecord} from '@natlibfi/marc-record';
-import Utils from '@natlibfi/melinda-commons';
 import EventEmitter from 'events';
-import createValidator from './validate';
 
 class TransformEmitter extends EventEmitter {}
-const createLogger = Utils;
-// <- 3.6
 
-console.log('\n *** Start -  in makefixture.js  ******** \n ');
-
- // run();
- // async function run() {
-
-export default async function (stream) { // ORIG:  (stream, {validate = true, fix = true})
-
-		
-	MarcRecord.setValidationOptions({subfieldValues: false});
-	const validateRecord = await createValidator();
-	const emitter = new TransformEmitter();
-	const logger = createLogger();
-	const promises = [];
-
-	console.log('\n *** now in makefixture.js/default async  ******** \n ');
-
-	// ----> added 3/4.6.2020
-
+export default async function (stream) { 
 	createParse(stream)
-		.on('record', async obj => { 			
-			console.log(JSON.stringify(record, undefined, 2)); // record
+		.on('record', obj => { 			
+			console.log(JSON.stringify(record, undefined, 2)); 
 		});
-	// <---- 3/4.6.2020
-
-	// POIS -> // const GetRecord = await createParse(process.stdin); //   // was: await xmlToObject
-
-	console.log('*** makefixture/ending \n');
-
-//	Console.log(JSON.stringify(GetRecord[0].record, undefined, 2)); // ***Was***eslint-disable-line no-console
-	// ALKUP:  (GetRecord[0].record, undefined, 2)
 }    
 
 
