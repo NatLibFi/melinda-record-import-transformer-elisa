@@ -27,7 +27,7 @@
 */
 
 import {EventEmitter} from 'events';
-import convertRecord from './convert';
+// Import convertRecord from './convert';
 import {Utils} from '@natlibfi/melinda-commons';
 
 import createStreamParser, {toXML, ALWAYS as streamParserAlways} from 'xml-flow';
@@ -62,12 +62,12 @@ export function createParse(stream) {
 
 			promises.push(async () => {
 				const obj = await convertToObject();
-				const result = await convertRecord(obj);
-				emitter.emit('record', result);
+				// Const result = await convertRecord(obj);
+				emitter.emit('record', obj); // WAS: result
 			});
 
 			async function convertToObject() {
-				const str = toXML(node);
+				const str = toXML(node); // ORIG
 				return toObject();
 
 				async function toObject() {
