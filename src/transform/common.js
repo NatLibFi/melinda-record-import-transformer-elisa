@@ -58,14 +58,14 @@ export function createParse(stream) {
 			await Promise.all(promises);
 			emitter.emit('end', promises.length);
 		})
-		.on('tag:Product', async node => { // Was: record
-			console.log('*** BINGO!');
+		.on('tag:Product', async node => { // Was: record // tag:Product
+			console.log('*** createStreamParser/on/tag:Product');
 
 			promises.push(async () => {
 				const obj = convertToObject();
 				console.log('*** objs:', obj);
 				const result = await convertRecord(obj);
-				emitter.emit('record', result); // Was: record
+				emitter.emit('record', result);
 				console.log('*** MMM...');
 			});
 
@@ -88,6 +88,7 @@ export function createParse(stream) {
 			}
 		});
 
+		
 	return emitter;
 }
 // <---
