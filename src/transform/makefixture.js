@@ -55,29 +55,13 @@ export default async function (stream) { // ORIG:  (stream, {validate = true, fi
 
 	console.log('\n *** now in makefixture.js/default async  ******** \n ');
 
-	// ----> added 3.6.2020
+	// ----> added 3/4.6.2020
 
 	createParse(stream)
-		.on('error', err => emitter.emit('error', err))
-		.on('Product', async obj => {  // record vai Product?
-			promises.push(async () => {
-				const record = await convertRecord(obj);
-
-				if (validate === true || fix === true) {
-					const result = await validateRecord(record, fix);
-
-					emitter.emit('record', result);
-						console.log('   ***   ');
-						
-					return;
-				}
-
-				emitter.emit('record', record);
-
-				console.log(JSON.stringify(record, undefined, 2)); // record
-			});
+		.on('record', async obj => { 			
+			console.log(JSON.stringify(record, undefined, 2)); // record
 		});
-	// <---- 3.6.2020
+	// <---- 3/4.6.2020
 
 	// POIS -> // const GetRecord = await createParse(process.stdin); //   // was: await xmlToObject
 
