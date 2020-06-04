@@ -60,6 +60,7 @@ export function createParse(stream) {
 		})
 		.on('tag:Product', async node => { // Was: record // tag:Product
 			console.log('*** createStreamParser/on/tag:Product');
+			console.log('*** node: ', node);
 
 			promises.push(async () => {
 				const obj = convertToObject();
@@ -88,7 +89,6 @@ export function createParse(stream) {
 			}
 		});
 
-		
 	return emitter;
 }
 // <---

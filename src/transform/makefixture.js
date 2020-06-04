@@ -27,16 +27,10 @@
 */
 
 import {createParse} from './common';
-import {MarcRecord} from '@natlibfi/marc-record';
-import EventEmitter from 'events';
 
-class TransformEmitter extends EventEmitter {}
 
- 
-	createParse(process.stdin)   // stream??
-		.on('record', obj => { 			
-			console.log(JSON.stringify(record, undefined, 2)); 
-		});
- 
-
+createParse(process.stdin)
+	.on('record', obj => {
+		console.log(JSON.stringify(obj, undefined, 2)); 
+	});
 
