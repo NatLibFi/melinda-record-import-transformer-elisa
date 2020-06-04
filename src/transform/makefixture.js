@@ -32,11 +32,11 @@ import EventEmitter from 'events';
 
 class TransformEmitter extends EventEmitter {}
 
- default async function (stream) { 
-	createParse(stream)
+ 
+	createParse(process.stdin)   // stream??
 		.on('record', obj => { 			
 			console.log(JSON.stringify(record, undefined, 2)); 
 		});
-}    
+ 
 
 
