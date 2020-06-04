@@ -32,7 +32,7 @@ import EventEmitter from 'events';
 
 class TransformEmitter extends EventEmitter {}
 
-export default async function (stream) { 
+ default async function (stream) { 
 	createParse(stream)
 		.on('record', obj => { 			
 			console.log(JSON.stringify(record, undefined, 2)); 
