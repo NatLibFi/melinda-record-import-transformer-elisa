@@ -28,9 +28,8 @@
 
 import {createParse} from './common';
 
-
 createParse(process.stdin)
 	.on('record', obj => {
-		console.log(JSON.stringify(obj, undefined, 2)); 
+		console.log(JSON.stringify(obj, undefined, 2));
 	});
 

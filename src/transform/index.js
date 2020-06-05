@@ -36,7 +36,7 @@ import createValidator from './validate';
 class TransformEmitter extends EventEmitter {}
 const {createLogger} = Utils;
 
-export default async function (stream, {validate = true, fix = true}) { // ORIG:  (stream, {validate = true, fix = true})
+export default async function (stream, {validate = true, fix = true}) {
 	MarcRecord.setValidationOptions({subfieldValues: false});
 	const validateRecord = await createValidator();
 	const emitter = new TransformEmitter();
@@ -52,7 +52,7 @@ export default async function (stream, {validate = true, fix = true}) { // ORIG:
 			await Promise.all(promises);
 			emitter.emit('end', promises.length);
 		})
-		.on('record', async obj => {
+		.on('Product', async obj => {
 			promises.push(async () => {
 				const record = await convertRecord(obj);
 
@@ -69,10 +69,5 @@ export default async function (stream, {validate = true, fix = true}) { // ORIG:
 		});
 
 	return emitter;
-
-	// -> async function readStream ->
-
-// <- async function readStream <-
-// HERE WAS   async function convertRecord
 }
 
