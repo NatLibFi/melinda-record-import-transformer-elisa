@@ -26,21 +26,10 @@
 *
 */
 
-import transformCallback from './transform';
-import {Transformer} from '@natlibfi/melinda-record-import-commons';
+import {createParse} from './common';
 
-const {runCLI} = Transformer;
-const transformerSettings = {
+createParse(process.stdin)
+	.on('record', obj => {
+		console.log(JSON.stringify(obj, undefined, 2));
+	});
 
-	name: 'melinda-record-import-transformer-onix',
-
-	yargsOptions: [
-		{option: 'v', conf: {alias: 'validate', default: false, type: 'boolean', describe: 'Validate records'}},
-		{option: 'f', conf: {alias: 'fix', default: false, type: 'boolean', describe: 'Validate & fix records'}}
-	],
-
-	callback: transformCallback
-
-};
-
-runCLI(transformerSettings);

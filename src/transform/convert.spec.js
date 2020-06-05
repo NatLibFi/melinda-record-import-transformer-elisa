@@ -26,21 +26,49 @@
 *
 */
 
-import transformCallback from './transform';
-import {Transformer} from '@natlibfi/melinda-record-import-commons';
+import chai from 'chai';
+import moment from 'moment';
+import {readdirSync} from 'fs';
+import {join as joinPath} from 'path';
+import fixtureFactory, {READERS} from '@natlibfi/fixura';
+import createConverter, {__RewireAPI__ as RewireAPI} from './convert'; // eslint-disable-line import/named
 
-const {runCLI} = Transformer;
-const transformerSettings = {
+describe('transform/convert', () => {
+	const {expect} = chai;
+	const fixturesPath = joinPath(__dirname, '..', '..', 'test-fixtures', 'transform', 'convert');
 
-	name: 'melinda-record-import-transformer-onix',
+	beforeEach(() => {
+		RewireAPI.__Rewire__('moment', () => moment('2020-01-01T00:00:00'));
+	});
 
-	yargsOptions: [
-		{option: 'v', conf: {alias: 'validate', default: false, type: 'boolean', describe: 'Validate records'}},
-		{option: 'f', conf: {alias: 'fix', default: false, type: 'boolean', describe: 'Validate & fix records'}}
-	],
+	afterEach(() => {
+		RewireAPI.__ResetDependency__('moment');
+	});
 
-	callback: transformCallback
+	readdirSync(fixturesPath).forEach(subDir => {
+		it(subDir, () => {
+			const {getFixture} = fixtureFactory({root: [
 
-};
+				fixturesPath,
 
-runCLI(transformerSettings);
+				subDir
+
+			], reader: READERS.JSON});
+
+			const inputData = getFixture(['input.xml']);
+			const expectedRecord = getFixture(['output.json']);
+
+			const convert = createConverter({
+				harvestSource: 'FOOBAR',
+				urnResolverUrl: 'http://foo.bar'
+
+			});
+
+			// Fixtures are lists so that they can be fed to the CLI when testing manually
+
+			const record = convert(inputData[0]);
+
+			expect(record.toObject()).to.eql(expectedRecord);
+		});
+	});
+});

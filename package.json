@@ -22,15 +22,17 @@
 	},
 	"scripts": {
 		"start": "node dist/index.js",
-		"check-deps": "npm-check || exit 0",
+		"cli": "node dist/cli.js",
+		"check-deps": "npm-check|exit 0",
 		"lint": "eslint src",
 		"lint:dev": "eslint --fix src",
-		"test": "npm run lint",
-		"test:dev": "npm run lint:dev",
-		"build": "babel src --source-maps --delete-dir-on-start --out-dir=dist",
-		"build:dev": "npm run build && npm run check-deps",
-		"watch:test": "cross-env DEBUG=1 NODE_ENV=test chokidar src -c 'npm run test:dev'",
-		"watch:dev": "chokidar src -c 'npm run build:transpile && node dist/index.js'"
+		"test:base": "cross-env NODE_ENV=test nyc mocha --require @babel/register",
+		"test": "npm run lint && npm run test:base -- src/*.spec.js src/**/*.spec.js && npm run coverage",
+		"test:dev": "npm run lint:dev && npm run test:base -- src/*.spec.js src/**/*.spec.js && npm run coverage",
+		"coverage": "nyc check-coverage --per-file",
+		"build": "babel src --source-maps --copy-files --delete-dir-on-start --out-dir=dist --minified",
+		"watch:test": "cross-env DEBUG=1 NODE_ENV=test nodemon -w src --exec 'npm run test:dev'",
+		"watch:dev": "cross-env DEBUG=1 nodemon -w src --exec 'babel-node src/index.js'"
 	},
 	"dependencies": {
 		"@babel/core": "^7.6.4",
@@ -41,24 +43,37 @@
 		"@natlibfi/melinda-record-import-commons": "^7.0.1",
 		"moment": "^2.22.2",
 		"sax-stream": "^1.3.0",
+		"xml-flow": "^1.0.4",
+		"xml2js": "^0.4.23",
 		"xmlfmt": "^1.0.0"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.6.4",
-		"@babel/preset-env": "^7.6.3",
-		"@babel/register": "^7.6.2",
-		"babel-eslint": "^10.0.3",
+		"@babel/cli": "^7.7.5",
+		"@babel/core": "^7.9.0",
+		"@babel/node": "^7.8.7",
+		"@babel/preset-env": "^7.9.5",
+		"@babel/register": "^7.9.0",
+		"@natlibfi/eslint-config-melinda-backend": "^1.0.0",
+		"@natlibfi/fixura": "^1.0.0",
+		"babel-eslint": "^10.1.0",
+		"babel-plugin-istanbul": "^6.0.0",
 		"babel-plugin-rewire": "^1.2.0",
-		"cross-env": "^5.2.1",
+		"chai": "^4.2.0",
+		"chai-as-promised": "^7.1.1",
+		"cross-env": "^7.0.2",
 		"eslint": "^6.5.1",
 		"eslint-config-standard": "^14.1.0",
 		"eslint-config-xo": "^0.27.1",
-		"eslint-plugin-import": "^2.18.2",
+		"eslint-plugin-import": "^2.20.2",
 		"eslint-plugin-node": "^10.0.0",
 		"eslint-plugin-promise": "^4.2.1",
 		"eslint-plugin-standard": "^4.0.1",
-		"nodemon": "^1.19.3",
-		"npm-check": "^5.7.1"
+		"istanbul": "^0.4.5",
+		"mocha": "^7.1.2",
+		"nodemon": "^2.0.4",
+		"npm-check": "^5.9.2",
+		"nyc": "^15.0.1",
+		"rimraf": "^3.0.2"
 	},
 	"eslintConfig": {
 		"parser": "babel-eslint",
@@ -73,6 +88,9 @@
 			"prefer-arrow-callback": [
 				"error"
 			]
+		},
+		"env": {
+			"mocha": true
 		}
 	},
 	"babel": {
@@ -81,10 +99,37 @@
 				"@babel/preset-env",
 				{
 					"targets": {
-						"node": "7"
+						"node": "12"
 					}
 				}
 			]
-		]
+		],
+		"env": {
+			"test": {
+				"plugins": [
+					"istanbul",
+					"rewire"
+				]
+			}
+		}
+	},
+	"nyc": {
+		"exclude": [
+			"*/*.spec.js",
+			"*/**/*.spec.js"
+		],
+		"reporter": [
+			"lcov",
+			"html"
+		],
+		"require": [
+			"@babel/register"
+		],
+		"sourceMap": false,
+		"instrument": false,
+		"lines": 80,
+		"statements": 80,
+		"functions": 80,
+		"branches": 80
 	}
 }
