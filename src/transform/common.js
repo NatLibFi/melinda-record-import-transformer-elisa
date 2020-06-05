@@ -52,22 +52,32 @@ export function createParse(stream) {
 		.on('error', err => emitter.emit('error', err))
 
 		.on('end', async () => {
-			logger.log('debug', `Handled ${promises.length} recordEvents`);
-			await Promise.all(promises);
-			emitter.emit('end', promises.length);
+			try {
+				logger.log('debug', `Handled ${promises.length} recordEvents`);
+				await Promise.all(promises);
+				emitter.emit('end', promises.length);
+			} catch (err) {
+				emitter.emit('error', err);
+			}
 		})
 		.on('tag:Product', async node => { // Was: record // tag:Product
-			console.log('*** createStreamParser/on/tag:Product');
-			console.log('*** node: ', node);
-
-			promises.push(async () => {
-				const obj = await convertToObject();
-				// Const result = await convertRecord(obj);
+			function convert() {
+				const obj = convertToObject();
 				emitter.emit('record', obj); // WAS: result
-			});
+			}
+
+			try {
+				console.log('*** createStreamParser/on/tag:Product');
+				console.log('*** node: ', node);
+
+				const promise = convert();
+				promises.push(promise);
+			} catch (err) {
+				emitter.emit('error', err);
+			}
 
 			async function convertToObject() {
-				const str = toXML(node); // ORIG
+				const str = toXML(node);
 				return toObject();
 
 				async function toObject() {
