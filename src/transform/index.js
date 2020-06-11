@@ -27,47 +27,47 @@
 */
 
 import {MarcRecord} from '@natlibfi/marc-record';
-import {Utils} from '@natlibfi/melinda-commons';
-import {createParse} from './common';
+import {createParser} from './common';
 import {EventEmitter} from 'events';
 import convertRecord from './convert';
 import createValidator from './validate';
 
-class TransformEmitter extends EventEmitter {}
-const {createLogger} = Utils;
-
-export default async function (stream, {validate = true, fix = true}) {
+export default function (stream, {validate = true, fix = true}) {
 	MarcRecord.setValidationOptions({subfieldValues: false});
-	const validateRecord = await createValidator();
-	const emitter = new TransformEmitter();
-	const logger = createLogger();
+
 	const promises = [];
+	const emitter = new class extends EventEmitter {}();
 
-	logger.log('debug', 'Starting to send recordEvents');
-
-	createParse(stream)
-		.on('error', err => emitter.emit('error', err))
-		.on('end', async () => {
-			logger.log('debug', `Handled ${promises.length} recordEvents`);
-			await Promise.all(promises);
-			emitter.emit('end', promises.length);
-		})
-		.on('Product', async obj => {
-			promises.push(async () => {
-				const record = await convertRecord(obj);
-
-				if (validate === true || fix === true) {
-					const result = await validateRecord(record, fix);
-
-					emitter.emit('record', result);
-
-					return;
-				}
-
-				emitter.emit('record', record);
-			});
-		});
+	start();
 
 	return emitter;
+
+	async function start() {
+		const validateRecord = await createValidator();
+
+		createParser(stream)
+			.on('error', err => emitter.emit('error', err))
+			.on('end', async () => {
+				try {
+					await Promise.all(promises);
+					emitter.emit('end', promises.length);
+				} catch (err) {
+					emitter.emit('error', err);
+				}
+			})
+			.on('record', obj => {
+				promises.push((async () => {
+					const record = await convertRecord(obj);
+
+					if (validate === true || fix === true) {
+						const result = await validateRecord(record, fix);
+						emitter.emit('record', result);
+						return;
+					}
+
+					emitter.emit('record', record);
+				})());
+			});
+	}
 }
 

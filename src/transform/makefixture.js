@@ -26,9 +26,9 @@
 *
 */
 
-import {createParse} from './common';
+import {createParser} from './common';
 
-createParse(process.stdin)
+createParser(process.stdin)
 	.on('record', obj => {
 		console.log(JSON.stringify(obj, undefined, 2));
 	});

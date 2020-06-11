@@ -26,49 +26,32 @@
 *
 */
 
-import chai from 'chai';
+import {READERS} from '@natlibfi/fixura';
 import moment from 'moment';
-import {readdirSync} from 'fs';
-import {join as joinPath} from 'path';
-import fixtureFactory, {READERS} from '@natlibfi/fixura';
-import createConverter, {__RewireAPI__ as RewireAPI} from './convert'; // eslint-disable-line import/named
+import {expect} from 'chai';
+import generateTests from '@natlibfi/fixugen';
+import convert, {__RewireAPI__ as RewireAPI} from './convert'; // eslint-disable-line import/named
 
-describe('transform/convert', () => {
-	const {expect} = chai;
-	const fixturesPath = joinPath(__dirname, '..', '..', 'test-fixtures', 'transform', 'convert');
-
-	beforeEach(() => {
-		RewireAPI.__Rewire__('moment', () => moment('2020-01-01T00:00:00'));
-	});
-
-	afterEach(() => {
-		RewireAPI.__ResetDependency__('moment');
-	});
-
-	readdirSync(fixturesPath).forEach(subDir => {
-		it(subDir, () => {
-			const {getFixture} = fixtureFactory({root: [
-
-				fixturesPath,
-
-				subDir
-
-			], reader: READERS.JSON});
-
-			const inputData = getFixture(['input.xml']);
-			const expectedRecord = getFixture(['output.json']);
-
-			const convert = createConverter({
-				harvestSource: 'FOOBAR',
-				urnResolverUrl: 'http://foo.bar'
-
-			});
-
-			// Fixtures are lists so that they can be fed to the CLI when testing manually
-
-			const record = convert(inputData[0]);
-
-			expect(record.toObject()).to.eql(expectedRecord);
-		});
-	});
+generateTests({callback,
+	path: [__dirname, '..', '..', 'test-fixtures', 'transform', 'convert'],
+	recurse: false,
+	fixura: {
+		reader: READERS.JSON,
+		failWhenNotFound: false
+	},
+	mocha: {
+		beforeEach: () => {
+			RewireAPI.__Rewire__('moment', () => moment('2020-01-01T00:00:00'));
+		},
+		afterEach: () => {
+			RewireAPI.__ResetDependency__('moment');
+		}
+	}
 });
+
+function callback({getFixture}) {
+	const inputData = getFixture('input.json');
+	const expectedRecord = getFixture('output.json');
+	const record = convert(inputData);
+	expect(record.toObject()).to.eql(expectedRecord);
+}

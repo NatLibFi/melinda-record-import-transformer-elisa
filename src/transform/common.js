@@ -27,16 +27,13 @@
 */
 
 import {EventEmitter} from 'events';
-import {Utils} from '@natlibfi/melinda-commons';
 import createStreamParser, {toXml, ALWAYS as streamParserAlways} from 'xml-flow';
 import {Parser} from 'xml2js';
 
-export function createParse(stream) {
+export function createParser(stream) {
 	const promises = [];
 	class Emitter extends EventEmitter {}
-	const {createLogger} = Utils;
 	const emitter = new Emitter();
-	const logger = createLogger();
 
 	createStreamParser(stream, {
 		strict: true,
@@ -47,43 +44,40 @@ export function createParse(stream) {
 		useArrays: streamParserAlways
 	})
 		.on('error', err => emitter.emit('error', err))
-
 		.on('end', async () => {
 			try {
-				logger.log('debug', `Handled ${promises.length} recordEvents`);
 				await Promise.all(promises);
 				emitter.emit('end', promises.length);
 			} catch (err) {
 				emitter.emit('error', err);
 			}
 		})
-		.on('tag:Product', async node => {
-			async function convert() {
-				const obj = await convertToObject();
-				emitter.emit('record', obj);
-			}
-
+		.on('tag:Product', node => {
 			try {
-				const promise = convert();
-				promises.push(promise);
+				promises.push(convert());
 			} catch (err) {
 				emitter.emit('error', err);
 			}
 
-			async function convertToObject() {
-				const str = toXml(node);
-				return toObject();
+			async function convert() {
+				const obj = await convertToObject();
+				emitter.emit('record', obj);
 
-				async function toObject() {
-					return new Promise((resolve, reject) => {
-						new Parser().parseString(str, (err, obj) => {
-							if (err) {
-								return reject(err);
-							}
+				async function convertToObject() {
+					const str = toXml(node);
+					return toObject();
 
-							resolve(obj);
+					async function toObject() {
+						return new Promise((resolve, reject) => {
+							new Parser().parseString(str, (err, obj) => {
+								if (err) {
+									return reject(err);
+								}
+
+								resolve(obj);
+							});
 						});
-					});
+					}
 				}
 			}
 		});

@@ -1,10 +1,13 @@
 {
-  "_validationOptions": {},
   "leader": "00000nam^a22000008i^4500",
   "fields": [
     {
+      "tag": "003",
+      "value": "FI-Elisa"
+    },
+    {
       "tag": "006",
-      "value": "m|||||o||d||||||||"
+      "value": "m|||||o||h||||||||"
     },
     {
       "tag": "007",
@@ -12,78 +15,70 @@
     },
     {
       "tag": "008",
-      "value": "200519s2017^^^^fi^|||||o|||||||||||fin||"
+      "value": "190807s2018||||^^^|||||o|||||^||||||||||"
     },
     {
       "tag": "020",
+      "ind1": " ",
+      "ind2": " ",
       "subfields": [
         {
           "code": "a",
-          "value": "9789526849638"
+          "value": "9789520402631"
         },
         {
           "code": "q",
-          "value": "PDF"
+          "value": "EPUB"
         }
-      ],
-      "ind1": " ",
-      "ind2": " "
+      ]
     },
     {
-      "tag": "040",
-      "subfields": [
-        {
-          "code": "b",
-          "value": "fin"
-        },
-        {
-          "code": "e",
-          "value": "rda"
-        },
-        {
-          "code": "d",
-          "value": "FI-NL"
-        }
-      ],
-      "ind1": " ",
-      "ind2": " "
-    },
-    {
-      "tag": "041",
+      "tag": "020",
+      "ind1": "3",
+      "ind2": " ",
       "subfields": [
         {
           "code": "a",
-          "value": "fin"
+          "value": "9789520402631"
         }
-      ],
-      "ind1": " ",
-      "ind2": " "
+      ]
     },
     {
-      "tag": "042",
+      "tag": "035",
+      "ind1": " ",
+      "ind2": " ",
       "subfields": [
         {
           "code": "a",
-          "value": "finb"
+          "value": "(FI-Elisa)115288"
         }
-      ],
-      "ind1": " ",
-      "ind2": " "
+      ]
+    },
+    {
+      "tag": "037",
+      "ind1": "3",
+      "ind2": " ",
+      "subfields": [
+        {
+          "code": "a",
+          "value": "ElisaKirja115288"
+        }
+      ]
     },
     {
       "tag": "100",
       "ind1": "1",
+      "ind2": " ",
       "subfields": [
         {
           "code": "a",
-          "value": "Gorshkov, Sergey"
+          "value": "Ristkari, Maiju"
         },
         {
           "code": "e",
           "value": "kirjoittaja"
         }
-      ],
-      "ind2": " "
+      ]
     },
     {
       "tag": "245",
@@ -92,42 +87,40 @@
       "subfields": [
         {
           "code": "a",
-          "value": "Arktinen helmi :"
-        },
-        {
-          "code": "b",
-          "value": "Wrangelinsaari (näköiskirja)"
+          "value": "Sukupuolena ihminen"
         }
       ]
     },
     {
       "tag": "264",
+      "ind1": " ",
       "ind2": "1",
       "subfields": [
         {
           "code": "b",
-          "value": "E-painos"
+          "value": "Tammi"
         },
         {
           "code": "c",
-          "value": "2017"
+          "value": "2018"
         }
-      ],
-      "ind1": " "
+      ]
     },
     {
       "tag": "300",
+      "ind1": " ",
+      "ind2": " ",
       "subfields": [
         {
           "code": "a",
           "value": "1 verkkoaineisto"
         }
-      ],
-      "ind1": " ",
-      "ind2": " "
+      ]
     },
     {
       "tag": "336",
+      "ind1": " ",
+      "ind2": " ",
       "subfields": [
         {
           "code": "a",
@@ -141,12 +134,12 @@
           "code": "2",
           "value": "rdacontent"
         }
-      ],
-      "ind1": " ",
-      "ind2": " "
+      ]
     },
     {
       "tag": "337",
+      "ind1": " ",
+      "ind2": " ",
       "subfields": [
         {
           "code": "a",
@@ -160,12 +153,12 @@
           "code": "2",
           "value": "rdamedia"
         }
-      ],
-      "ind1": " ",
-      "ind2": " "
+      ]
     },
     {
       "tag": "338",
+      "ind1": " ",
+      "ind2": " ",
       "subfields": [
         {
           "code": "a",
@@ -179,12 +172,12 @@
           "code": "2",
           "value": "rdacarrier"
         }
-      ],
-      "ind1": " ",
-      "ind2": " "
+      ]
     },
     {
       "tag": "344",
+      "ind1": " ",
+      "ind2": " ",
       "subfields": [
         {
           "code": "a",
@@ -194,12 +187,12 @@
           "code": "2",
           "value": "rda"
         }
-      ],
-      "ind1": " ",
-      "ind2": " "
+      ]
     },
     {
       "tag": "347",
+      "ind1": " ",
+      "ind2": " ",
       "subfields": [
         {
           "code": "a",
@@ -207,75 +200,28 @@
         },
         {
           "code": "b",
-          "value": "PDF"
+          "value": "EPUB"
         },
         {
           "code": "2",
           "value": "rda"
         }
-      ],
-      "ind1": " ",
-      "ind2": " "
+      ]
     },
     {
-      "tag": "500",
-      "ind1": " ",
+      "tag": "700",
+      "ind1": "1",
       "ind2": " ",
       "subfields": [
         {
           "code": "a",
-          "value": "Koneellisesti tuotettu tietue."
+          "value": "Suni, Nina"
         },
         {
-          "code": "9",
-          "value": "FENNI<KEEP>"
+          "code": "e",
+          "value": "kirjoittaja"
         }
       ]
-    },
-    {
-      "tag": "520",
-      "subfields": [
-        {
-          "code": "a",
-          "value": "Kirja vie lukijan ainutlaatuiseen maailmankolkkaan, Wrangelinsaarelle Pohjoiselle Jäämerelle. Se kertoo seikkaperäisesti saaren löytymisen historiasta ja kuljettaa seuraamaan saaren nykyisten asukkaiden elämää. Päähenkilöinä ovat pohjoisen luonnon eläimet: jääkarhut, naalit, tunturipöllöt, mursut ja lumihanhet. Kertoessaan arktisten alueiden kesyttömästä luonnosta kuvat pysäyttävät myös pohtimaan ekologisen tasapainon haurautta ja sen säilyttämisen välttämättömyyttä. Teos on osa Venäjän tunnetuimman luontokuvaajan kunnianhimoista kuvaushanketta halki kotimaansa pohjoisen napaseudun. Hänen tavoitteenaan on kulkea kuvaten Venäjän Pohjolaa idästä länteen, sen saaria, meriä ja rannikoita. Matka alkoi Wrangelinsaarelta.\r\n\r\n\"Wrangelinsaari on epätavallisimpia paikkoja maapallolla. Siellä aistii vielä luonnon alkuperäisen voiman henkäilyn.\"\r\n\r\n-Sergey Gorshkov-\r\n\r\nSergey Gorshkov on Venäjän tunnetuin luontokuvaaja. Kansainvälisesti palkittu Gorshkov on myös voittanut kahdesti Venäjän vuoden luontokuvaajan tittelin ja on ensimmäinen venäläinen National Geographicin kuvaaja. Hänen teoksiaan ei ole aiemmin julkaistu suomeksi.  \r\n\r\nTämä versio on painetun kirjan ulkoasun mukainen näköiskirja. Saatavilla on myös tabletin, miniläppärin tai älypuhelimen näyttöön paremmin istuva mobiilikirja.\r\n"
-        }
-      ],
-      "ind1": " ",
-      "ind2": " "
-    },
-    {
-      "tag": "884",
-      "subfields": [
-        {
-          "code": "a",
-          "value": "ONIX3 to MARC transformation"
-        },
-        {
-          "code": "g",
-          "value": "20200519"
-        },
-        {
-          "code": "k",
-          "value": "MELINDA_RECORD_IMPORT_SOURCE1"
-        },
-        {
-          "code": "q",
-          "value": "FI-NL"
-        }
-      ],
-      "ind1": " ",
-      "ind2": " "
-    },
-    {
-      "tag": "LOW",
-      "subfields": [
-        {
-          "code": "a",
-          "value": "FIKKA"
-        }
-      ],
-      "ind1": " ",
-      "ind2": " "
     }
   ]
 }
