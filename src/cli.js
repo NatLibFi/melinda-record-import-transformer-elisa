@@ -26,21 +26,18 @@
 *
 */
 
-import transformCallback from './transform';
+import * as options from './config';
+import createCallback from './transform';
 import {Transformer} from '@natlibfi/melinda-record-import-commons';
 
 const {runCLI} = Transformer;
 const transformerSettings = {
-
 	name: 'melinda-record-import-transformer-onix',
-
 	yargsOptions: [
 		{option: 'v', conf: {alias: 'validate', default: false, type: 'boolean', describe: 'Validate records'}},
 		{option: 'f', conf: {alias: 'fix', default: false, type: 'boolean', describe: 'Validate & fix records'}}
 	],
-
-	callback: transformCallback
-
+	callback: createCallback(options)
 };
 
 runCLI(transformerSettings);

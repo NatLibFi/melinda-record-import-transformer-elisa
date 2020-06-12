@@ -27,13 +27,9 @@
 *
 */
 
-import transform from './transform';
+import * as options from './config';
+import transformFactory from './transform';
 import {Transformer} from '@natlibfi/melinda-record-import-commons/';
 
 const {startTransformer} = Transformer;
-
-run();
-
-async function run() {
-	startTransformer(transform);
-}
+startTransformer(transformFactory(options));

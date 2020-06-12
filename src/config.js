@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+
 /**
 *
 * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -27,34 +27,7 @@
 *
 */
 
-/* eslint-disable new-cap */
+import {Utils} from '@natlibfi/melinda-commons';
+const {readEnvironmentVariable} = Utils;
 
-import validateFactory from '@natlibfi/marc-record-validate';
-import {
-	IsbnIssn, FieldExclusion, Urn, EndingPunctuation, ItemLanguage, Punctuation
-} from '@natlibfi/marc-record-validators-melinda';
-
-export default async () => {
-	const validate = validateFactory([
-		await IsbnIssn({hyphenateISBN: true}),
-		await Urn(),
-		await ItemLanguage(/^520$/),
-		await FieldExclusion([
-			{
-				tag: /^520$/
-			}
-		]),
-		await EndingPunctuation(),
-		await Punctuation()
-	]);
-
-	return async (record, fix, validateFixes) => {
-		const opts = fix ? {fix, validateFixes} : {fix};
-		const result = await validate(record, opts);
-		return {
-			record: result.record,
-			failed: result.valid === false,
-			messages: result.report
-		};
-	};
-};
+export const sources = readEnvironmentVariable('SOURCES', {format: JSON.parse});

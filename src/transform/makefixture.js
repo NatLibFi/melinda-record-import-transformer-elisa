@@ -28,8 +28,12 @@
 
 import {createParser} from './common';
 
+const list = [];
+
 createParser(process.stdin)
 	.on('record', obj => {
-		console.log(JSON.stringify(obj, undefined, 2));
-	});
+		list.push(obj);
+		console.error(`Got record ${list.length}`);
+	})
+	.on('end', () => console.log(JSON.stringify(list, undefined, 2)));
 

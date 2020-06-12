@@ -30,7 +30,7 @@ import {READERS} from '@natlibfi/fixura';
 import moment from 'moment';
 import {expect} from 'chai';
 import generateTests from '@natlibfi/fixugen';
-import convert, {__RewireAPI__ as RewireAPI} from './convert'; // eslint-disable-line import/named
+import createConverter, {__RewireAPI__ as RewireAPI} from './convert'; // eslint-disable-line import/named
 
 generateTests({callback,
 	path: [__dirname, '..', '..', 'test-fixtures', 'transform', 'convert'],
@@ -41,7 +41,7 @@ generateTests({callback,
 	},
 	mocha: {
 		beforeEach: () => {
-			RewireAPI.__Rewire__('moment', () => moment('2020-01-01T00:00:00'));
+			RewireAPI.__Rewire__('moment', () => moment('2000-01-01T00:00:00'));
 		},
 		afterEach: () => {
 			RewireAPI.__ResetDependency__('moment');
@@ -50,8 +50,15 @@ generateTests({callback,
 });
 
 function callback({getFixture}) {
+	const convert = createConverter({sources: {foobar: 'foobar'}});
 	const inputData = getFixture('input.json');
 	const expectedRecord = getFixture('output.json');
+	const expectedError = getFixture({components: ['error.txt'], reader: READERS.TEXT});
+
+	if (expectedError) {
+		return expect(() => convert(inputData)).to.throw(Error, new RegExp(expectedError));
+	}
+
 	const record = convert(inputData);
 	expect(record.toObject()).to.eql(expectedRecord);
 }

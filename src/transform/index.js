@@ -29,45 +29,61 @@
 import {MarcRecord} from '@natlibfi/marc-record';
 import {createParser} from './common';
 import {EventEmitter} from 'events';
-import convertRecord from './convert';
+import createConverter from './convert';
 import createValidator from './validate';
 
-export default function (stream, {validate = true, fix = true}) {
-	MarcRecord.setValidationOptions({subfieldValues: false});
+export default options => {
+	return (stream, {validate = true, fix = true}) => {
+		MarcRecord.setValidationOptions({subfieldValues: false});
 
-	const promises = [];
-	const emitter = new class extends EventEmitter {}();
+		const promises = [];
+		const emitter = new class extends EventEmitter {}();
 
-	start();
+		start();
 
-	return emitter;
+		return emitter;
 
-	async function start() {
-		const validateRecord = await createValidator();
+		async function start() {
+			const convertRecord = createConverter(options);
+			const validateRecord = await createValidator();
 
-		createParser(stream)
-			.on('error', err => emitter.emit('error', err))
-			.on('end', async () => {
-				try {
-					await Promise.all(promises);
-					emitter.emit('end', promises.length);
-				} catch (err) {
-					emitter.emit('error', err);
-				}
-			})
-			.on('record', obj => {
-				promises.push((async () => {
-					const record = await convertRecord(obj);
-
-					if (validate === true || fix === true) {
-						const result = await validateRecord(record, fix);
-						emitter.emit('record', result);
-						return;
+			createParser(stream)
+				.on('error', err => emitter.emit('error', err))
+				.on('end', async () => {
+					try {
+						await Promise.all(promises);
+						emitter.emit('end', promises.length);
+					} catch (err) {
+						emitter.emit('error', err);
 					}
+				})
+				.on('record', obj => {
+					const promise = convert();
+					promises.push(promise);
 
-					emitter.emit('record', record);
-				})());
-			});
-	}
-}
+					async function convert() {
+						try {
+							const record = await convertRecord(obj);
 
+							if (validate === true || fix === true) {
+								const result = await validateRecord(record, fix);
+								emitter.emit('record', result);
+								return;
+							}
+
+							emitter.emit('record', record);
+						} catch (err) {
+							if (err.message === 'Unsupported product identifier type & value') {
+								return emitter.emit('record', {
+									failed: true,
+									messages: [err.message]
+								});
+							}
+
+							throw err;
+						}
+					}
+				});
+		}
+	};
+};

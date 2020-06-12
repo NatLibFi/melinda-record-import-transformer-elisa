@@ -1,0 +1,191 @@
+{
+  "Product": {
+    "RecordReference": [
+      "foobar"
+    ],
+    "NotificationType": [
+      "03"
+    ],
+    "ProductIdentifier": [
+      {
+        "ProductIDType": [
+          "01"
+        ],
+        "IDTypeName": [
+          "NID"
+        ],
+        "IDValue": [
+          "foobar"
+        ]
+      },
+      {
+        "ProductIDType": [
+          "03"
+        ],
+        "IDValue": [
+          "9789520402631"
+        ]
+      },
+      {
+        "ProductIDType": [
+          "15"
+        ],
+        "IDValue": [
+          "9789520402631"
+        ]
+      }
+    ],
+    "DescriptiveDetail": [
+      {
+        "ProductComposition": [
+          "00"
+        ],
+        "ProductForm": [
+          "EB"
+        ],
+        "ProductFormDetail": [
+          "E101"
+        ],
+        "TitleDetail": [
+          {
+            "TitleType": [
+              "01"
+            ],
+            "TitleElement": [
+              {
+                "TitleElementLevel": [
+                  "01"
+                ],
+                "TitleText": [
+                  "Sukupuolena ihminen"
+                ]
+              }
+            ]
+          }
+        ],
+        "Contributor": [
+          {
+            "SequenceNumber": [
+              "1"
+            ],
+            "ContributorRole": [
+              "A01"
+            ],
+            "PersonNameInverted": [
+              "Ristkari, Maiju"
+            ]
+          },
+          {
+            "SequenceNumber": [
+              "2"
+            ],
+            "ContributorRole": [
+              "A01"
+            ],
+            "PersonNameInverted": [
+              "Suni, Nina"
+            ]
+          }
+        ],
+        "Language": [
+          {
+            "LanguageRole": [
+              "01"
+            ],
+            "LanguageCode": [
+              "fin"
+            ]
+          }
+        ]
+      }
+    ],
+    "CollateralDetail": [
+      {
+        "TextContent": [
+          {
+            "TextType": [
+              "03"
+            ],
+            "ContentAudience": [
+              "00"
+            ],
+            "Text": [
+              {
+                "_": "<p><b>Ihan totta! -tietokirjakilpailun nuorten sarjan voittajateos on ensimmäinen nuorille suunnattu suomenkielinen teos sukupuolen moninaisuudesta ja transsukupuolisuudesta.</b></p>\n<p><br /><em>Sukupuolena ihminen</em> on 2010-luvun nuorille suunnattu tietopaketti sukupuolen moninaisuudesta. Se on hyödyllinen niin trans- kuin cis-nuorille sekä heidän vanhemmilleen, mutta myös opettajille, oppilashuollon työntekijöille, hoitohenkilökunnalle ja kaikille, jotka haluavat ymmärtää, mistä sukupuoli-identiteeteissä ja erityisesti transsukupuolisuudessa on kyse.</p>\n<p><br />Kirja tarjoaa asiallista, tieteeseen ja kokemusasiantuntijuuteen perustuvaa tietoa ajankohtaisesta aiheesta, josta julkisuudessa ja sosiaalisessa mediassa liikkuu hyvin erilaisia näkemyksiä. Lähestymistapa on käytännönläheinen ja myötätuntoinen &amp;dash; kirja on tarkoitettu avuksi ja tueksi niille, jotka pohtivat omaa sukupuoltaan. Se avartaa ymmärrystä siitä, kuinka moninaisia tapoja on olla ihan tavallinen ihminen.</p>\n<p><em>Sukupuolena ihminen</em> pohjautuu Maiju Ristkarin, Nina Sunin ja valokuvaaja Vesa Tynin samannimiseen dokumenttiprojektiin, joka käynnistyi vuonna 2015 ja jatkuu edelleen. Projektiin liittyvä valokuvanäyttely on kiertänyt Suomea syksystä 2016 alkaen. Vesa Tynin valokuvia ja näyttelyssä esiintyvien transihmisten tarinoita on mukana myös kirjassa. www.sukupuolenaihminen.fi </p>\n<p>Kustannusosakeyhtiö Tammen ja Tietokirjallisuuden edistämiskeskuksen Ihan totta! -tietokirjakilpailussa etsittiin uusia ja ajankohtaisia tietokirjoja lasten ja nuorten sarjoissa. Teemoja oli kaksi: Monimuotoinen maailmamme sekä Toimiva ja tunteva ihminen. Tammi julkaisee molempien sarjojen voittajateokset syksyllä 2018.</p>\n<p><b>Maiju Ristkari</b> on tehnyt pitkään töitä sukupuolen moninaisuuteen liittyvien teemojen parissa. Nina Sunin tausta on kuvataiteen kentällä. Vesa Tyni on henkilökuvaukseen erikoistunut palkittu valokuvaaja.</p>",
+                "$": {
+                  "textformat": "02"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "PublishingDetail": [
+      {
+        "Publisher": [
+          {
+            "PublishingRole": [
+              "01"
+            ],
+            "PublisherName": [
+              "Tammi"
+            ]
+          }
+        ],
+        "CountryOfPublication": [
+          "FI"
+        ],
+        "PublishingStatus": [
+          "04"
+        ],
+        "PublishingDate": [
+          {
+            "PublishingDateRole": [
+              "01"
+            ],
+            "Date": [
+              {
+                "_": "2018",
+                "$": {
+                  "dateformat": "05"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "ProductSupply": [
+      {
+        "SupplyDetail": [
+          {
+            "Supplier": [
+              {
+                "SupplierRole": [
+                  "06"
+                ],
+                "SupplierName": [
+                  "foobar"
+                ],
+                "Website": [
+                  {
+                    "WebsiteLink": [
+                      "default"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "ProductAvailability": [
+              "21"
+            ],
+            "UnpricedItemType": [
+              "02"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

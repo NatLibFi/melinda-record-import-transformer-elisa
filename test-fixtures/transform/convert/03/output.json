@@ -1,28 +1,32 @@
 {
-  "leader": "00000nam a22000008i 4500",
+  "leader": "00000nim a22000008i 4500",
   "fields": [
     {
       "tag": "006",
-      "value": "m|||||o||d||||||||"
+      "value": "m|||||o||h||||||||"
     },
     {
       "tag": "007",
-      "value": "cr||||||||||||"
+      "value": "sr|uunnnnnuneu"
+    },
+    {
+      "tag": "007",
+      "value": "cr|nnannnuuuuu"
     },
     {
       "tag": "008",
-      "value": "000101s2018    fi |||||o|||||||||||fin||"
+      "value": "000101s2017    fi |||||o|||||||||||fin||"
     },
     {
       "tag": "020",
       "subfields": [
         {
           "code": "a",
-          "value": "9789520402631"
+          "value": "9788711862070"
         },
         {
           "code": "q",
-          "value": "EPUB"
+          "value": "MP3"
         }
       ],
       "ind1": " ",
@@ -75,7 +79,7 @@
       "subfields": [
         {
           "code": "a",
-          "value": "Ristkari, Maiju"
+          "value": "Cartland, Barbara"
         },
         {
           "code": "e",
@@ -91,7 +95,7 @@
       "subfields": [
         {
           "code": "a",
-          "value": "Sukupuolena ihminen"
+          "value": "Rakkaus piilottelee"
         }
       ]
     },
@@ -101,11 +105,11 @@
       "subfields": [
         {
           "code": "b",
-          "value": "Tammi"
+          "value": "Saga Egmont"
         },
         {
           "code": "c",
-          "value": "2018"
+          "value": "2017"
         }
       ],
       "ind1": " "
@@ -126,11 +130,11 @@
       "subfields": [
         {
           "code": "a",
-          "value": "teksti"
+          "value": "puhe"
         },
         {
           "code": "b",
-          "value": "txt"
+          "value": "spw"
         },
         {
           "code": "2",
@@ -198,15 +202,30 @@
       "subfields": [
         {
           "code": "a",
-          "value": "tekstitiedosto"
+          "value": "äänitiedosto"
         },
         {
           "code": "b",
-          "value": "EPUB"
+          "value": "MP3"
         },
         {
           "code": "2",
           "value": "rda"
+        }
+      ],
+      "ind1": " ",
+      "ind2": " "
+    },
+    {
+      "tag": "500",
+      "subfields": [
+        {
+          "code": "a",
+          "value": "Äänikirja."
+        },
+        {
+          "code": "9",
+          "value": "FENNI<KEEP>"
         }
       ],
       "ind1": " ",
@@ -259,7 +278,7 @@
       "subfields": [
         {
           "code": "a",
-          "value": "<p><b>Ihan totta! -tietokirjakilpailun nuorten sarjan voittajateos on ensimmäinen nuorille suunnattu suomenkielinen teos sukupuolen moninaisuudesta ja transsukupuolisuudesta.</b></p>\n<p><br /><em>Sukupuolena ihminen</em> on 2010-luvun nuorille suunnattu tietopaketti sukupuolen moninaisuudesta. Se on hyödyllinen niin trans- kuin cis-nuorille sekä heidän vanhemmilleen, mutta myös opettajille, oppilashuollon työntekijöille, hoitohenkilökunnalle ja kaikille, jotka haluavat ymmärtää, mistä sukupuoli-identiteeteissä ja erityisesti transsukupuolisuudessa on kyse.</p>\n<p><br />Kirja tarjoaa asiallista, tieteeseen ja kokemusasiantuntijuuteen perustuvaa tietoa ajankohtaisesta aiheesta, josta julkisuudessa ja sosiaalisessa mediassa liikkuu hyvin erilaisia näkemyksiä. Lähestymistapa on käytännönläheinen ja myötätuntoinen &amp;dash; kirja on tarkoitettu avuksi ja tueksi niille, jotka pohtivat omaa sukupuoltaan. Se avartaa ymmärrystä siitä, kuinka moninaisia tapoja on olla ihan tavallinen ihminen.</p>\n<p><em>Sukupuolena ihminen</em> pohjautuu Maiju Ristkarin, Nina Sunin ja valokuvaaja Vesa Tynin samannimiseen dokumenttiprojektiin, joka käynnistyi vuonna 2015 ja jatkuu edelleen. Projektiin liittyvä valokuvanäyttely on kiertänyt Suomea syksystä 2016 alkaen. Vesa Tynin valokuvia ja näyttelyssä esiintyvien transihmisten tarinoita on mukana myös kirjassa. www.sukupuolenaihminen.fi </p>\n<p>Kustannusosakeyhtiö Tammen ja Tietokirjallisuuden edistämiskeskuksen Ihan totta! -tietokirjakilpailussa etsittiin uusia ja ajankohtaisia tietokirjoja lasten ja nuorten sarjoissa. Teemoja oli kaksi: Monimuotoinen maailmamme sekä Toimiva ja tunteva ihminen. Tammi julkaisee molempien sarjojen voittajateokset syksyllä 2018.</p>\n<p><b>Maiju Ristkari</b> on tehnyt pitkään töitä sukupuolen moninaisuuteen liittyvien teemojen parissa. Nina Sunin tausta on kuvataiteen kentällä. Vesa Tyni on henkilökuvaukseen erikoistunut palkittu valokuvaaja.</p>"
+          "value": "<b>Orpotyttö Gretna Hayden matkustaa Lontooseen turvaan lapsuudenystävänsä Marian luo.</b>\n\nMatkalla Gretna tapaa Staden markiisin dramaattisissa olosuhteissa. Nuori aristokraatti rakastuu silmittömästi kauniiseen, vaaleatukkaiseen neitoon ja tunteet ovat molemminpuolisia. Gretna tajuaa kuitenkin pian, ettei onnellisesta elämästä markiisin rinnalla kannata unelmoida. Gretna Hayden on jo etukäteen ongelmia: hänen ainoa tukensa maailmassa ei ole kukaan muu kuin Walesin prinssin pahamaineinen ja vihattu rakastajatar Maria Fitzherbert, eivätkä Marian viholliset ole vähemmän leppymättömiä kuin Julien, Staden markiisi.   \n\n<b>Barbara Cartland</b> (1901 - 2000) on vuosisadan kaikkein tuotteliain kirjailija. Hän on kirjoittanut yli 650 romanttista romaania, hänen kirjojaan on käännetty 38 kielelle ja niitä on myyty yli miljardi kappaletta. Ei voi enää olla epäilystäkään siitä, että Barbara Cartland on yksi maailman suurimmista romantikoista."
         }
       ],
       "ind1": " ",
@@ -297,16 +316,35 @@
       "ind2": " "
     },    
     {
+      "tag": "655",
+      "ind2": "7",
+      "subfields": [
+        {
+          "code": "a",
+          "value": "äänikirjat"
+        },
+        {
+          "code": "2",
+          "value": "slm/fin"
+        },
+        {
+          "code": "0",
+          "value": "http://urn.fi/URN:NBN:fi:au:slm:s579"
+        }
+      ],
+      "ind1": " "
+    },
+    {
       "tag": "700",
       "ind1": "1",
       "subfields": [
         {
           "code": "a",
-          "value": "Suni, Nina"
+          "value": "Renwall, Mia"
         },
         {
           "code": "e",
-          "value": "kirjoittaja"
+          "value": "lukija"
         }
       ],
       "ind2": " "

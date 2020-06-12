@@ -1,0 +1,186 @@
+
+{
+  "Product": {
+    "RecordReference": [
+      "foobar"
+    ],
+    "NotificationType": [
+      "03"
+    ],
+    "ProductIdentifier": [
+      {
+        "ProductIDType": [
+          "01"
+        ],
+        "IDTypeName": [
+          "NID"
+        ],
+        "IDValue": [
+          "foobar"
+        ]
+      },
+      {
+        "ProductIDType": [
+          "03"
+        ],
+        "IDValue": [
+          "9788711862070"
+        ]
+      },
+      {
+        "ProductIDType": [
+          "15"
+        ],
+        "IDValue": [
+          "9788711862070"
+        ]
+      }
+    ],
+    "DescriptiveDetail": [
+      {
+        "ProductComposition": [
+          "00"
+        ],
+        "ProductForm": [
+          "AJ"
+        ],
+        "ProductFormDetail": [
+          "A103"
+        ],
+        "TitleDetail": [
+          {
+            "TitleType": [
+              "01"
+            ],
+            "TitleElement": [
+              {
+                "TitleElementLevel": [
+                  "01"
+                ],
+                "TitleText": [
+                  "Rakkaus piilottelee"
+                ]
+              }
+            ]
+          }
+        ],
+        "Contributor": [
+          {
+            "ContributorRole": [
+              "A01"
+            ],
+            "PersonNameInverted": [
+              "Cartland, Barbara"
+            ]
+          },
+          {
+            "ContributorRole": [
+              "E07"
+            ],
+            "PersonNameInverted": [
+              "Renwall, Mia"
+            ]
+          }
+        ],
+        "Language": [
+          {
+            "LanguageRole": [
+              "01"
+            ],
+            "LanguageCode": [
+              "fin"
+            ]
+          }
+        ]
+      }
+    ],
+    "CollateralDetail": [
+      {
+        "TextContent": [
+          {
+            "TextType": [
+              "03"
+            ],
+            "ContentAudience": [
+              "00"
+            ],
+            "Text": [
+              {
+                "_": "<b>Orpotyttö Gretna Hayden matkustaa Lontooseen turvaan lapsuudenystävänsä Marian luo.</b>\n\nMatkalla Gretna tapaa Staden markiisin dramaattisissa olosuhteissa. Nuori aristokraatti rakastuu silmittömästi kauniiseen, vaaleatukkaiseen neitoon ja tunteet ovat molemminpuolisia. Gretna tajuaa kuitenkin pian, ettei onnellisesta elämästä markiisin rinnalla kannata unelmoida. Gretna Hayden on jo etukäteen ongelmia: hänen ainoa tukensa maailmassa ei ole kukaan muu kuin Walesin prinssin pahamaineinen ja vihattu rakastajatar Maria Fitzherbert, eivätkä Marian viholliset ole vähemmän leppymättömiä kuin Julien, Staden markiisi.   \n\n<b>Barbara Cartland</b> (1901 - 2000) on vuosisadan kaikkein tuotteliain kirjailija. Hän on kirjoittanut yli 650 romanttista romaania, hänen kirjojaan on käännetty 38 kielelle ja niitä on myyty yli miljardi kappaletta. Ei voi enää olla epäilystäkään siitä, että Barbara Cartland on yksi maailman suurimmista romantikoista.",
+                "$": {
+                  "textformat": "02"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "PublishingDetail": [
+      {
+        "Publisher": [
+          {
+            "PublishingRole": [
+              "01"
+            ],
+            "PublisherName": [
+              "Saga Egmont"
+            ]
+          }
+        ],
+        "CountryOfPublication": [
+          "FI"
+        ],
+        "PublishingStatus": [
+          "04"
+        ],
+        "PublishingDate": [
+          {
+            "PublishingDateRole": [
+              "01"
+            ],
+            "Date": [
+              {
+                "_": "2017",
+                "$": {
+                  "dateformat": "05"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "ProductSupply": [
+      {
+        "SupplyDetail": [
+          {
+            "Supplier": [
+              {
+                "SupplierRole": [
+                  "06"
+                ],
+                "SupplierName": [
+                  "foobar"
+                ],
+                "Website": [
+                  {
+                    "WebsiteLink": [
+                      "default"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "ProductAvailability": [
+              "21"
+            ],
+            "UnpricedItemType": [
+              "02"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
