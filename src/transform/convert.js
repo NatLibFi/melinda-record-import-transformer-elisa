@@ -519,15 +519,15 @@ export default ({sources}) => {
 						return {mainTitle: title};
 
 						function calculateLengths() {
-							const firstResult = /(s+[\u2013\u2014-]\s+|:\s+|[^.]\.[^.])/.exec(title);
+							const firstResult = /\s+[\u2013\u2014-]\s+|:\s+|[^.]\.[^.]/.exec(title);
 
 							if (firstResult) {
 								const [matched] = firstResult;
 								const {index} = firstResult;
 
 								return {
-									titleSpec: index,
-									remainderSpec: index + matched.length
+									mainLength: index,
+									remainderLength: index + matched.length
 								};
 							}
 
@@ -538,8 +538,8 @@ export default ({sources}) => {
 								const {index} = secondResult;
 
 								return {
-									titleSpec: index + 1,
-									remainderSpec: index + 1 + matched.length
+									mainLength: index + 1,
+									remainderLength: index + 1 + matched.length
 								};
 							}
 						}
