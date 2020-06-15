@@ -1,28 +1,86 @@
+kind: pipeline
+type: docker
+name: Default
+
+trigger:
+  event:
+    - push
+
+steps:
+
+  - name: audit
+    image: node:12
+    environment:
+      NPM_CONFIG_IGNORE_SCRIPTS: true
+    commands:
+      - npm audit --package-lock-only --audit-level=moderate
+
+  - name: install
+    image: node:12
+    environment:
+      NPM_CONFIG_IGNORE_SCRIPTS: true
+    commands:
+      - npm ci
+
+  - name: test
+    image: node:12
+    commands:
+      - npm test
+
+  - name: check-coverage
+    image: node:12
+    commands:
+      - npm run check-coverage
+
+  - name: build
+    image: node:12
+    commands:
+      - npm run build
+      - npm ci --production
+
+  - name: static-security-scan
+    image: quay.io/natlibfi/nodejsscan
+    commands:
+      - python /usr/src/app/cli.py -d dist
+
+  - name: docker 
+    image: plugins/docker
+    settings:
+      repo: quay.io/natlibfi/melinda-record-import-transformer-onix
+      registry: quay.io
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 ---
 kind: pipeline
-name: default
+type: docker
+name: Update dependencies
+
+trigger:
+  event:
+    - custom
+  branch:
+    - next
+
 steps:
-- name: generate-tags
-  image: quay.io/natlibfi/drone-gen-tags
-- name: test-init
-  image: busybox
-  commands:
-  - chmod o+w /drone/src
-- name: test
-  image: node:12
-  user: node  
-  commands:
-  - npm install
-  - npm test
-- name: docker 
-  image: plugins/docker
-  settings:
-    repo: quay.io/natlibfi/melinda-record-import-transformer-onix
-    registry: quay.io
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+
+  - name: update-deps
+    image: node:12
+    commands:
+      - npm install --package-lock-only
+
+  - name: commit-and-push
+    image: quay.io/natlibfi/drone-plugin-git-push
+    settings:
+      remote: ${DRONE_GIT_SSH_URL}
+      branch: next
+      commit: true
+      commit_message: 'Update dependencies'
+      author_name: natlibfi-melinda-automation
+      author_email: 65649125+natlibfi-melinda-automation@users.noreply.github.com
+      ssh_key:
+        from_secret: github_deploy_key
 ---
 kind: secret
 name: docker_username
