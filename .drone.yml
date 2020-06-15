@@ -92,6 +92,6 @@ name: docker_password
 data: u2vqZCICPzN3tGzPGRtYdDXWlhNfPE6TNPjEERTd2k3ypFnCyQBjvo7Lygfv1F8h6/imo0hyGNuPXUdiW8xwQSwvxr5fw7oqFrrpgjqgQhJM3T/4U2vElaW46n0=
 ---
 kind: signature
-hmac: 26681ff87dc1e76520027b73130f88026d7b34134f8006f454eeaa2895b945d3
+hmac: 5d1960ea3ad8527ffd476320a8e40c6f18240e6dd0de77b54c2e3d68081904ac
 
 ...
