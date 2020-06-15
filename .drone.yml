@@ -28,10 +28,10 @@ steps:
     commands:
       - npm test
 
-  - name: check-coverage
-    image: node:12
-    commands:
-      - npm run check-coverage
+  #- name: check-coverage
+  #  image: node:12
+  #  commands:
+  #    - npm run check-coverage
 
   - name: build
     image: node:12
