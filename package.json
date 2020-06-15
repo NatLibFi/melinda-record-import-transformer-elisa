@@ -26,7 +26,7 @@
 		"lint": "eslint src",
 		"lint:dev": "eslint --fix src",
 		"test:base": "cross-env NODE_ENV=test nyc mocha --require @babel/register",
-		"test": "npm run lint && npm run test:base -- src/*.spec.js src/**/*.spec.js",		
+		"test": "npm run lint && npm run test:base -- src/*.spec.js src/**/*.spec.js",
 		"test:dev": "npm run lint:dev && npm run test:base -- src/**/*.spec.js && npm run coverage",
 		"coverage": "nyc check-coverage --per-file",
 		"build": "babel src --source-maps --copy-files --delete-dir-on-start --out-dir=dist --minified",
@@ -41,6 +41,7 @@
 		"@natlibfi/melinda-commons": "^8.0.0",
 		"@natlibfi/melinda-record-import-commons": "^8.0.1",
 		"moment": "^2.22.2",
+		"npm-check": "^5.9.2",
 		"xml-flow": "^1.0.4",
 		"xml2js": "^0.4.23"
 	},
