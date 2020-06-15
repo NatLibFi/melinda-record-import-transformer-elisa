@@ -1,0 +1,179 @@
+[
+  {
+    "Product": {
+      "RecordReference": [
+        "ElisaKirja109807"
+      ],
+      "NotificationType": [
+        "03"
+      ],
+      "ProductIdentifier": [
+        {
+          "ProductIDType": [
+            "01"
+          ],
+          "IDTypeName": [
+            "NID"
+          ],
+          "IDValue": [
+            "109807"
+          ]
+        },
+        {
+          "ProductIDType": [
+            "03"
+          ],
+          "IDValue": [
+            "9789527196250"
+          ]
+        },
+        {
+          "ProductIDType": [
+            "15"
+          ],
+          "IDValue": [
+            "9789527196250"
+          ]
+        }
+      ],
+      "DescriptiveDetail": [
+        {
+          "ProductComposition": [
+            "00"
+          ],
+          "ProductForm": [
+            "EB"
+          ],
+          "ProductFormDetail": [
+            "E107"
+          ],
+          "TitleDetail": [
+            {
+              "TitleType": [
+                "01"
+              ],
+              "TitleElement": [
+                {
+                  "TitleElementLevel": [
+                    "01"
+                  ],
+                  "TitleText": [
+                    "Uskalla nauraa - Ei niin vakava arki"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Contributor": [
+            {
+              "ContributorRole": [
+                "A01"
+              ],
+              "PersonNameInverted": [
+                "Holmavuo, Heidi"
+              ]
+            }
+          ],
+          "Language": [
+            {
+              "LanguageRole": [
+                "01"
+              ],
+              "LanguageCode": [
+                "fin"
+              ]
+            }
+          ]
+        }
+      ],
+      "CollateralDetail": [
+        {
+          "TextContent": [
+            {
+              "TextType": [
+                "03"
+              ],
+              "ContentAudience": [
+                "00"
+              ],
+              "Text": [
+                {
+                  "_": "<b>Tämän kirjan syvin ajatus on tuoda huumori keskelle arjen elämää ja tuottaa hyvää mieltä. </b>\n\nKirjassa pohditaan huumoria ja sen monia eri ulottuvuuksia ammattihuumorista tilannetajuun ja kyvystä sietää häpeää aina siihen hyvän olon tunteeseen asti jonka nauru meissä saa aikaan. \n\nKirjassa huumoria elämän kantavana voimana kanssani käsittelevät Anna Dahlman, Ali Jahangri, Janne Kataja, Kari Ketonen, Sami Kuronen, Pete Poskiparta, Krisse Salminen ja Jaakko Saariluoma. He ovat kaikki viihteen moniottelijoita ja heillä on kyky saada suomi nauramaan, mutta nauraa myös itsellensä. \n\n<b>Heidi Holmavuo</b> on kirjailija, radiopersoona, luennoitsija, juontaja, ensihoitaja ja muusikko. Moniottelija, joka haluaa auttaa ihmisiä uskomaan itseensä, voittamaan pelkonsa ja elämään parempaa elämää.",
+                  "$": {
+                    "textformat": "02"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "PublishingDetail": [
+        {
+          "Publisher": [
+            {
+              "PublishingRole": [
+                "01"
+              ],
+              "PublisherName": [
+                "Fitra"
+              ]
+            }
+          ],
+          "CountryOfPublication": [
+            "FI"
+          ],
+          "PublishingStatus": [
+            "04"
+          ],
+          "PublishingDate": [
+            {
+              "PublishingDateRole": [
+                "01"
+              ],
+              "Date": [
+                {
+                  "_": "2018",
+                  "$": {
+                    "dateformat": "05"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ProductSupply": [
+        {
+          "SupplyDetail": [
+            {
+              "Supplier": [
+                {
+                  "SupplierRole": [
+                    "06"
+                  ],
+                  "SupplierName": [
+                    "Elisa Kirja"
+                  ],
+                  "Website": [
+                    {
+                      "WebsiteLink": [
+                        "default"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "ProductAvailability": [
+                "21"
+              ],
+              "UnpricedItemType": [
+                "02"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

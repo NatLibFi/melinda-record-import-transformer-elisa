@@ -36,9 +36,8 @@ export default ({sources}) => {
 		}
 
 		const marcRecord = new MarcRecord();
-		
+
 		const {isAudio, isText, textFormat} = getTypeInformation();
-		const authors = getAuthors();		
 
 		marcRecord.leader = generateLeader();
 		generateFields().forEach(f => marcRecord.insertField(f));
@@ -63,13 +62,8 @@ export default ({sources}) => {
 					'09': '8'
 				};
 
-				const notificationType = getValueNew('NotificationType');
-
-				if ([notificationType] in encodingLevels) {
-					return encodingLevels[notificationType];
-				}
-
-				return '|';
+				const notificationType = getValue('NotificationType');
+				return encodingLevels[notificationType] || '|';
 			}
 
 			function generateType() {
@@ -90,6 +84,8 @@ export default ({sources}) => {
 		}
 
 		function generateFields() {
+			const authors = getAuthors();
+
 			return [
 				generate008(),
 				generate006(),
@@ -98,11 +94,14 @@ export default ({sources}) => {
 				generate040(),
 				generate041(),
 				generate884(),
-				generate337(),
 				generate264(),
+				generate336(),
+				generate347(),
+				generate500(),
+				generate655(),
 				generateStandardIdentifiers(),
 				generateTitles(),
-				generatAuthors(),
+				generateAuthors(),
 				generateStaticFields()
 			].flat();
 
@@ -148,7 +147,7 @@ export default ({sources}) => {
 						tag: '347',
 						subfields: [
 							{code: 'a', value: 'tekstitiedosto'},
-							{code: 'b', value: format},
+							{code: 'b', value: textFormat},
 							{code: '2', value: 'rda'}
 						]
 					}];
@@ -165,7 +164,7 @@ export default ({sources}) => {
 			}
 
 			function generate655() {
-				return isText ? [{
+				return isAudio ? [{
 					tag: '655',
 					ind2: '7',
 					subfields: [
@@ -214,10 +213,10 @@ export default ({sources}) => {
 			}
 
 			function generate264() {
-				const publisher = getValueNew('PublishingDetail', 'Publisher', 'PublisherName');
+				const publisher = getValue('PublishingDetail', 'Publisher', 'PublisherName');
 
 				if (publisher) {
-					const publishingDate = getValueNew('PublishingDetail', 'PublishingDate', 'Date');
+					const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
 
 					if (publishingDate) {
 						return {
@@ -341,7 +340,7 @@ export default ({sources}) => {
 				}
 
 				function generatePublishingYear() {
-					const publishingDate = getValueNew('PublishingDetail', 'PublishingDate', 'Date');
+					const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
 					return publishingDate ? publishingDate.slice(0, 4) : '    ';
 				}
 			}
@@ -415,48 +414,28 @@ export default ({sources}) => {
 			}
 
 			function generateAuthors() {
-			/*
-
-				.forEach((contributor, index) => {
-					const {name, role} = contributor;
-
-					// Not a actual name
-					if ((/, Useita/i).test(name)) {
-						const f245 = marcRecord.get(/^245$/).shift();
-
-						if (f245) {
-							f245.ind1 = '0';
-						}
-					} else if (index === 0) {
-						marcRecord.insertField({
-							tag: '100',
-							ind1: '1',
+				return authors.map(({name, role}, index) => {
+					if (index === 0) {
+						return {
+							tag: '100', ind1: '1',
 							subfields: [
 								{code: 'a', value: name},
 								{code: 'e', value: role}
 							]
-						});
-						const f245 = marcRecord.get(/^245$/).shift();
-
-						if (f245) {
-							f245.ind1 = '1';
-						}
-					} else {
-						marcRecord.insertField({
-							tag: '700',
-							ind1: '1',
-							subfields: [
-								{code: 'a', value: name},
-								{code: 'e', value: role}
-							]
-						});
+						};
 					}
+
+					return {
+						tag: '700', ind1: '1',
+						subfields: [
+							{code: 'a', value: name},
+							{code: 'e', value: role}
+						]
+					};
 				});
-		}
-		*/
 			}
 
-			function generateTitles() {				
+			function generateTitles() {
 				const titleType = record?.DescriptiveDetail?.[0]?.TitleDetail?.[0]?.TitleType?.[0];
 				const title = record?.DescriptiveDetail?.[0]?.TitleDetail?.[0]?.TitleElement?.[0]?.TitleText?.[0];
 
@@ -499,7 +478,7 @@ export default ({sources}) => {
 				return [];
 
 				function generate245() {
-					const generateInd1 = generateInd1();
+					const ind1 = generateInd1();
 					const {mainTitle, remainder} = formatTitle();
 
 					if (remainder) {
@@ -601,54 +580,49 @@ export default ({sources}) => {
 				}
 			}
 
-			function getTypeInformation() {
-				const form = getValueNew('DescriptiveDetail', 'ProductForm');
-				const formDetail = getValueNew('DescriptiveDetail', 'ProductFormDetail');
+			function getAuthors() {
+				return getValues('DescriptiveDetail', 'Contributor')
+					.filter(filter)
+					.map(normalize)
+					.sort(({sequence: a}, {sequence: b}) => a - b);
 
-				if (form === 'AJ' && formDetail === 'A103') {
-					return {isAudio: true};
+				function filter({PersonNameInverted, ContributorRole}) {
+					return PersonNameInverted?.[0] && ['A01', 'E07'].includes(ContributorRole?.[0]);
 				}
 
-				if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
-					return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
+				function normalize({PersonNameInverted, ContributorRole, SequenceNumber}) {
+					const pattern = /\s?\(toim\.\)|Toimittanut /;
+					const name = PersonNameInverted?.[0] || '';
+					// Without sequence use a high number to get sorted to the end
+					const sequence = Number(SequenceNumber?.[0]) || 1000;
+
+					if (pattern.test(name)) {
+						return {
+							sequence,
+							name: name.replace(pattern, ''),
+							role: 'toimittaja'
+						};
+					}
+
+					return {
+						name, sequence,
+						role: ContributorRole?.[0] === 'A01' ? 'kirjoittaja' : 'lukija'
+					};
 				}
 			}
 		}
 
-		function getAuthors() {
-			/*function parseContributors() {
-				const list = getValue('DescriptiveDetail', 'Contributor')
-					.map(n => ({
-						name: n.PersonNameInverted[0],
-						role: n.ContributorRole[0],
-						sequence: n?.SequenceNumber?.[0]
-					}))
-					.filter(n => n.name);
-	
-				list.sort((a, b) => Number(a.sequence) - Number(b.sequence));
-				return list;
+		function getTypeInformation() {
+			const form = getValue('DescriptiveDetail', 'ProductForm');
+			const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
+
+			if (form === 'AJ' && formDetail === 'A103') {
+				return {isAudio: true};
 			}
-	
-			function handleContributors() {
-				const pattern = /\s?\(toim\.\)|Toimittanut /;
-				contributors
-					.filter(c => [
-						'A01',
-						'E07'
-					].includes(c.role))
-					.map(c => {
-						if (pattern.test(c.name)) {
-							return {
-								name: c.name.replace(pattern, ''),
-								role: 'toimittaja'
-							};
-						}
-	
-						return {
-							name: c.name,
-							role: c.role === 'A01' ? 'kirjoittaja' : 'lukija'
-						};
-					})*/
+
+			if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
+				return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
+			}
 		}
 
 		function getLanguageRole() {
@@ -689,5 +663,23 @@ export default ({sources}) => {
 				return typeof context === 'object' ? context._ : context;
 			}
 		}
-	}
+
+		function getValues(...path) {
+			return recurse(path);
+
+			function recurse(props, context = record) {
+				const [prop] = props;
+
+				if (prop) {
+					if (props.length === 1) {
+						return context?.[prop] || [];
+					}
+
+					return recurse(props.slice(1), context?.[prop]?.[0] || {});
+				}
+
+				return [];
+			}
+		}
+	};
 };

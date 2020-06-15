@@ -60,5 +60,6 @@ function callback({getFixture}) {
 	}
 
 	const record = convert(inputData);
+	// Console.log(JSON.stringify(record.toObject(),undefined,2));
 	expect(record.toObject()).to.eql(expectedRecord);
 }
