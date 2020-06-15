@@ -1,0 +1,38 @@
+---
+kind: pipeline
+name: default
+steps:
+- name: generate-tags
+  image: quay.io/natlibfi/drone-gen-tags
+- name: test-init
+  image: busybox
+  commands:
+  - chmod o+w /drone/src
+- name: test
+  image: node:12
+  user: node  
+  commands:
+  - npm install
+  - npm test
+- name: docker 
+  image: plugins/docker
+  settings:
+    repo: quay.io/natlibfi/melinda-record-import-transformer-onix
+    registry: quay.io
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+---
+kind: secret
+name: docker_username
+data: RxJTmd5S6BSOBhIGhO8ULxz+7xiX890892wr2/0hxErKfhtARbKjtJ127WVoMe4UQDM=
+---
+kind: secret
+name: docker_password
+data: u2vqZCICPzN3tGzPGRtYdDXWlhNfPE6TNPjEERTd2k3ypFnCyQBjvo7Lygfv1F8h6/imo0hyGNuPXUdiW8xwQSwvxr5fw7oqFrrpgjqgQhJM3T/4U2vElaW46n0=
+---
+kind: signature
+hmac: 5571affe7fafe1118be74f7379c2b385174d872e629d13ebb8bd2ab58667732b
+
+...
