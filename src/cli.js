@@ -2,18 +2,18 @@
 *
 * @licstart  The following is the entire license notice for the JavaScript code in this file.
 *
-* Publication archives record transformer for the Melinda record batch import system
+* ONIX record transformer for the Melinda record batch import system
 *
 * Copyright (C) 2019-2020 University Of Helsinki (The National Library Of Finland)
 *
-* This file is part of melinda-record-import-transformer-publication-archives
+* This file is part of melinda-record-import-transformer-onix
 *
-* melinda-record-import-transformer-publication-archives program is free software: you can redistribute it and/or modify
+* melinda-record-import-transformer-onix program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as
 * published by the Free Software Foundation, either version 3 of the
 * License, or (at your option) any later version.
 *
-* melinda-record-import-transformer-publication-archives is distributed in the hope that it will be useful,
+* melinda-record-import-transformer-onix is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU Affero General Public License for more details.
@@ -32,12 +32,12 @@ import {Transformer} from '@natlibfi/melinda-record-import-commons';
 
 const {runCLI} = Transformer;
 const transformerSettings = {
-	name: 'melinda-record-import-transformer-onix',
-	yargsOptions: [
-		{option: 'v', conf: {alias: 'validate', default: false, type: 'boolean', describe: 'Validate records'}},
-		{option: 'f', conf: {alias: 'fix', default: false, type: 'boolean', describe: 'Validate & fix records'}}
-	],
-	callback: createCallback(options)
+  name: 'melinda-record-import-transformer-onix',
+  yargsOptions: [
+    {option: 'v', conf: {alias: 'validate', default: false, type: 'boolean', describe: 'Validate records'}},
+    {option: 'f', conf: {alias: 'fix', default: false, type: 'boolean', describe: 'Validate & fix records'}}
+  ],
+  callback: createCallback(options)
 };
 
 runCLI(transformerSettings);

@@ -5,7 +5,7 @@
 *
 * ONIX record transformer for the Melinda record batch import system
 *
-* Copyright (C) 2019 University Of Helsinki (The National Library Of Finland)
+* Copyright (C) 2019-2020 University Of Helsinki (The National Library Of Finland)
 *
 * This file is part of melinda-record-import-transformer-onix
 *
@@ -27,34 +27,39 @@
 *
 */
 
-/* eslint-disable new-cap */
-
 import validateFactory from '@natlibfi/marc-record-validate';
 import {
-	IsbnIssn, FieldExclusion, Urn, EndingPunctuation, ItemLanguage, Punctuation
+  IsbnIssn as isbnIssn,
+  FieldExclusion as fieldExclusion,
+  Urn as urn,
+  EndingPunctuation as endingPunctuation,
+  AccessRights as accessRights,
+  ItemLanguage as itemLanguage,
+  Punctuation as punctuation
 } from '@natlibfi/marc-record-validators-melinda';
 
 export default async () => {
-	const validate = validateFactory([
-		await IsbnIssn({hyphenateISBN: true}),
-		await Urn(),
-		await ItemLanguage(/^520$/),
-		await FieldExclusion([
-			{
-				tag: /^520$/
-			}
-		]),
-		await EndingPunctuation(),
-		await Punctuation()
-	]);
+  const validate = validateFactory([
+    await isbnIssn({hyphenateISBN: true}),
+    await urn(),
+    await itemLanguage(/^520$/u),
+    await fieldExclusion([
+      {
+        tag: /^520$/u
+      }
+    ]),
+    await accessRights(),
+    await endingPunctuation(),
+    await punctuation()
+  ]);
 
-	return async (record, fix, validateFixes) => {
-		const opts = fix ? {fix, validateFixes} : {fix};
-		const result = await validate(record, opts);
-		return {
-			record: result.record,
-			failed: result.valid === false,
-			messages: result.report
-		};
-	};
+  return async (record, fix, validateFixes) => {
+    const opts = fix ? {fix, validateFixes} : /* istanbul ignore next: The actual functionality is tested with the first condition */ {fix};
+    const result = await validate(record, opts);
+    return {
+      record: result.record,
+      failed: result.valid === false,
+      messages: result.report
+    };
+  };
 };

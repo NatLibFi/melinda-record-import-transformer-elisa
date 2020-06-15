@@ -4,7 +4,7 @@
 *
 * ONIX record transformer for the Melinda record batch import system
 *
-* Copyright (C) 2019 University Of Helsinki (The National Library Of Finland)
+* Copyright (C) 2019-2020 University Of Helsinki (The National Library Of Finland)
 *
 * This file is part of melinda-record-import-transformer-onix
 *
@@ -27,63 +27,91 @@
 */
 
 import {MarcRecord} from '@natlibfi/marc-record';
-import {createParser} from './common';
 import {EventEmitter} from 'events';
+import createStreamParser, {toXml, ALWAYS as streamParserAlways} from 'xml-flow';
+import {Parser} from 'xml2js';
 import createConverter from './convert';
 import createValidator from './validate';
 
-export default options => {
-	return (stream, {validate = true, fix = true}) => {
-		MarcRecord.setValidationOptions({subfieldValues: false});
+export default options => (stream, {validate = true, fix = true} = {}) => {
+  MarcRecord.setValidationOptions({subfieldValues: false});
 
-		const promises = [];
-		const emitter = new class extends EventEmitter {}();
+  const emitter = new class extends EventEmitter {}();
 
-		start();
+  start();
 
-		return emitter;
+  return emitter;
 
-		async function start() {
-			const convertRecord = createConverter(options);
-			const validateRecord = await createValidator();
+  async function start() {
+    const promises = [];
 
-			createParser(stream)
-				.on('error', err => emitter.emit('error', err))
-				.on('end', async () => {
-					try {
-						await Promise.all(promises);
-						emitter.emit('end', promises.length);
-					} catch (err) {
-						emitter.emit('error', err);
-					}
-				})
-				.on('record', obj => {
-					const promise = convert();
-					promises.push(promise);
+    const convertRecord = createConverter(options);
+    const validateRecord = await createValidator();
 
-					async function convert() {
-						try {
-							const record = await convertRecord(obj);
+    createStreamParser(stream, {
+      strict: true,
+      trim: false,
+      normalize: false,
+      preserveMarkup: streamParserAlways,
+      simplifyNodes: false,
+      useArrays: streamParserAlways
+    })
+      .on('error', err => emitter.emit('error', err))
+      .on('end', async () => {
+        try {
+          await Promise.all(promises);
+          emitter.emit('end', promises.length);
+        } catch (err) {
+          /* istanbul ignore next: Generic error */ emitter.emit('error', err);
+        }
+      })
+      .on('tag:Product', node => {
+        try {
+          promises.push(convert()); // eslint-disable-line functional/immutable-data
+        } catch (err) {
+          /* istanbul ignore next: Generic error */ emitter.emit('error', err);
+        }
 
-							if (validate === true || fix === true) {
-								const result = await validateRecord(record, fix);
-								emitter.emit('record', result);
-								return;
-							}
+        async function convert() {
+          try {
+            const obj = await convertToObject();
+            const record = await convertRecord(obj);
 
-							emitter.emit('record', record);
-						} catch (err) {
-							if (err.message === 'Unsupported product identifier type & value') {
-								return emitter.emit('record', {
-									failed: true,
-									messages: [err.message]
-								});
-							}
+            if (validate === true || fix === true) {
+              const result = await validateRecord(record, fix);
+              emitter.emit('record', result);
+              return;
+            }
 
-							throw err;
-						}
-					}
-				});
-		}
-	};
+            /* istanbul ignore next: No tests without validators */ emitter.emit('record', record);
+          } catch (err) {
+            if (err.message === 'Unsupported product identifier type & value') {
+              return emitter.emit('record', {
+                failed: true,
+                messages: [err.message]
+              });
+            }
+
+            /* istanbul ignore next: Generic error */ throw err;
+          }
+
+          function convertToObject() {
+            const str = toXml(node);
+            return toObject();
+
+            function toObject() {
+              return new Promise((resolve, reject) => {
+                new Parser().parseString(str, (err, obj) => {
+                  if (err) {
+                    /* istanbul ignore next: Generic error */ return reject(err);
+                  }
+
+                  resolve(obj);
+                });
+              });
+            }
+          }
+        }
+      });
+  }
 };

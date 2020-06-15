@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
 *
 * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -27,9 +26,38 @@
 *
 */
 
-import * as options from './config';
-import transformFactory from './transform';
-import {Transformer} from '@natlibfi/melinda-record-import-commons/';
+export function createValueInterface(record) {
+  return {getValue, getValues};
 
-const {startTransformer} = Transformer;
-startTransformer(transformFactory(options));
+  function getValue(...path) {
+    return recurse(path);
+
+    function recurse(props, context = record) {
+      const [prop] = props;
+
+      if (prop) {
+        return recurse(props.slice(1), context?.[prop]?.[0]);
+      }
+
+      return typeof context === 'object' ? context._ : context;
+    }
+  }
+
+  function getValues(...path) {
+    return recurse(path);
+
+    function recurse(props, context = record) {
+      const [prop] = props;
+
+      if (prop) { /* istanbul ignore else: Added as a safeguard only */
+        if (props.length === 1) {
+          return context?.[prop] || /* istanbul ignore next: Added as a safeguard only */ [];
+        }
+
+        return recurse(props.slice(1), context?.[prop]?.[0] || /* istanbul ignore next: Added as a safeguard only */ {});
+      }
+
+      /* istanbul ignore next: Added as a safeguard only */ return [];
+    }
+  }
+}

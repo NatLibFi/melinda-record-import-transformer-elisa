@@ -26,12 +26,11 @@
 		"lint": "eslint src",
 		"lint:dev": "eslint --fix src",
 		"test:base": "cross-env NODE_ENV=test nyc mocha --require @babel/register",
-		"test": "npm run lint && npm run test:base -- src/*.spec.js src/**/*.spec.js && npm run coverage",
+		"test": "npm run lint && npm run test:base -- src/*.spec.js src/**/*.spec.js",		
 		"test:dev": "npm run lint:dev && npm run test:base -- src/**/*.spec.js && npm run coverage",
 		"coverage": "nyc check-coverage --per-file",
 		"build": "babel src --source-maps --copy-files --delete-dir-on-start --out-dir=dist --minified",
-		"watch:test": "cross-env DEBUG=1 NODE_ENV=test nodemon -w src --exec 'npm run test:dev'",
-		"watch:dev": "cross-env DEBUG=1 nodemon -w src --exec 'babel-node src/index.js'"
+		"watch:test": "cross-env DEBUG=1 NODE_ENV=test nodemon -w src --exec 'npm run test:dev'"
 	},
 	"dependencies": {
 		"@babel/node": "^7.10.1",
@@ -40,7 +39,7 @@
 		"@natlibfi/marc-record-validate": "^5.0.0",
 		"@natlibfi/marc-record-validators-melinda": "^8.2.1",
 		"@natlibfi/melinda-commons": "^8.0.0",
-		"@natlibfi/melinda-record-import-commons": "file:../melinda-record-import-commons",
+		"@natlibfi/melinda-record-import-commons": "^8.0.1",
 		"moment": "^2.22.2",
 		"xml-flow": "^1.0.4",
 		"xml2js": "^0.4.23"
@@ -51,38 +50,22 @@
 		"@babel/preset-env": "^7.10.2",
 		"@babel/register": "^7.10.1",
 		"@natlibfi/eslint-config-melinda-backend": "^1.0.4",
-		"@natlibfi/fixugen": "file:../fixugen-js",
+		"@natlibfi/fixugen": "^1.0.0",
 		"@natlibfi/fixura": "^2.1.2",
 		"babel-eslint": "^10.1.0",
 		"babel-plugin-istanbul": "^6.0.0",
-		"babel-plugin-rewire": "^1.2.0",
 		"chai": "^4.2.0",
 		"cross-env": "^7.0.2",
 		"eslint": "^7.2.0",
-		"eslint-config-standard": "^14.1.0",
-		"eslint-config-xo": "^0.31.0",
-		"eslint-plugin-import": "^2.20.2",
-		"eslint-plugin-node": "^11.1.0",
-		"eslint-plugin-promise": "^4.2.1",
-		"eslint-plugin-standard": "^4.0.1",
 		"mocha": "^8.0.1",
 		"nodemon": "^2.0.4",
 		"nyc": "^15.1.0"
 	},
 	"eslintConfig": {
 		"parser": "babel-eslint",
-		"plugins": [
-			"import"
-		],
 		"extends": [
-			"xo",
-			"plugin:import/errors"
+			"@natlibfi/melinda-backend"
 		],
-		"rules": {
-			"prefer-arrow-callback": [
-				"error"
-			]
-		},
 		"env": {
 			"mocha": true
 		}
@@ -101,8 +84,7 @@
 		"env": {
 			"test": {
 				"plugins": [
-					"istanbul",
-					"rewire"
+					"istanbul"
 				]
 			}
 		}

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
 *
 * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -27,9 +26,49 @@
 *
 */
 
-import * as options from './config';
-import transformFactory from './transform';
-import {Transformer} from '@natlibfi/melinda-record-import-commons/';
-
-const {startTransformer} = Transformer;
-startTransformer(transformFactory(options));
+export default () => [
+  {
+    tag: '300',
+    subfields: [{code: 'a', value: '1 verkkoaineisto'}]
+  },
+  {
+    tag: '337',
+    subfields: [
+      {code: 'a', value: 'tietokonekäyttöinen'},
+      {code: 'b', value: 'c'},
+      {code: '2', value: 'rdamedia'}
+    ]
+  },
+  {
+    tag: '338',
+    subfields: [
+      {code: 'a', value: 'verkkoaineisto'},
+      {code: 'b', value: 'cr'},
+      {code: '2', value: 'rdacarrier'}
+    ]
+  },
+  {
+    tag: '344',
+    subfields: [
+      {code: 'a', value: 'digitaalinen'},
+      {code: '2', value: 'rda'}
+    ]
+  },
+  {
+    tag: '042',
+    subfields: [{code: 'a', value: 'finb'}]
+  },
+  {
+    tag: 'LOW',
+    subfields: [{code: 'a', value: 'FIKKA'}]
+  },
+  {
+    tag: '500',
+    ind1: ' ',
+    ind2: ' ',
+    subfields: [
+      {code: 'a', value: 'Koneellisesti tuotettu tietue.'},
+      {code: '9', value: 'FENNI<KEEP>'}
+    ]
+  }
+];
