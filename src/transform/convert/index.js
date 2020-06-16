@@ -32,6 +32,7 @@ import {createValueInterface} from './common';
 import generateTitles from './generate-titles';
 import generateStaticFields from './generate-static-fields';
 
+
 export default ({sources, moment = momentOrig}) => ({Product: record}) => {
   const {getValue, getValues} = createValueInterface(record);
 
@@ -256,19 +257,49 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
     }
 
     function generate884() {
-      const supplier = getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
+      // KIrjavälityksellä on SenderName, muilla SupplierName:
 
-      return [
-        {
-          tag: '884',
-          subfields: [
-            {code: 'a', value: 'ONIX3 to MARC transformation'},
-            {code: 'g', value: moment().format('YYYYMMDD')},
-            {code: 'k', value: sources[supplier]},
-            {code: 'q', value: 'FI-NL'}
-          ]
-        }
-      ];
+      if (getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName')) {
+
+        const supplier = getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName');
+        // Console.log('*** Now detected SenderName');
+
+        return [
+          {
+            tag: '884',
+            subfields: [
+              {code: 'a', value: 'ONIX3 to MARC transformation'},
+              {code: 'g', value: moment().format('YYYYMMDD')},
+              {code: 'k', value: sources[supplier]},
+              {code: 'q', value: 'FI-NL'}
+            ]
+          }
+        ];
+
+
+      }
+
+
+      if (getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName')) {
+        // <- 16.6.2020:  SupplierName --> SenderName
+        const supplier = getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
+        // Console.log('*** Now detected SupplierName');
+        // Console.log('*** const supplier:', supplier);
+
+        return [
+          {
+            tag: '884',
+            subfields: [
+              {code: 'a', value: 'ONIX3 to MARC transformation'},
+              {code: 'g', value: moment().format('YYYYMMDD')},
+              {code: 'k', value: sources[supplier]},
+              {code: 'q', value: 'FI-NL'}
+            ]
+          }
+        ];
+
+      }
+
     }
 
     function generate008() {
