@@ -43,9 +43,9 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
   return emitter;
 
   async function start() {
+    let converterPromise; // eslint-disable-line functional/no-let
     const promises = [];
 
-    const convertRecord = createConverter(options);
     const validateRecord = await createValidator();
 
     createStreamParser(stream, {
@@ -65,6 +65,28 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
           /* istanbul ignore next: Generic error */ emitter.emit('error', err);
         }
       })
+      .on('tag:Header', node => {
+        converterPromise = initializeConverter();
+
+        async function initializeConverter() {
+          try {
+            const obj = await convertToObject(node);
+            const sender = parseSender(obj);
+            converterPromise = createConverter({...options, sender});
+          } catch (err) {
+            /* istanbul ignore next: Generic error */ emitter.emit('error', err);
+          }
+
+          function parseSender(obj) {
+            return {
+              name: obj?.Header?.Sender?.[0]?.SenderName?.[0],
+              addressee: obj?.Header?.Addressee?.[0]?.AddresseeName?.[0],
+              messageNumber: obj?.Header?.MessageNumber?.[0],
+              sentTime: obj?.Header?.SentDateTime?.[0]
+            };
+          }
+        }
+      })
       .on('tag:Product', node => {
         try {
           promises.push(convert()); // eslint-disable-line functional/immutable-data
@@ -74,7 +96,8 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
 
         async function convert() {
           try {
-            const obj = await convertToObject();
+            const obj = await convertToObject(node);
+            const convertRecord = await converterPromise;
             const record = await convertRecord(obj);
 
             if (validate === true || fix === true) {
@@ -94,24 +117,24 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
 
             /* istanbul ignore next: Generic error */ throw err;
           }
-
-          function convertToObject() {
-            const str = toXml(node);
-            return toObject();
-
-            function toObject() {
-              return new Promise((resolve, reject) => {
-                new Parser().parseString(str, (err, obj) => {
-                  if (err) {
-                    /* istanbul ignore next: Generic error */ return reject(err);
-                  }
-
-                  resolve(obj);
-                });
-              });
-            }
-          }
         }
       });
+
+    function convertToObject(node) {
+      const str = toXml(node);
+      return toObject();
+
+      function toObject() {
+        return new Promise((resolve, reject) => {
+          new Parser().parseString(str, (err, obj) => {
+            if (err) {
+              /* istanbul ignore next: Generic error */ return reject(err);
+            }
+
+            resolve(obj);
+          });
+        });
+      }
+    }
   }
 };

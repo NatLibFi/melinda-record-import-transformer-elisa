@@ -36,6 +36,7 @@ import generateStaticFields from './generate-static-fields';
 export default ({sources, moment = momentOrig}) => ({Product: record}) => {
   const {getValue, getValues} = createValueInterface(record);
 
+
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
     throw new Error('Unsupported product identifier type & value');
   }
