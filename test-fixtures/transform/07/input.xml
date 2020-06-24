@@ -2,10 +2,10 @@
 <ONIXMessage xmlns="http://ns.editeur.org/onix/3.0/reference" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" release="3.0" xsi:schemaLocation="http://ns.editeur.org/onix/3.0/reference http://intranet/onix/ONIX_BookProduct_3.0_reference.xsd">
   <Header>
     <Sender>
-      <SenderName>FooBar</SenderName>
+      <SenderName>Kirjavälitys Oy</SenderName>
     </Sender>
     <Addressee>
-      <AddresseeName>barfoo</AddresseeName>
+      <AddresseeName>barfoo barfoo barfoo</AddresseeName>
     </Addressee>
     <MessageNumber>1</MessageNumber>
     <SentDateTime>20190402T1042</SentDateTime>
@@ -28,13 +28,13 @@
     </ProductIdentifier>
     <DescriptiveDetail>
       <ProductComposition>00</ProductComposition>
-      <ProductForm>AJ</ProductForm>
-      <ProductFormDetail>A103</ProductFormDetail>
+      <ProductForm>EB</ProductForm>
+      <ProductFormDetail>E101</ProductFormDetail>
       <TitleDetail>
         <TitleType>01</TitleType>
         <TitleElement>
           <TitleElementLevel>01</TitleElementLevel>
-          <TitleText>Rakkaus piilottelee</TitleText>
+          <TitleText>Rakkaus piilottelee, osa 2</TitleText>
         </TitleElement>
       </TitleDetail>
       <Contributor>
@@ -49,12 +49,17 @@
         <LanguageRole>01</LanguageRole>
         <LanguageCode>fin</LanguageCode>
       </Language>
+   <Subject>
+    <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
+    <SubjectSchemeName>YKL</SubjectSchemeName>
+    <SubjectCode>92.7</SubjectCode>
+   </Subject>      
     </DescriptiveDetail>
     <CollateralDetail>
       <TextContent>
         <TextType>03</TextType>
         <ContentAudience>00</ContentAudience>
-        <Text textformat="02">foobar</Text>
+        <Text textformat="02">foobar foobar foobar </Text>
       </TextContent>
     </CollateralDetail>
     <PublishingDetail>

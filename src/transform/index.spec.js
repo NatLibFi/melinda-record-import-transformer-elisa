@@ -32,6 +32,7 @@ import {expect} from 'chai';
 import generateTests from '@natlibfi/fixugen';
 import createTransformer from '.';
 
+
 generateTests({callback,
   path: [__dirname, '..', '..', 'test-fixtures', 'transform'],
   recurse: false,

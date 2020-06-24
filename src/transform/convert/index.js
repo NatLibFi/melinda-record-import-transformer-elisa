@@ -32,23 +32,68 @@ import {createValueInterface} from './common';
 import generateTitles from './generate-titles';
 import generateStaticFields from './generate-static-fields';
 
+import NotSupportedError from './../../error'; // Added 23.6.2020
 
-export default ({sources, moment = momentOrig}) => ({Product: record}) => {
+export default ({sources, sender, moment = momentOrig}) => ({Product: record}) => {
+// Export default ({sources, moment = momentOrig},sender) => ({Product: record}) => {  // ALKUP
+
+  // Console.log('\n *** ------ RECORD: ', record);
+  // Console.log('\n <------------------- \n');
+
   const {getValue, getValues} = createValueInterface(record);
+
+  // Console.log('\n *** ------- GET VALUE by PRODUCT: ', getValue('Product', 'ProductIdentifier', 'ProductIDType'));
+  // Console.log('\n *** ------- GET VALUE by PRODUCT/SupplierName: ', getValue('Product', 'ProductSupply', 'SupplyDetail','Supplier','SupplierName'));
+
+  /*
+Console.log('\n-------------------');
+console.log('***     sender/Header:', sender);
+console.log('***   sender.name',sender.name);
+console.log('***   sender.addressee:',sender.addressee);
+console.log('-------------------\n');
+*/
+
+  function dataSource() {
+    // Const sourceValue = '';
+
+    if (sender.name === 'Kirjavälitys Oy') {
+      return sender.name;
+    }
+
+    const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
+
+    if (gvalue === 'Kirjavälitys Oy') {
+      return gvalue;
+    }
+
+    if (sender.name !== 'Kirjavälitys Oy' && getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName') !== 'Kirjavälitys Oy') {
+      return 'NON-KV';
+    }
+
+    // Return sourceValue;
+  }
+
+
+  const jokin = dataSource(); // ***
+  console.log('   QQQ    dataSource:', jokin); // ***
 
 
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
     throw new Error('Unsupported product identifier type & value');
   }
 
+
   const marcRecord = new MarcRecord();
 
   const {isAudio, isText, textFormat} = getTypeInformation();
 
   marcRecord.leader = generateLeader(); // eslint-disable-line functional/immutable-data
+
   generateFields().forEach(f => marcRecord.insertField(f));
 
+
   return marcRecord;
+
 
   function generateLeader() {
     const type = generateType();
@@ -308,8 +353,10 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
       const language = generateLanguage();
       const publicationCountry = generatePublicationCountry();
       const publishingYear = generatePublishingYear();
-      const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||||${language}||`;
+      const subjectSchemeName = generateSubjectSchemeName();
 
+      const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||||${language}||   ${subjectSchemeName}`;
+      // ALKUP // const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||||${language}||`;
       return [{tag: '008', value}];
 
       function generateLanguage() {
@@ -325,7 +372,18 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
         const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
         return publishingDate ? publishingDate.slice(0, 4) : '    ';
       }
+
+
+      function generateSubjectSchemeName() { // Added  24.6.2020
+        // Lisää vielä ehtolause: vain KV:lle!!!
+        const subjectSchemeName = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeName'); // ....
+        // Console.log('SSN: ',subjectSchemeName );
+        return subjectSchemeName; // ...
+      }
+
+
     }
+
 
     function generate520() {
       const summary = getSummary();
@@ -464,6 +522,8 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
   function getTypeInformation() {
     const form = getValue('DescriptiveDetail', 'ProductForm');
     const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
+    console.log('   QQQ form:', form);
+    console.log('   QQQ formDetail:', formDetail);
 
     if (form === 'AJ' && formDetail === 'A103') {
       return {isAudio: true};
@@ -472,6 +532,20 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
     if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
       return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
     }
+
+    // Lopuksi, jos ei kolahda noihin, menee tänne: ->
+    try {
+      throw new Error('Unidentified: not audio, not text');
+    } catch (e) {
+      console.error(`${e.name}: ${e.message}`);
+
+      if (e instanceof NotSupportedError) {
+        return e;
+      }
+
+    }
+    // Lopuksi, jos ei kolahda noihin, menee tänne: <-
+
   }
 
   function getLanguageRole() {

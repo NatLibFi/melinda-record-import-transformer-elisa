@@ -33,6 +33,8 @@ import {Parser} from 'xml2js';
 import createConverter from './convert';
 import createValidator from './validate';
 
+import NotSupportedError from './../error'; // Added 23.6.2020
+
 export default options => (stream, {validate = true, fix = true} = {}) => {
   MarcRecord.setValidationOptions({subfieldValues: false});
 
@@ -108,14 +110,16 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
 
             /* istanbul ignore next: No tests without validators */ emitter.emit('record', record);
           } catch (err) {
-            if (err.message === 'Unsupported product identifier type & value') {
+
+            if (err instanceof NotSupportedError) {
+
               return emitter.emit('record', {
                 failed: true,
                 messages: [err.message]
               });
             }
 
-            /* istanbul ignore next: Generic error */ throw err;
+
           }
         }
       });
