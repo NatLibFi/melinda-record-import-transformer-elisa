@@ -355,8 +355,9 @@ console.log('-------------------\n');
       const publishingYear = generatePublishingYear();
       const subjectSchemeName = generateSubjectSchemeName();
 
-      const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||||${language}||   ${subjectSchemeName}`;
-      // ALKUP // const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||||${language}||`;
+
+      const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||${subjectSchemeName}|${language}||`;
+      // Const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||||${language}||`;  // ALKUP
       return [{tag: '008', value}];
 
       function generateLanguage() {
@@ -376,9 +377,23 @@ console.log('-------------------\n');
 
       function generateSubjectSchemeName() { // Added  24.6.2020
         // Lisää vielä ehtolause: vain KV:lle!!!
-        const subjectSchemeName = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeName'); // ....
-        // Console.log('SSN: ',subjectSchemeName );
-        return subjectSchemeName; // ...
+        const CheckSubjectSchemeName = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeName');
+        const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
+
+        if (CheckSubjectSchemeName && CheckSubjectCode) {
+
+          console.log('\n   QQQ   CheckSubjectSchemeName = ', CheckSubjectSchemeName);
+          console.log('\n   QQQ   CheckSubjectCode = ', CheckSubjectCode);
+
+          if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03') {
+            console.log('\n   QQQ   arvoksi 0 !');
+            return '0';
+          }
+
+        }
+
+        return '|'; // Basic value
+
       }
 
 
