@@ -354,9 +354,10 @@ console.log('-------------------\n');
       const publicationCountry = generatePublicationCountry();
       const publishingYear = generatePublishingYear();
       const subjectSchemeName = generateSubjectSchemeName();
+      const editionType = generateEditionType();
 
-
-      const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||${subjectSchemeName}|${language}||`;
+      const value = `${date}s${publishingYear}    ${publicationCountry} ||||${editionType}o|||||||||${subjectSchemeName}|${language}||`;
+      // PREV //const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||${subjectSchemeName}|${language}||`;
       // Const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||||${language}||`;  // ALKUP
       return [{tag: '008', value}];
 
@@ -374,26 +375,36 @@ console.log('-------------------\n');
         return publishingDate ? publishingDate.slice(0, 4) : '    ';
       }
 
-
       function generateSubjectSchemeName() { // Added  24.6.2020
         // Lisää vielä ehtolause: vain KV:lle!!!
         const CheckSubjectSchemeName = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeName');
         const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
 
         if (CheckSubjectSchemeName && CheckSubjectCode) {
-
           console.log('\n   QQQ   CheckSubjectSchemeName = ', CheckSubjectSchemeName);
           console.log('\n   QQQ   CheckSubjectCode = ', CheckSubjectCode);
-
           if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03') {
             console.log('\n   QQQ   arvoksi 0 !');
             return '0';
           }
+        }
+        return '|'; // Basic value
+      }
 
+
+      function generateEditionType() { // Added  25.6.2020
+        // Lisää vielä ehtolause: vain KV:lle!!!
+        const CheckEditionType = getValue('DescriptiveDetail', 'EditionType');
+        console.log('\n      QQQ   CheckEditionType = ', CheckEditionType);
+
+        if (CheckEditionType) {
+          if (CheckEditionType === 'SMP') {
+            console.log('\n      QQQ   arvoksi SMP -> uusi !');
+            return 'f';
+          }
         }
 
         return '|'; // Basic value
-
       }
 
 
