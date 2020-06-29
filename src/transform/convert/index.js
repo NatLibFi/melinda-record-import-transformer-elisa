@@ -35,47 +35,69 @@ import generateStaticFields from './generate-static-fields';
 import NotSupportedError from './../../error'; // Added 23.6.2020
 
 export default ({sources, sender, moment = momentOrig}) => ({Product: record}) => {
-// Export default ({sources, moment = momentOrig},sender) => ({Product: record}) => {  // ALKUP
 
-  // Console.log('\n *** ------ RECORD: ', record);
-  // Console.log('\n <------------------- \n');
 
   const {getValue, getValues} = createValueInterface(record);
 
-  // Console.log('\n *** ------- GET VALUE by PRODUCT: ', getValue('Product', 'ProductIdentifier', 'ProductIDType'));
-  // Console.log('\n *** ------- GET VALUE by PRODUCT/SupplierName: ', getValue('Product', 'ProductSupply', 'SupplyDetail','Supplier','SupplierName'));
-
-  /*
-Console.log('\n-------------------');
-console.log('***     sender/Header:', sender);
-console.log('***   sender.name',sender.name);
-console.log('***   sender.addressee:',sender.addressee);
-console.log('-------------------\n');
-*/
 
   function dataSource() {
-    // Const sourceValue = '';
+    // 1. suppliernamesta 2. sender name
 
-    if (sender.name === 'Kirjavälitys Oy') {
+    // SupplierName --->
+    if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName')) {
+      const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
+      console.log(' *** ------ X ProductSupply/SupplierName: ', getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName'));
+
+      if (gvalue === 'Kirjavälitys Oy') {
+        console.log(' QQQ           datasource by SupplierName (A): ', gvalue);
+        return 'KV-GO';
+      }
+
+      if (sender.name !== 'Kirjavälitys Oy' && gvalue !== 'Kirjavälitys Oy') {
+        return 'NON-KV (A)';
+      }
+
+    }
+    // SupplierName <---
+
+    // SenderName --->
+    if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName')) {
+      const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName');
+      console.log(' *** ------ X ProductSupply/SenderName: ', getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName'));
+
+      if (gvalue === 'Kirjavälitys Oy') {
+        console.log(' QQQ           datasource by SenderName (B): ', gvalue);
+        return 'KV-GO';
+      }
+
+      if (sender.name !== 'Kirjavälitys Oy' && gvalue !== 'Kirjavälitys Oy') {
+        return 'NON-KV (B)';
+      }
+
+    }
+    // SenderName <---
+
+
+    if (sender.name === undefined) {
+      console.log('   QQQ    datasource  undefined - exception!  ', sender.name);
       return sender.name;
     }
 
-    const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
 
-    if (gvalue === 'Kirjavälitys Oy') {
-      return gvalue;
+    if (sender.name === 'Kirjavälitys Oy') {
+      // Return sender.name;
+      console.log('   QQQ    datasource  From sender.name: ', sender.name);
+      return 'KV-GO';
     }
 
-    if (sender.name !== 'Kirjavälitys Oy' && getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName') !== 'Kirjavälitys Oy') {
-      return 'NON-KV';
-    }
+    console.log('NON-KV-GO !!!: ', sender.name);
+    return sender.name;
 
-    // Return sourceValue;
   }
 
 
-  const jokin = dataSource(); // ***
-  console.log('   QQQ    dataSource:', jokin); // ***
+  const dataFrom = dataSource(); // ***
+  console.log('   QQQ    dataSource:', dataFrom); // ***
 
 
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
@@ -303,34 +325,11 @@ console.log('-------------------\n');
     }
 
     function generate884() {
-      // KIrjavälityksellä on SenderName, muilla SupplierName:
-
-      if (getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName')) {
-
-        const supplier = getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName');
-        // Console.log('*** Now detected SenderName');
-
-        return [
-          {
-            tag: '884',
-            subfields: [
-              {code: 'a', value: 'ONIX3 to MARC transformation'},
-              {code: 'g', value: moment().format('YYYYMMDD')},
-              {code: 'k', value: sources[supplier]},
-              {code: 'q', value: 'FI-NL'}
-            ]
-          }
-        ];
-
-
-      }
-
 
       if (getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName')) {
         // <- 16.6.2020:  SupplierName --> SenderName
         const supplier = getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
-        // Console.log('*** Now detected SupplierName');
-        // Console.log('*** const supplier:', supplier);
+        console.log('*** 884: Now detected SupplierName');
 
         return [
           {
@@ -343,8 +342,42 @@ console.log('-------------------\n');
             ]
           }
         ];
-
       }
+
+
+      if (getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName')) {
+        console.log('*** 884: Now detected SenderName');
+        const supplier = getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName');
+
+        return [
+          {
+            tag: '884',
+            subfields: [
+              {code: 'a', value: 'ONIX3 to MARC transformation'},
+              {code: 'g', value: moment().format('YYYYMMDD')},
+              {code: 'k', value: sources[supplier]},
+              {code: 'q', value: 'FI-NL'}
+            ]
+          }
+        ];
+      }
+
+      // Sender.name  ->
+      console.log('*** 884: Now by Header/sender.name');
+      const supplier = sender.name;
+      return [
+        {
+          tag: '884',
+          subfields: [
+            {code: 'a', value: 'ONIX3 to MARC transformation'},
+            {code: 'g', value: moment().format('YYYYMMDD')},
+            {code: 'k', value: sources[supplier]},
+            {code: 'q', value: 'FI-NL'}
+          ]
+        }
+      ];
+
+      // <-- sender.name
 
     }
 
@@ -354,9 +387,12 @@ console.log('-------------------\n');
       const publicationCountry = generatePublicationCountry();
       const publishingYear = generatePublishingYear();
       const subjectSchemeName = generateSubjectSchemeName();
-      const editionType = generateEditionType();
+      const position22 = generatePosition22();
 
-      const value = `${date}s${publishingYear}    ${publicationCountry} ||||${editionType}o|||||||||${subjectSchemeName}|${language}||`;
+      console.log('   QQQ    dataSource (g008):', dataFrom); // ***// 'KV-GO' means go
+
+
+      const value = `${date}s${publishingYear}    ${publicationCountry} ||||${position22}o|||||||||${subjectSchemeName}|${language}||`;
       // PREV //const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||${subjectSchemeName}|${language}||`;
       // Const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||||${language}||`;  // ALKUP
       return [{tag: '008', value}];
@@ -375,16 +411,18 @@ console.log('-------------------\n');
         return publishingDate ? publishingDate.slice(0, 4) : '    ';
       }
 
-      function generateSubjectSchemeName() { // Added  24.6.2020
+      function generateSubjectSchemeName() { // Ns. 008/A -  Added  24.6.2020
         // Lisää vielä ehtolause: vain KV:lle!!!
+
+
         const CheckSubjectSchemeName = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeName');
         const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
 
         if (CheckSubjectSchemeName && CheckSubjectCode) {
-          console.log('\n   QQQ   CheckSubjectSchemeName = ', CheckSubjectSchemeName);
-          console.log('\n   QQQ   CheckSubjectCode = ', CheckSubjectCode);
-          if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03') {
-            console.log('\n   QQQ   arvoksi 0 !');
+          console.log('   QQQ   CheckSubjectSchemeName = ', CheckSubjectSchemeName);
+          console.log('   QQQ   CheckSubjectCode = ', CheckSubjectCode);
+          if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03' && dataFrom === 'KV-GO') {
+            console.log('   QQQ   arvoksi 0 !');
             return '0';
           }
         }
@@ -392,17 +430,31 @@ console.log('-------------------\n');
       }
 
 
-      function generateEditionType() { // Added  25.6.2020
+      function generatePosition22() { // Ns. 008/B & C -  Added  25.6.2020
         // Lisää vielä ehtolause: vain KV:lle!!!
         const CheckEditionType = getValue('DescriptiveDetail', 'EditionType');
-        console.log('\n      QQQ   CheckEditionType = ', CheckEditionType);
+        const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier'); // C
+        const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode'); // C
+
+        console.log('      QQQ   CheckEditionType = ', CheckEditionType);
+        console.log('      QQQ  C/  CheckSubjectSchemeIdentifier = ', CheckSubjectSchemeIdentifier);
+        console.log('      QQQ  C/  CheckSubjectCode = ', CheckSubjectCode);
 
         if (CheckEditionType) {
-          if (CheckEditionType === 'SMP') {
+          if (CheckEditionType === 'SMP' && dataFrom === 'KV-GO') {
             console.log('\n      QQQ   arvoksi SMP -> uusi !');
             return 'f';
           }
         }
+
+        // 008/22=j       if (SubjectSchemeIdentifier = 73) AND (  (SubjectCode = L or N) and (EditionType not SMP) ->
+        if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && dataFrom === 'KV-GO') {
+          if (CheckSubjectSchemeIdentifier === '73' && ((CheckSubjectCode === 'L' || CheckSubjectCode === 'N') && CheckEditionType !== 'SMP')) {
+            console.log('\n      QQQ   case B -> arvoksi j');
+            return 'j';
+          }
+        }
+
 
         return '|'; // Basic value
       }
@@ -484,11 +536,48 @@ console.log('-------------------\n');
     }
 
     function generate041() {
-      return getLanguageRole() === '01' ? [
-        {
-          tag: '041', subfields: [{code: 'a', value: getLanguage()}]
+
+      // Add:  if ProductForm = EB, EC or ED
+
+      if (getValue('DescriptiveDetail', 'ProductForm')) {
+        const form = getValue('DescriptiveDetail', 'ProductForm');
+        console.log('          QQQ from g041:', form);
+
+
+        if (['EB', 'EC', 'ED'].includes(form)) {
+          console.log('   QQQ   Now action: a ');
+          // Normi ->  // new operation here // sama kuin oletuksena?
+          return getLanguageRole() === '01' ? [
+            {
+              tag: '041', subfields: [{code: 'a', value: getLanguage()}]
+            }
+          ] : [];
+          // <- normi
         }
-      ] : [];
+
+
+        if (['AJ'].includes(form)) {
+          console.log('   QQQ   Now action: d');
+          // Osakenttään d ->
+          return getLanguageRole() === '01' ? [
+            {
+              tag: '041', subfields: [{code: 'd', value: getLanguage()}]
+            }
+          ] : [];
+          // <- osakenttään d
+        }
+
+
+        // Normi ->
+        return getLanguageRole() === '01' ? [
+          {
+            tag: '041', subfields: [{code: 'a', value: getLanguage()}]
+          }
+        ] : [];
+        // <- normi
+
+      }
+
     }
 
     function generateAuthors() {
@@ -546,22 +635,29 @@ console.log('-------------------\n');
   }
 
   function getTypeInformation() {
-    const form = getValue('DescriptiveDetail', 'ProductForm');
-    const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
-    console.log('   QQQ form:', form);
-    console.log('   QQQ formDetail:', formDetail);
 
-    if (form === 'AJ' && formDetail === 'A103') {
-      return {isAudio: true};
-    }
 
-    if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
-      return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
-    }
+    if (getValue('DescriptiveDetail', 'ProductFormDetail') && getValue('DescriptiveDetail', 'ProductForm')) {
+
+      const form = getValue('DescriptiveDetail', 'ProductForm');
+      const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
+      console.log('   QQQ form:', form);
+      console.log('   QQQ formDetail:', formDetail);
+
+
+      if (form === 'AJ' && formDetail === 'A103') {
+        return {isAudio: true};
+      }
+
+      if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
+        return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
+      }
+
+    } // If getvaluecheck
 
     // Lopuksi, jos ei kolahda noihin, menee tänne: ->
     try {
-      throw new Error('Unidentified: not audio, not text');
+      throw new Error('\n  Unidentified: not audio, not text');
     } catch (e) {
       console.error(`${e.name}: ${e.message}`);
 
@@ -573,6 +669,7 @@ console.log('-------------------\n');
     // Lopuksi, jos ei kolahda noihin, menee tänne: <-
 
   }
+
 
   function getLanguageRole() {
     return getValue('DescriptiveDetail', 'Language', 'LanguageRole');

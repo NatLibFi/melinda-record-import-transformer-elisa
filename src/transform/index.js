@@ -102,6 +102,7 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
             const convertRecord = await converterPromise;
             const record = await convertRecord(obj);
 
+
             if (validate === true || fix === true) {
               const result = await validateRecord(record, fix);
               emitter.emit('record', result);
