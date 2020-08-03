@@ -26,10 +26,7 @@
 *
 */
 
-
 import {Utils} from '@natlibfi/melinda-commons';
 const {readEnvironmentVariable} = Utils;
 
 export const sources = readEnvironmentVariable('SOURCES', {format: JSON.parse});
-
-
