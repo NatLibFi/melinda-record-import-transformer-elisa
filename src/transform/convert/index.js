@@ -125,7 +125,8 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       generate300(), // <-- added 2.7.2020
       generate511(), // <-- added 3.7.2020
       generate600(), // <-- added 3.7.2020
-      generate884(), // Modified 3.7.2020
+      generate884(), // Modified  3.7.2020
+      generate974(), // <-- added 4.8.2020
       generate264(),
       generate336(),
       generate347(),
@@ -286,8 +287,8 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       }
 
 
-      function printRows(values) {
-        console.log('---   QQQ        600   values:  ', values);
+      function printRows() {
+
         const writeValue = getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted'); // YES
 
         return [
@@ -305,6 +306,28 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       //  Return [];
     }
 
+
+    function generate974() { // Added 4.8.2020
+
+      if (getValue('ProductIdentifier', 'IDValue')) {
+
+        // Just to check, this condition is not really needed
+
+        return [
+          {
+            tag: '974',
+            subfields: [
+              {code: 'a', value: 'KV'},
+              {code: 'b', value: 'XXXXXXXXXX'},
+              {code: '5', value: 'FENNI'}
+            ]
+          }
+        ];
+
+      }
+
+      return []; // Drop out case
+    }
 
     function generate336() {
       if (isAudio) {
@@ -783,7 +806,8 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     try {
       throw new Error('Unidentified: not audio, not text');
     } catch (e) {
-      console.error(`${e.name}: ${e.message}`);
+      // Console.error(`${e.name}: ${e.message}`);
+      logger.log('debug', 'Exception!');
 
       if (e instanceof NotSupportedError) {
         return e;
