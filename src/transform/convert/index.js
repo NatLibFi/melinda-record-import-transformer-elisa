@@ -34,14 +34,17 @@ import generateStaticFields from './generate-static-fields';
 
 import NotSupportedError from './../../error'; // Added 23.6.2020
 
-export default ({sources, sender, moment = momentOrig}) => ({Product: record}) => {
+import {Utils} from '@natlibfi/melinda-commons';
+const {createLogger} = Utils;
+const logger = createLogger();
 
+
+export default ({sources, sender, moment = momentOrig}) => ({Product: record}) => {
 
   const {getValue, getValues} = createValueInterface(record);
 
 
   const dataSource = getSource(); // ***
-  console.log('   QQQ    1. getSource:', dataSource); // ***
 
   // Add 3.7 ->
   if (dataSource === undefined) { // eslint-disable-line functional/no-conditional-statement
@@ -136,11 +139,8 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
     function generate250() { // Added 1.7.2020
       // Generate only if EditionNumber exists!
-      console.log('   QQQ   250 - Shall we make field 250?');
 
       if (getValue('DescriptiveDetail', 'EditionNumber')) {
-
-        console.log('   QQQ   250 - YES ');
 
         return [
           {
@@ -156,7 +156,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
         return `${getValue('DescriptiveDetail', 'EditionNumber')}. painos`;
       }
 
-      console.log('   QQQ   250 - NOT Editno... ');
+
       return [];
     }
 
@@ -165,20 +165,15 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       // Generate only if:
       // NotificationType = 01 or 02  AND
       // PublishingDateRole = 01
-      console.log('   QQQ  263 - Shall we make field 263?');
+
 
       if (getValue('PublishingDetail', 'PublishingDate', 'Date') &&
         getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole') &&
         getValue('NotificationType')) {
 
-        console.log('   QQQ  263 - PublishingDate :   ', getValue('PublishingDetail', 'PublishingDate', 'Date'));
-        console.log('   QQQ  263 - PublishingDateRole :   ', getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole'));
-        console.log('   QQQ  263 - NotificationType :   ', getValue('NotificationType'));
-
         if ((getValue('NotificationType') === '01' || getValue('NotificationType') === '02') &&
               getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole') === '01') {
 
-          console.log('   QQQ  263 - YES, CREATE FIELD');
           return [
             {
               tag: '263',
@@ -200,7 +195,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
     function generate300() { // Added 2.7.2020
     // Generate only if
-      console.log(' QQQ 300 - Shall we make field 300?');
+
       if (getValue('DescriptiveDetail', 'Extent', 'ExtentType') &&
           getValue('DescriptiveDetail', 'Extent', 'ExtentValue') &&
           getValue('DescriptiveDetail', 'Extent', 'ExtentUnit')) {
@@ -209,14 +204,10 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
         const extValue = getValue('DescriptiveDetail', 'Extent', 'ExtentValue');
         const extUnit = getValue('DescriptiveDetail', 'Extent', 'ExtentUnit');
 
-        console.log(' QQQ - 300 ExtentType ARVO: ', extType);
-        console.log(' QQQ - 300 ExtentValue ARVO: ', extValue);
-        console.log(' QQQ - 300 ExtentUnit ARVO: ', extUnit);
 
         // I A :  if ExtentType = 09 and ExtentUnit = 15 ( 15 -> HHHMM i.e. 5 digits)
         if (extType === '09' && extUnit === '15') {
           const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace('0', '').replace('0', '')}h ${extValue.slice(3, 5)} min)`;
-          console.log(' QQQ - 300 Now case IA: ', outText);
 
           return [
             {
@@ -230,7 +221,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
         // I B :  if ExtentType = 09 and ExtentUnit = 16 ( 16 -> HHHMMSS !!!  i.e. 7 digits)
         if (extType === '09' && extUnit === '16') {
           const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace('0', '').replace('0', '')} h ${extValue.slice(3, 5)} min ${extValue.slice(6, 7)} s)`;
-          console.log(' QQQ - 300 Now case IB: ', outText);
+
           return [
             {
               tag: '300',
@@ -243,7 +234,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
         //
         if ((extType === '00' || extType === '10') && extUnit === '03' && ['EB', 'EC', 'ED'].includes(getValue('DescriptiveDetail', 'ProductForm'))) {
           const outText = `1 verkkoaineisto ( ${extValue} sivua)`;
-          console.log(' QQQ - 300 Now case II: ', outText);
+
           return [
             {
               tag: '300',
@@ -261,9 +252,9 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
     function generate511() { // Added 3.7.2020
 
-      console.log(' QQQ 511 - ALWAYS makes field 511!');
+
       if (getValue('ProductIdentifier', 'IDValue')) {
-        console.log(' QQQ 511 - IDValue ARVO: ', getValue('ProductIdentifier', 'IDValue'));
+
         // Just to check, this condition is not really needed
 
         return [
@@ -280,22 +271,40 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     }
 
 
-    function generate600() { // Added 3.7.2020
+    function generate600() { // Added 3.8.2020
 
-      console.log(' QQQ 600 - Shall we make field 600?');
+      logger.log('debug', 'Testing debugger!');
+
       if (getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted')) {
-        console.log(' QQQ - 600 PersonNameInverted ARVO: ', getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted'));
+
+        const theData = getValues('DescriptiveDetail', 'Contributor');
+
+        theData.forEach(printRows);
+
+        return printRows();
+
+      }
+
+
+      function printRows(values) {
+        console.log('---   QQQ        600   values:  ', values);
+        const writeValue = getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted'); // YES
+
         return [
           {
             tag: '600',
             ind1: '1',
             ind2: '4',
-            subfields: [{code: 'a', value: getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted')}]
+            subfields: [{code: 'a', value: writeValue}] // GetValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted')
           }
         ];
+
+
       }
-      return [];
+
+      //  Return [];
     }
+
 
     function generate336() {
       if (isAudio) {
@@ -448,7 +457,6 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     function generate884() {
 
       const supplier = dataSource; // = getSource()
-      console.log('   QQQ   884 supplier = ', supplier);
 
       return [
         {
@@ -472,8 +480,6 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       const publishingYear = generatePublishingYear();
       const subjectSchemeName = generateSubjectSchemeName();
       const targetAudience = generateTargetAudience();
-
-      console.log('   QQQ    getSource (008):', dataSource); // ***// 'Kirjavälitys Oy' means go
 
 
       const value = `${date}s${publishingYear}    ${publicationCountry} ||||${targetAudience}o|||||||||${subjectSchemeName}|${language}||`;
@@ -500,11 +506,9 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
         const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
 
         if (CheckSubjectSchemeName && CheckSubjectCode) {
-          console.log('   QQQ   CheckSubjectSchemeName = ', CheckSubjectSchemeName);
-          console.log('   QQQ   CheckSubjectCode = ', CheckSubjectCode);
 
           if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03' && dataSource === 'Kirjavälitys Oy') {
-            console.log('   QQQ   arvoksi 0 !');
+
             return '0';
           }
 
@@ -522,22 +526,18 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
         const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
         const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
 
-        console.log('      QQQ   CheckEditionType = ', CheckEditionType);
-        console.log('      QQQ  C/  CheckSubjectSchemeIdentifier = ', CheckSubjectSchemeIdentifier);
-        console.log('      QQQ  C/  CheckSubjectCode = ', CheckSubjectCode);
-
 
         if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && dataSource === 'Kirjavälitys Oy') {
 
 
           if (CheckSubjectSchemeIdentifier === '73' && ((CheckSubjectCode === 'L' || CheckSubjectCode === 'N') && CheckEditionType !== 'SMP')) {
-            console.log('\n      QQQ   case C -> arvoksi j');
+
             return 'j';
           }
 
 
           if (CheckEditionType === 'SMP' && dataSource === 'Kirjavälitys Oy') {
-            console.log('\n      QQQ  case B   arvoksi SMP -> uusi !');
+
             return 'f';
           }
 
@@ -628,11 +628,10 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
       if (getValue('DescriptiveDetail', 'ProductForm')) {
         const form = getValue('DescriptiveDetail', 'ProductForm');
-        console.log('          QQQ from g041:', form);
 
 
         if (['EB', 'EC', 'ED'].includes(form)) {
-          console.log('   QQQ   g041 Now action: a ');
+
           // Normi ->  // new operation here // sama kuin oletuksena?
           return getLanguageRole() === '01' ? [
             {
@@ -644,7 +643,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
 
         if (form === 'AJ') {
-          console.log('   QQQ   Now action: d/ is AJ ');
+
           // Osakenttään d ->
           return getLanguageRole() === '01' ? [
             {
@@ -670,13 +669,10 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
     function generate084() { // Added as new entry  30.6.2020 // cases a & b
 
-      const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
+      // Const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
       const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
-      const CheckSubjectHeadingText = getValue('DescriptiveDetail', 'Subject', 'SubjectHeadingText'); // SubjectHeadingText for b
+      // Const CheckSubjectHeadingText = getValue('DescriptiveDetail', 'Subject', 'SubjectHeadingText'); // SubjectHeadingText for b
 
-      console.log('   QQQ 084       SubjectCode: ', CheckSubjectCode);
-      console.log('   QQQ 084       SubjectSchemeIbdentifier: ', CheckSubjectSchemeIdentifier);
-      console.log('   QQQ 084 b     SubjectHeadingText: ', CheckSubjectHeadingText);
 
       if (CheckSubjectSchemeIdentifier === '66') {
 
@@ -771,8 +767,6 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
       const form = getValue('DescriptiveDetail', 'ProductForm');
       const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
-      console.log('   QQQ form:', form);
-      console.log('   QQQ formDetail:', formDetail);
 
 
       if (form === 'AJ' && formDetail === 'A103') {
@@ -831,10 +825,10 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     // SupplierName --->
     if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName')) {
       const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
-      console.log(' *** ------ X ProductSupply/SupplierName: ', getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName'));
+
 
       if (gvalue === 'Kirjavälitys Oy') {
-        console.log(' QQQ           getSource by SupplierName (A): ', gvalue);
+
         return 'Kirjavälitys Oy';
       }
 
@@ -848,10 +842,10 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     // SenderName --->
     if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName')) {
       const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName');
-      console.log(' *** ------ X ProductSupply/SenderName: ', getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName'));
+
 
       if (gvalue === 'Kirjavälitys Oy') {
-        console.log(' QQQ           getSource by SenderName (B): ', gvalue);
+
         return 'Kirjavälitys Oy';
       }
 
@@ -864,18 +858,18 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
 
     if (sender.name === undefined) {
-      console.log('   QQQ    getSource  undefined - exception!  ', sender.name);
+
       return sender.name;
     }
 
 
     if (sender.name === 'Kirjavälitys Oy') {
       // Return sender.name;
-      console.log('   QQQ    getSource  From sender.name: ', sender.name);
+
       return 'Kirjavälitys Oy';
     }
 
-    console.log(' QQQ FINALLY:    NON-KV-GO !!!: ', sender.name);
+
     return sender.name;
 
   }
