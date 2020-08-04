@@ -41,7 +41,6 @@
 		"@natlibfi/melinda-commons": "^8.0.0",
 		"@natlibfi/melinda-record-import-commons": "^8.0.1",
 		"moment": "^2.22.2",
-		"npm-check": "^5.9.2",
 		"xml-flow": "^1.0.4",
 		"xml2js": "^0.4.23"
 	},
