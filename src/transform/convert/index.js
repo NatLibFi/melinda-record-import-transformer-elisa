@@ -274,7 +274,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
     function generate600() { // Added 3.8.2020
 
-      logger.log('debug', 'Testing debugger!');
+      logger.log('debug', ` Testing debugger! ${getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted')}`);
 
       if (getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted')) {
 
@@ -313,21 +313,45 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
         // Just to check, this condition is not really needed
 
-        return [
-          {
-            tag: '974',
-            subfields: [
-              {code: 'a', value: 'KV'},
-              {code: 'b', value: 'XXXXXXXXXX'},
-              {code: '5', value: 'FENNI'}
-            ]
-          }
-        ];
+        const data = makeOutput();
 
+        console.log('   QQQ  data: \n', data); // JSON.stringify(obj)  // JSON.parse(data)
+
+        return data;
+
+      } // If-end
+
+
+      function makeOutput () {
+
+        let output = '';
+        // ------------------------->
+        const getpid = getValues('ProductIdentifier');
+        console.log(`   QQQ   getpid: ${JSON.stringify(getpid)}`);
+        const objectArray = Object.entries(getpid);
+
+        objectArray.forEach(([key, value]) => {
+          console.log(value.IDValue); // 'right hand side'
+
+          output +=
+`{
+  tag: '974',
+  subfields: [
+    {code: 'a', value: 'KV'},
+    {code: 'b', value: ${value.IDValue},
+    {code: '5', value: 'FENNI'}
+    ]
+  },`;
+
+        });
+        // <-------------------------
+        return output;
       }
+
 
       return []; // Drop out case
     }
+
 
     function generate336() {
       if (isAudio) {
