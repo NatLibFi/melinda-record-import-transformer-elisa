@@ -126,7 +126,6 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       generate511(), // <-- added 3.7.2020
       generate600(), // <-- added 3.7.2020
       generate884(), // Modified  3.7.2020
-      generate974(), // <-- added 4.8.2020
       generate264(),
       generate336(),
       generate347(),
@@ -304,64 +303,6 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       }
 
       //  Return [];
-    }
-
-
-    function generate974() { // Added 4.8.2020
-
-      if (getValue('ProductIdentifier', 'IDValue')) {   // Just to check, this condition is not really needed
-
-      
-        const data = makeOutput();
-
-        console.log('   QQQ  data: \n', data); // JSON.stringify(obj)  // JSON.parse(data)
-        console.log('< ----------');
-        return data;  
-
-      } // If-end
-
-
-      function makeOutput () {
-
-        var output = "";
-        // ------------------------->
-        const getpid = getValues('ProductIdentifier');
-        console.log(`   QQQ   getpid: ${JSON.stringify(getpid)}`);
-        const objectArray = Object.entries(getpid);
-
-        objectArray.forEach(([key, value]) => {
-          console.log(value.IDValue); // 'right hand side'
-
-output +=
-`{
-  "tag": "974",
-  "subfields": [
-    {
-    "code": "a", 
-    value: "KV",
-    },
-    {
-    "code": "b", 
-    value: "${value.IDValue}",
-    },
-    {
-    "code": "5", 
-    value: "FENNI"
-    }  
-  ],
-  "ind1": " ",
-  "ind2": " "
-  },
-  `;
-
-        });  // forEach
-        // <-------------------------
-       
-        return output;
-      }
-
-
-      //return []; // Drop out case
     }
 
 
