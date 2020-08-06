@@ -309,22 +309,21 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
     function generate974() { // Added 4.8.2020
 
-      if (getValue('ProductIdentifier', 'IDValue')) {
+      if (getValue('ProductIdentifier', 'IDValue')) {   // Just to check, this condition is not really needed
 
-        // Just to check, this condition is not really needed
-
+      
         const data = makeOutput();
 
         console.log('   QQQ  data: \n', data); // JSON.stringify(obj)  // JSON.parse(data)
-
-        return data;
+        console.log('< ----------');
+        return data;  
 
       } // If-end
 
 
       function makeOutput () {
 
-        let output = '';
+        var output = "";
         // ------------------------->
         const getpid = getValues('ProductIdentifier');
         console.log(`   QQQ   getpid: ${JSON.stringify(getpid)}`);
@@ -333,23 +332,36 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
         objectArray.forEach(([key, value]) => {
           console.log(value.IDValue); // 'right hand side'
 
-          output +=
+output +=
 `{
-  tag: '974',
-  subfields: [
-    {code: 'a', value: 'KV'},
-    {code: 'b', value: ${value.IDValue},
-    {code: '5', value: 'FENNI'}
-    ]
-  },`;
+  "tag": "974",
+  "subfields": [
+    {
+    "code": "a", 
+    value: "KV",
+    },
+    {
+    "code": "b", 
+    value: "${value.IDValue}",
+    },
+    {
+    "code": "5", 
+    value: "FENNI"
+    }  
+  ],
+  "ind1": " ",
+  "ind2": " "
+  },
+  `;
 
-        });
+        });  // forEach
         // <-------------------------
+       
         return output;
       }
 
 
-      return []; // Drop out case
+      //return []; // Drop out case
     }
 
 
