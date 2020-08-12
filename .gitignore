@@ -4,6 +4,11 @@ coverage
 dist
 .nyc_output
 env
+test-fixtures\transform\01
+test-fixtures\transform\02
+test-fixtures\transform\03
+test-fixtures\transform\04
+test-fixtures\transform\05
 test-fixtures\transform\06
 test-fixtures\transform\07
 test-fixtures\transform\08

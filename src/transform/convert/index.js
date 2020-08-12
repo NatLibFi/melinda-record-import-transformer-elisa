@@ -31,10 +31,9 @@ import momentOrig from 'moment';
 import {createValueInterface} from './common';
 import generateTitles from './generate-titles';
 import generateStaticFields from './generate-static-fields';
-
-import NotSupportedError from './../../error'; // Added 23.6.2020
-
+import NotSupportedError from './../../error';
 import {Utils} from '@natlibfi/melinda-commons';
+
 const {createLogger} = Utils;
 const logger = createLogger();
 
@@ -44,13 +43,12 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
   const {getValue, getValues} = createValueInterface(record);
 
 
-  const dataSource = getSource(); // ***
+  const dataSource = getSource();
 
-  // Add 3.7 ->
+
   if (dataSource === undefined) { // eslint-disable-line functional/no-conditional-statement
     throw new Error('  No source found.');
   }
-  // Add 3.7 <-
 
 
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
@@ -110,6 +108,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
   }
 
   function generateFields() {
+
     const authors = getAuthors();
 
     return [
@@ -119,13 +118,14 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       generate520(),
       generate040(),
       generate041(),
-      generate084(), // <-- added 30.6.2020
-      generate250(), // <-- added 1.7.2020
-      generate263(), // <-- added 1.7.2020
-      generate300(), // <-- added 2.7.2020
-      generate511(), // <-- added 3.7.2020
-      generate600(), // <-- added 3.7.2020
-      generate884(), // Modified  3.7.2020
+      generate084(),
+      generate250(),
+      generate263(),
+      generate300(),
+      generate511(),
+      generate600(),
+      generate884(),
+      generate974(),
       generate264(),
       generate336(),
       generate347(),
@@ -137,25 +137,21 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       generateStaticFields()
     ].flat();
 
-    function generate250() { // Added 1.7.2020
+    function generate250() {
       // Generate only if EditionNumber exists!
 
       if (getValue('DescriptiveDetail', 'EditionNumber')) {
+        const editionNr = getValue('DescriptiveDetail', 'EditionNumber');
 
         return [
           {
             tag: '250',
             ind1: ' ',
             ind2: ' ',
-            subfields: [{code: 'a', value: getEditionNumber()}]
+            subfields: [{code: 'a', value: `${editionNr}. painos`}]
           }
         ];
       }
-
-      function getEditionNumber() {
-        return `${getValue('DescriptiveDetail', 'EditionNumber')}. painos`;
-      }
-
 
       return [];
     }
@@ -193,8 +189,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     }
 
 
-    function generate300() { // Added 2.7.2020
-    // Generate only if
+    function generate300() {
 
       if (getValue('DescriptiveDetail', 'Extent', 'ExtentType') &&
           getValue('DescriptiveDetail', 'Extent', 'ExtentValue') &&
@@ -207,7 +202,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
         // I A :  if ExtentType = 09 and ExtentUnit = 15 ( 15 -> HHHMM i.e. 5 digits)
         if (extType === '09' && extUnit === '15') {
-          const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace('0', '').replace('0', '')}h ${extValue.slice(3, 5)} min)`;
+          const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace(/0/g, '')}h ${extValue.slice(3, 5)} min)`;
 
           return [
             {
@@ -220,7 +215,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
         // I B :  if ExtentType = 09 and ExtentUnit = 16 ( 16 -> HHHMMSS !!!  i.e. 7 digits)
         if (extType === '09' && extUnit === '16') {
-          const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace('0', '').replace('0', '')} h ${extValue.slice(3, 5)} min ${extValue.slice(6, 7)} s)`;
+          const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace(/0/g, '')} h ${extValue.slice(3, 5)} min ${extValue.slice(6, 7)} s)`;
 
           return [
             {
@@ -246,16 +241,14 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
       }
 
-      return []; // Drop out case
+      return [];
     }
 
 
-    function generate511() { // Added 3.7.2020
+    function generate511() {
 
 
       if (getValue('ProductIdentifier', 'IDValue')) {
-
-        // Just to check, this condition is not really needed
 
         return [
           {
@@ -267,11 +260,11 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
       }
 
-      return []; // Drop out case
+      return [];
     }
 
 
-    function generate600() { // Added 3.8.2020
+    function generate600() {
 
       logger.log('debug', ` Testing debugger! ${getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted')}`);
 
@@ -303,6 +296,37 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       }
 
       //  Return [];
+    }
+
+
+    function generate974() {
+
+      let entry = {};
+
+      const gids = getValues('ProductIdentifier'); // 'ProductIdentifier', 'IDValue'
+      console.log('   QQQ   gids suoraan:', gids);
+
+      const array = gids;
+
+      console.log('   QQQ   array length:', array.length);
+
+      let result = {};
+
+      array.forEach((element) => {
+        console.log('   arvot for each: ', `${element.IDValue}`); // Value is object
+        console.log('   type: ', typeof element.IDValue);
+        entry =
+            [
+              {
+                tag: '974',
+                ind1: '0',
+                subfields: [{code: '9', value: JSON.stringify(element.IDValue)}]
+              }
+            ];
+        result = entry.concat(entry);
+      });
+
+      return result;
     }
 
 
@@ -480,10 +504,8 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       const publishingYear = generatePublishingYear();
       const subjectSchemeName = generateSubjectSchemeName();
       const targetAudience = generateTargetAudience();
-
-
       const value = `${date}s${publishingYear}    ${publicationCountry} ||||${targetAudience}o|||||||||${subjectSchemeName}|${language}||`;
-      // Const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||||${language}||`;  // ALKUP
+
       return [{tag: '008', value}];
 
       function generateLanguage() {
@@ -500,7 +522,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
         return publishingDate ? publishingDate.slice(0, 4) : '    ';
       }
 
-      function generateSubjectSchemeName() { // Ns. 008/A -  Added  24.6.2020
+      function generateSubjectSchemeName() { // Ns. 008/A
 
         const CheckSubjectSchemeName = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeName');
         const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
@@ -519,7 +541,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       }
 
 
-      function generateTargetAudience() { // Ns. 008/B & C -  Added  25.6.2020
+      function generateTargetAudience() { // Ns. 008/B & C
         // Position 22 = target audience on MARC
 
         const CheckEditionType = getValue('DescriptiveDetail', 'EditionType');
@@ -632,47 +654,43 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
         if (['EB', 'EC', 'ED'].includes(form)) {
 
-          // Normi ->  // new operation here // sama kuin oletuksena?
+
           return getLanguageRole() === '01' ? [
             {
               tag: '041', subfields: [{code: 'a', value: getLanguage()}]
             }
           ] : [];
-          // <- normi
+
         }
 
 
         if (form === 'AJ') {
 
-          // Osakenttään d ->
+
           return getLanguageRole() === '01' ? [
             {
               tag: '041', subfields: [{code: 'd', value: getLanguage()}]
             }
           ] : [];
-          // <- osakenttään d
+
         }
 
 
-        // Normi ->
         return getLanguageRole() === '01' ? [
           {
             tag: '041', subfields: [{code: 'a', value: getLanguage()}]
           }
         ] : [];
-        // <- normi
+
 
       }
 
     }
 
 
-    function generate084() { // Added as new entry  30.6.2020 // cases a & b
+    function generate084() { //  Cases a & b
 
-      // Const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
       const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
-      // Const CheckSubjectHeadingText = getValue('DescriptiveDetail', 'Subject', 'SubjectHeadingText'); // SubjectHeadingText for b
-
 
       if (CheckSubjectSchemeIdentifier === '66') {
 
@@ -777,13 +795,13 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
         return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
       }
 
-    } // If getvaluecheck
+    }
 
-    // Lopuksi, jos ei kolahda noihin, menee tänne: ->
+
     try {
       throw new Error('Unidentified: not audio, not text');
     } catch (e) {
-      // Console.error(`${e.name}: ${e.message}`);
+
       logger.log('debug', 'Exception!');
 
       if (e instanceof NotSupportedError) {
@@ -791,7 +809,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       }
 
     }
-    // Lopuksi, jos ei kolahda noihin, menee tänne: <-
+
 
   }
 
@@ -826,51 +844,22 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     // SupplierName --->
     if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName')) {
       const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
-
-
-      if (gvalue === 'Kirjavälitys Oy') {
-
-        return 'Kirjavälitys Oy';
-      }
-
-      if (sender.name !== 'Kirjavälitys Oy' && gvalue !== 'Kirjavälitys Oy') {
-        return sender.name; //  'NON-KV (A)'
-      }
-
+      console.log('   QQQ   (1) PRODUCT-...SupplierName:', gvalue); // ***
+      return gvalue;
     }
     // SupplierName <---
+
 
     // SenderName --->
     if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName')) {
       const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName');
-
-
-      if (gvalue === 'Kirjavälitys Oy') {
-
-        return 'Kirjavälitys Oy';
-      }
-
-      if (sender.name !== 'Kirjavälitys Oy' && gvalue !== 'Kirjavälitys Oy') {
-        return sender.name; // 'NON-KV (B)'
-      }
-
+      console.log('   QQQ   (2) PRODUCT-...SenderName:', gvalue); // ***
+      return gvalue;
     }
     // SenderName <---
 
 
-    if (sender.name === undefined) {
-
-      return sender.name;
-    }
-
-
-    if (sender.name === 'Kirjavälitys Oy') {
-      // Return sender.name;
-
-      return 'Kirjavälitys Oy';
-    }
-
-
+    console.log('   QQQ   (3) HEADER, SenderName:', sender.name); // ***
     return sender.name;
 
   }

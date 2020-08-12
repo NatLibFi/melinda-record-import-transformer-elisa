@@ -56,6 +56,7 @@ export default async () => {
   return async (record, fix, validateFixes) => {
     const opts = fix ? {fix, validateFixes} : /* istanbul ignore next: The actual functionality is tested with the first condition */ {fix};
     const result = await validate(record, opts);
+    // Console.log('   QQQ   record:\n ', record); // ***
     return {
       record: result.record,
       failed: result.valid === false,
