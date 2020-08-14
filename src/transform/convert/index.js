@@ -118,7 +118,8 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       generate520(),
       generate040(),
       generate041(),
-      generate084(),
+      generate084a(),
+      generate084b(),
       generate250(),
       generate263(),
       generate300(),
@@ -202,7 +203,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
         // I A :  if ExtentType = 09 and ExtentUnit = 15 ( 15 -> HHHMM i.e. 5 digits)
         if (extType === '09' && extUnit === '15') {
-          const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace(/0/g, '')}h ${extValue.slice(3, 5)} min)`;
+          const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace(/0/gu, '')}h ${extValue.slice(3, 5)} min)`;
 
           return [
             {
@@ -215,7 +216,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
         // I B :  if ExtentType = 09 and ExtentUnit = 16 ( 16 -> HHHMMSS !!!  i.e. 7 digits)
         if (extType === '09' && extUnit === '16') {
-          const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace(/0/g, '')} h ${extValue.slice(3, 5)} min ${extValue.slice(6, 7)} s)`;
+          const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace(/0/gu, '')} h ${extValue.slice(3, 5)} min ${extValue.slice(6, 7)} s)`;
 
           return [
             {
@@ -266,67 +267,45 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
     function generate600() {
 
-      logger.log('debug', ` Testing debugger! ${getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted')}`);
-
-      if (getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted')) {
-
-        const theData = getValues('DescriptiveDetail', 'Contributor');
-
-        theData.forEach(printRows);
-
-        return printRows();
+      if (getValue('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted')) {
+        const theData = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
+        const dataMapped = theData.map(getNames);
+        return dataMapped;
 
       }
 
-
-      function printRows() {
-
-        const writeValue = getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted'); // YES
-
-        return [
-          {
-            tag: '600',
-            ind1: '1',
-            ind2: '4',
-            subfields: [{code: 'a', value: writeValue}] // GetValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted')
-          }
-        ];
-
-
+      function getNames(element) {
+        return {
+          tag: '600',
+          ind1: '1',
+          ind2: '4',
+          subfields: [
+            {code: 'a', value: element},
+            {code: '9', value: 'FENNI<KEEP>'}
+          ]
+        };
       }
 
-      //  Return [];
+      return [];
     }
 
 
     function generate974() {
 
-      let entry = {};
+      if (getValue('ProductIdentifier', 'IDValue')) {
+        const gids = getValues('ProductIdentifier');
+        const newDeal = gids.map(doEdits);
+        return newDeal;
+      }
 
-      const gids = getValues('ProductIdentifier'); // 'ProductIdentifier', 'IDValue'
-      console.log('   QQQ   gids suoraan:', gids);
+      function doEdits(element) {
+        return {
+          tag: '974',
+          ind1: '0',
+          subfields: [{code: '9', value: element.IDValue[0]}]
+        };
+      }
 
-      const array = gids;
-
-      console.log('   QQQ   array length:', array.length);
-
-      let result = {};
-
-      array.forEach((element) => {
-        console.log('   arvot for each: ', `${element.IDValue}`); // Value is object
-        console.log('   type: ', typeof element.IDValue);
-        entry =
-            [
-              {
-                tag: '974',
-                ind1: '0',
-                subfields: [{code: '9', value: JSON.stringify(element.IDValue)}]
-              }
-            ];
-        result = entry.concat(entry);
-      });
-
-      return result;
     }
 
 
@@ -388,29 +367,93 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     }
 
     function generate500() {
-      return isAudio ? [
-        {
-          tag: '500', subfields: [
-            {code: 'a', value: 'Äänikirja.'},
-            {code: '9', value: 'FENNI<KEEP>'}
-          ]
-        }
-      ] : [];
+
+      const legalDeposit = true;
+     
+
+      if (getValue('NotificationType') === '01' || getValue('NotificationType') === '02') {
+        
+        return [
+          {
+            tag: '500',
+            subfields: [
+              {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
+              {code: '9', value: 'FENNI<KEEP>'}
+            ]
+          }
+        ];
+
+      }
+
+      if (getValue('NotificationType') === '03' && legalDeposit === false) {
+        
+        return [
+          {
+            tag: '500',
+            subfields: [
+              {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
+              {code: '9', value: 'FENNI<KEEP>'}
+            ]
+          }
+        ];
+
+      }
+
+      if (getValue('NotificationType') === '03' && legalDeposit === true) {
+        
+        return [
+          {
+            tag: '500',
+            subfields: [
+              {code: 'a', value: 'Koneellisesti tuotettu tietue.'},
+              {code: '9', value: 'FENNI<KEEP>'}
+            ]
+          }
+        ];
+
+      }
+
+      return [];
     }
 
 
     function generate655() {
-      return isAudio ? [
-        {
-          tag: '655',
-          ind2: '7',
-          subfields: [
-            {code: 'a', value: 'äänikirjat'},
-            {code: '2', value: 'slm/fin'},
-            {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'}
-          ]
+
+      if (getValue('DescriptiveDetail', 'ProductFormDetail') &&
+        getValue('DescriptiveDetail', 'ProductForm')) {
+
+        const form = getValue('DescriptiveDetail', 'ProductForm');
+        const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
+
+        if (form === 'AJ' && formDetail === 'A103') {
+          return [
+            {
+              tag: '655',
+              ind2: '7',
+              subfields: [
+                {code: 'a', value: 'äänikirjat'},
+                {code: '2', value: 'slm/fin'},
+                {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            },
+            {
+              tag: '655',
+              ind2: '7',
+              subfields: [
+                {code: 'a', value: 'e-äänikirjat'},
+                {code: '2', value: 'slm/fin'},
+                {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s1204'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
         }
-      ] : [];
+
+        return [];
+      }
+
+
     }
 
     function generate006() {
@@ -688,40 +731,63 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     }
 
 
-    function generate084() { //  Cases a & b
+    function generate084a() { 
+      // A-case:  SubjectCode Field added if if SubjectSchemeIdentifier = 66
 
-      const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
-
-      if (CheckSubjectSchemeIdentifier === '66') {
-
-        return [
-          {
-            tag: '084',
-            subfields: [
-              {code: 'a', value: getValue('DescriptiveDetail', 'Subject', 'SubjectCode')},
-              {code: '2', value: 'Ykl'}
-            ]
-          }
-        ];
+      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier')) {
+          const theData = getValues('DescriptiveDetail', 'Subject').filter(filter);
+        
+              function filter({Subject,SubjectSchemeIdentifier}) {
+                return ['66'].includes(SubjectSchemeIdentifier?.[0]);
+              }
+ 
+        const dataMapped = theData.map(getSSI);
+        return dataMapped;
       }
 
-      if (CheckSubjectSchemeIdentifier === '80') {
-
-        return [
-          {
-            tag: '084',
-            ind1: '9', // <--- obs!
-            subfields: [
-              {code: 'a', value: getValue('DescriptiveDetail', 'Subject', 'SubjectHeadingText')},
-              {code: '2', value: 'Ykl'}
-            ]
-          }
-        ];
+      function getSSI(element) {
+ 
+                return {
+                  tag: '084',
+                  subfields: [
+                    {code: 'a', value: element.SubjectCode[0]},
+                    {code: '2', value: 'Ykl'},
+                  ]
+                };       
       }
 
-      return []; // Field added  (only) if SubjectSchemeIdentifier = 66  or 80
-
+      return [];
     }
+
+
+    function generate084b() { 
+      // B-case:  SubjectHeadingText Field added if SubjectSchemeIdentifier = 80
+      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier')) {
+          const theData = getValues('DescriptiveDetail', 'Subject').filter(filter);
+        
+              function filter({Subject,SubjectSchemeIdentifier}) {
+                return ['80'].includes(SubjectSchemeIdentifier?.[0]);
+              }
+ 
+        const dataMapped = theData.map(getSSI);
+        return dataMapped;
+      }
+
+      function getSSI(element) {
+ 
+                return {
+                  tag: '084',
+                  ind1: '9',
+                  subfields: [
+                    {code: 'a', value: element.SubjectHeadingText[0]},
+                    {code: '2', value: 'Ykl'}
+                  ]
+                };       
+      }
+
+      return [];
+    }
+
 
 
     function generateAuthors() {
@@ -844,7 +910,6 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     // SupplierName --->
     if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName')) {
       const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
-      console.log('   QQQ   (1) PRODUCT-...SupplierName:', gvalue); // ***
       return gvalue;
     }
     // SupplierName <---
@@ -853,13 +918,11 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     // SenderName --->
     if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName')) {
       const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName');
-      console.log('   QQQ   (2) PRODUCT-...SenderName:', gvalue); // ***
       return gvalue;
     }
     // SenderName <---
 
 
-    console.log('   QQQ   (3) HEADER, SenderName:', sender.name); // ***
     return sender.name;
 
   }
