@@ -38,18 +38,14 @@ const {createLogger} = Utils;
 const logger = createLogger();
 
 
-export default ({sources, sender, moment = momentOrig}) => ({Product: record}) => {
+export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Product: record}) => {
 
   const {getValue, getValues} = createValueInterface(record);
-
-
   const dataSource = getSource();
-
 
   if (dataSource === undefined) { // eslint-disable-line functional/no-conditional-statement
     throw new Error('  No source found.');
   }
-
 
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
     throw new Error('Unsupported product identifier type & value');
@@ -115,23 +111,30 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       generate008(),
       generate006(),
       generate007(),
-      generate520(),
       generate040(),
       generate041(),
       generate084a(),
       generate084b(),
       generate250(),
       generate263(),
-      generate300(),
-      generate511(),
-      generate600(),
-      generate884(),
-      generate974(),
       generate264(),
+      generate300(),
       generate336(),
       generate347(),
-      generate500(),
+      generate490(),
+      generate500(), // Only original is used (email SN 19.8.2020)
+      generate506(),
+      generate511(),
+      generate520(),
+      generate540(),
+      generate594(),
+      generate600(),
+      generate653(),
       generate655(),
+      generate700(),
+      generate856(),
+      generate884(),
+      generate974(),
       generateStandardIdentifiers(),
       generateTitles(record, authors),
       generateAuthors(),
@@ -192,32 +195,26 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
     function generate300() {
 
-      if (getValue('DescriptiveDetail', 'Extent', 'ExtentType') &&
-          getValue('DescriptiveDetail', 'Extent', 'ExtentValue') &&
-          getValue('DescriptiveDetail', 'Extent', 'ExtentUnit')) {
+      const extType = getValue('DescriptiveDetail', 'Extent', 'ExtentType');
+      const extValue = getValue('DescriptiveDetail', 'Extent', 'ExtentValue');
+      const extUnit = getValue('DescriptiveDetail', 'Extent', 'ExtentUnit');
 
-        const extType = getValue('DescriptiveDetail', 'Extent', 'ExtentType');
-        const extValue = getValue('DescriptiveDetail', 'Extent', 'ExtentValue');
-        const extUnit = getValue('DescriptiveDetail', 'Extent', 'ExtentUnit');
-
+      if (extType && extValue && extUnit) {
 
         // I A :  if ExtentType = 09 and ExtentUnit = 15 ( 15 -> HHHMM i.e. 5 digits)
         if (extType === '09' && extUnit === '15') {
-          const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace(/0/gu, '')}h ${extValue.slice(3, 5)} min)`;
-
+          const outText = `1 verkkoaineisto (${extValue.slice(0, 3).replace(/0/gu, '')}h ${extValue.slice(3, 5)} min)`;
           return [
             {
               tag: '300',
               subfields: [{code: 'a', value: outText}]
             }
           ];
-
         }
 
         // I B :  if ExtentType = 09 and ExtentUnit = 16 ( 16 -> HHHMMSS !!!  i.e. 7 digits)
         if (extType === '09' && extUnit === '16') {
-          const outText = `1 verkkoaineisto ( ${extValue.slice(0, 3).replace(/0/gu, '')} h ${extValue.slice(3, 5)} min ${extValue.slice(6, 7)} s)`;
-
+          const outText = `1 verkkoaineisto (${extValue.slice(0, 3).replace(/0/gu, '')} h ${extValue.slice(3, 5)} min ${extValue.slice(6, 7)} s)`;
           return [
             {
               tag: '300',
@@ -229,8 +226,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
         // II: extType 00 or 10      AND extUnit = 03      AND  ProductRorm = EB, EC, ED
         //
         if ((extType === '00' || extType === '10') && extUnit === '03' && ['EB', 'EC', 'ED'].includes(getValue('DescriptiveDetail', 'ProductForm'))) {
-          const outText = `1 verkkoaineisto ( ${extValue} sivua)`;
-
+          const outText = `1 verkkoaineisto (${extValue} sivua)`;
           return [
             {
               tag: '300',
@@ -239,25 +235,6 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
           ];
         }
 
-
-      }
-
-      return [];
-    }
-
-
-    function generate511() {
-
-
-      if (getValue('ProductIdentifier', 'IDValue')) {
-
-        return [
-          {
-            tag: '511',
-            ind1: '0',
-            subfields: [{code: '9', value: 'FENNI<KEEP>'}]
-          }
-        ];
 
       }
 
@@ -291,8 +268,9 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
 
     function generate974() {
+      const getidvalue = getValue('ProductIdentifier', 'IDValue');
 
-      if (getValue('ProductIdentifier', 'IDValue')) {
+      if (getidvalue) {
         const gids = getValues('ProductIdentifier');
         const newDeal = gids.map(doEdits);
         return newDeal;
@@ -366,13 +344,118 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
       }
     }
 
+
+    function generate490() {
+      // Field is repeated if ONIX contains several Collection elements with CollectionType = 10 // in CollectionIdentifier
+
+      // Filter: only CollectionType = 10  will be used! ->
+      const theData = getValues('DescriptiveDetail', 'Collection').filter(filter); // Collection
+      const dataMapped = theData.map(makeFields);
+      return dataMapped;
+
+      function filter({CollectionType}) {
+        return ['10'].includes(CollectionType?.[0]);
+      }
+
+      function makeFields(element) {
+
+        const [TitleElementLevel, PartNumber] = [element.TitleDetail[0].TitleElement[0].TitleElementLevel[0], element.TitleDetail[0].TitleElement[0].PartNumber[0]];
+        const [IDValue, CollIdType] = [element.CollectionIdentifier[0].IDValue[0], element.CollectionIdentifier[0].CollectionIdtype[0]];
+        const [CollectionType] = [element.CollectionType[0]];
+
+        function makeA() {
+          // Builds TitleText (if CollectionType=10 and TitleElementLevel=02)
+          // Subfields x and v are left out if ONIX has no IDValue or PartNumber.
+          // CollectionType = 10 is already checked : filtered elements
+          // Console.log('   QQQ      490  ... makeA ... TitleElementLevel: ', TitleElementLevel, ' - (Text:)', element.TitleDetail[0].TitleElement[0].TitleText[0]);
+          return {code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}; // <- TitleText, yes
+        }
+
+        function makeV() { // Builds 'PartNumber'
+          // Subfields x and v are left out if ONIX has no IDValue or PartNumber.
+          // ! PartNumber = checkFielPartNr()  // PartNumber is in TitleDetail
+          // CollectionType = 10 is already checked : filtered elements
+          // Console.log('   QQQ      490  ... makev ... PartNumber:', PartNumber, ' IDValue:', IDValue);
+          return {code: 'v', value: `${PartNumber}`};
+        }
+
+        function makeX() { // Builds 'IDValue'
+          // Subfields x and v are left out if ONIX has no IDValue or PartNumber.
+          // ${IDValue}    if CollectionIDType = 02
+          // Uses NO elements, so CollectionType=10-check-filtered NOT in use here!
+          // Console.log('   QQQ      490  ... makeX ... IDValue:', IDValue, '  checked PartNumber: ', PartNumber, '- CollIdType:', CollIdType);
+          return {code: 'x', value: `${IDValue}`};
+
+        }
+
+
+        //    Possible cases: All matches / Nothing matches, i.e  no  a,x,v / Only x matches /  Only a & v matches
+        // All matches
+        if (CollectionType === '10' && TitleElementLevel === '02' && CollIdType === '02' && IDValue && PartNumber) {
+          // Console.log('All matches! : CollectionType:', CollectionType, ' -TitleElementLevel:', TitleElementLevel, 'CollIdType:', CollIdType);
+          return {
+            tag: '490',
+            ind1: '0',
+            subfields: [
+              makeA(),
+              makeX(),
+              makeV()
+            ]
+          };
+        }
+
+        // Nothing matches, i.e  no  a,x,v
+        if (CollectionType !== '10' && TitleElementLevel !== '02' && CollIdType !== '02' && !IDValue && !PartNumber) {
+          // Console.log('Nothing matches: CollectionType:', CollectionType, ' -TitleElementLevel:', TitleElementLevel, 'CollIdType:', CollIdType);
+          return [];
+        }
+
+        // Only x matches
+        if (CollectionType !== '10' && TitleElementLevel !== '02' && CollIdType === '02' && IDValue && PartNumber) {
+          // Console.log('only x matches: CollectionType:', CollectionType, ' -TitleElementLevel:', TitleElementLevel, 'CollIdType:', CollIdType);
+          return {
+            tag: '490',
+            ind1: '0',
+            subfields: [makeX()]
+          };
+        }
+
+        // A & v matches ( = CollectionType & TitleElementLevel OK, but not for x)
+        // ... AND there IS IDValue & PartNumber
+        if (CollectionType === '10' && TitleElementLevel === '02' && CollIdType !== '02' && IDValue && PartNumber) {
+          // Console.log('Now   a & v matches: CollectionType:', CollectionType, ' -TitleElementLevel:', TitleElementLevel, 'CollIdType:', CollIdType);
+          return {
+            tag: '490',
+            ind1: '0',
+            subfields: [
+              makeA(),
+              makeV()
+            ]
+          };
+        }
+
+        // A&v = CollectionType & TitleElementLevel match, but not match for x)
+        // ...BUT there is NOT IDValue & PartNumber
+        if (CollectionType === '10' && TitleElementLevel === '02' && CollIdType !== '02' && !IDValue && !PartNumber) {
+          // Console.log('Now   a & v matches BUT NOT exists IDValue/PartNumber : CollectionType:', CollectionType, ' -TitleElementLevel:', TitleElementLevel, 'CollIdType:', CollIdType);
+          return {
+            tag: '490',
+            ind1: '0',
+            subfields: [makeA()]
+          };
+        }
+
+        return []; // If not found up there
+
+      } // <- makefields
+
+    }
+
+
     function generate500() {
 
-      const legalDeposit = true;
-     
-
       if (getValue('NotificationType') === '01' || getValue('NotificationType') === '02') {
-        
+
         return [
           {
             tag: '500',
@@ -385,8 +468,8 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
       }
 
-      if (getValue('NotificationType') === '03' && legalDeposit === false) {
-        
+      if (getValue('NotificationType') === '03' && legalDeposit.true !== 'true') {
+
         return [
           {
             tag: '500',
@@ -399,8 +482,8 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
       }
 
-      if (getValue('NotificationType') === '03' && legalDeposit === true) {
-        
+      if (getValue('NotificationType') === '03' && legalDeposit.true === 'true') {
+
         return [
           {
             tag: '500',
@@ -417,7 +500,150 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     }
 
 
+    function generate506() {
+      // Field added if NotificationType = 03 with legal deposit
+
+      if (getValue('NotificationType') === '03' && legalDeposit.true === 'true') {
+
+        return [
+          {
+            tag: '506',
+            ind1: '1',
+            subfields: [
+              {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
+              {code: 'f', value: 'Online access with authorization'},
+              {code: '2', value: 'star'},
+              {code: '5', value: 'FI-Vapaa'},
+              {code: '9', value: 'FENNI<KEEP>'}
+            ]
+          }
+        ];
+
+      }
+
+      return [];
+
+    }
+
+
+    function generate511() {
+
+      const theData = getValues('DescriptiveDetail', 'Contributor').filter(filter);
+      const dataMapped = theData.map(makeFields);
+      return dataMapped;
+
+      function filter({ContributorRole}) {
+        return ['E07'].includes(ContributorRole?.[0]);
+      }
+
+      function makeFields(element) {
+
+        return {
+          tag: '511',
+          ind1: '0',
+          subfields: [
+            {code: 'a', value: `Lukija: ${element.PersonName[0]}.`},
+            {code: '9', value: 'FENNI<KEEP>'}
+          ]
+        };
+      }
+
+    }
+
+
+    function generate540() {
+      // Field added if NotificationType = 03 with legal deposit
+      if (getValue('NotificationType') === '03' && legalDeposit.true === 'true') {
+
+        return [
+          {
+            tag: '540',
+            subfields: [
+              {code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
+              {code: 'b', value: 'Kansalliskirjasto;'},
+              {code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
+              {code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
+              {code: '5', value: 'FI-Vapaa'},
+              {code: '9', value: 'FENNI<KEEP>'}
+            ]
+          }
+        ];
+
+      }
+      return [];
+    }
+
+    function generate594() {
+      //  Field is left out if NotificationType = 03 with legal deposit
+      //  If NotificationType = 01 or 02 : ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
+      //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
+
+      if (getValue('NotificationType') === '03' && legalDeposit.true === 'true') {
+        return [];
+      }
+
+      // ... no need to ignore so let's go on ->
+      if (getValue('NotificationType') === '01' || getValue('NotificationType') === '02') {
+        //  If NotificationType = 01 or 02 : ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
+        return [
+          {
+            tag: '594',
+            subfields: [
+              {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
+              {code: '5', value: 'FENNI'}
+            ]
+          }
+        ];
+      }
+
+
+      if (getValue('NotificationType') === '03' && legalDeposit.true !== 'true') {
+        //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
+        return [
+          {
+            tag: '594',
+            subfields: [
+              {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
+              {code: '5', value: 'FENNI'}
+            ]
+          }
+        ];
+      }
+
+      return [];
+    }
+
+
+    function generate653() {
+      // Added only if SubjectSchemeIdentifier = 20, 64, 71 or 72
+      // A| <- SubjectHeadingText
+      const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
+
+      if (SubScheIde) {
+        const theData = getValues('DescriptiveDetail', 'Subject').filter(filter);
+        const dataMapped = theData.map(makeRows);
+        return dataMapped;
+      }
+
+      return [];
+
+      function makeRows(element) {
+
+        return {
+          tag: '653',
+          subfields: [{code: 'a', value: element.SubjectHeadingText[0]}]
+        };
+      }
+
+      function filter({SubjectSchemeIdentifier}) {
+        return ['20', '64', '71', '72'].includes(SubjectSchemeIdentifier?.[0]);
+      }
+
+    }
+
+
     function generate655() {
+      // Make always when there is form = AJ & formDetail = A103
 
       if (getValue('DescriptiveDetail', 'ProductFormDetail') &&
         getValue('DescriptiveDetail', 'ProductForm')) {
@@ -455,6 +681,73 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
 
 
     }
+
+
+    function generate700() {
+
+      const contribrole = getValue('DescriptiveDetail', 'Contributor', 'ContributorRole');
+
+      if (contribrole) {
+        const theData = getValues('DescriptiveDetail', 'Contributor').filter(filter);
+        // Console.log('   QQQ   700      theData: ', theData);
+        const dataMapped = theData.map(makeRows);
+        return dataMapped;
+      }
+      return [];
+
+      function makeRows(element) {
+        return {
+          tag: '700',
+          subfields: [{code: 'a', value: changeValues(element.ContributorRole[0])}]
+        };
+      }
+
+      function filter({ContributorRole}) {
+        return ['B06', 'E07', 'A12', 'B01'].includes(ContributorRole?.[0]);
+      }
+
+      function changeValues(value) {
+        if (value === 'B06') {
+          return 'kääntäjä.';
+        }
+        if (value === 'E07') {
+          return 'lukija.';
+        }
+        if (value === 'A12') {
+          return 'kuvittaja.';
+        }
+        if (value === 'B01') {
+          return 'toimittaja.';
+        }
+        return value;
+      }
+    }
+
+    function generate856() {
+      // Field added    if NotificationType = 03 with legal deposit
+      // WAITS FOR:  URN of legal deposit
+
+      if (getValue('NotificationType') === '03' && legalDeposit.true === 'true') {
+        // Console.log('   856   Now it is NotificationType 03 & legalDeposit true -> MAKE FIELD 856!');
+
+        return [
+          {
+            tag: '856',
+            ind1: '4',
+            ind2: '0',
+            subfields: [
+              {code: 'u', value: 'URN of legal deposit XXXXXXXXXX under construction'},
+              {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
+              {code: '5', value: 'FI-Vapaa'}
+            ]
+          }
+        ];
+      }
+
+
+      return [];
+    }
+
 
     function generate006() {
       const materialForm = isAudio || isText ? 'm' : '|';
@@ -681,6 +974,7 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
         {
           tag: '040',
           subfields: [
+            {code: 'a', value: 'FI-KV'},
             {code: 'b', value: getLanguage()},
             {code: 'e', value: 'rda'},
             {code: 'd', value: 'FI-NL'}
@@ -731,63 +1025,61 @@ export default ({sources, sender, moment = momentOrig}) => ({Product: record}) =
     }
 
 
-    function generate084a() { 
+    function generate084a() {
       // A-case:  SubjectCode Field added if if SubjectSchemeIdentifier = 66
 
       if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier')) {
-          const theData = getValues('DescriptiveDetail', 'Subject').filter(filter);
-        
-              function filter({Subject,SubjectSchemeIdentifier}) {
-                return ['66'].includes(SubjectSchemeIdentifier?.[0]);
-              }
- 
+        const theData = getValues('DescriptiveDetail', 'Subject').filter(filter);
         const dataMapped = theData.map(getSSI);
         return dataMapped;
       }
 
       function getSSI(element) {
- 
-                return {
-                  tag: '084',
-                  subfields: [
-                    {code: 'a', value: element.SubjectCode[0]},
-                    {code: '2', value: 'Ykl'},
-                  ]
-                };       
+
+        return {
+          tag: '084',
+          subfields: [
+            {code: 'a', value: element.SubjectCode[0]},
+            {code: '2', value: 'Ykl'}
+          ]
+        };
       }
+
+      function filter({SubjectSchemeIdentifier}) {
+        return ['66'].includes(SubjectSchemeIdentifier?.[0]);
+      }
+
 
       return [];
     }
 
 
-    function generate084b() { 
+    function generate084b() {
       // B-case:  SubjectHeadingText Field added if SubjectSchemeIdentifier = 80
       if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier')) {
-          const theData = getValues('DescriptiveDetail', 'Subject').filter(filter);
-        
-              function filter({Subject,SubjectSchemeIdentifier}) {
-                return ['80'].includes(SubjectSchemeIdentifier?.[0]);
-              }
- 
+        const theData = getValues('DescriptiveDetail', 'Subject').filter(filter);
         const dataMapped = theData.map(getSSI);
         return dataMapped;
       }
 
       function getSSI(element) {
- 
-                return {
-                  tag: '084',
-                  ind1: '9',
-                  subfields: [
-                    {code: 'a', value: element.SubjectHeadingText[0]},
-                    {code: '2', value: 'Ykl'}
-                  ]
-                };       
+
+        return {
+          tag: '084',
+          ind1: '9',
+          subfields: [
+            {code: 'a', value: element.SubjectHeadingText[0]},
+            {code: '2', value: 'Ykl'}
+          ]
+        };
+      }
+
+      function filter({SubjectSchemeIdentifier}) {
+        return ['80'].includes(SubjectSchemeIdentifier?.[0]);
       }
 
       return [];
     }
-
 
 
     function generateAuthors() {

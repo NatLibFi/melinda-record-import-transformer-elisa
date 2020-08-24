@@ -28,17 +28,14 @@
 
 export function createValueInterface(record) {
 
-
   return {getValue, getValues};
 
   function getValue(...path) {
-
 
     return recurse(path);
 
     function recurse(props, context = record) {
       const [prop] = props;
-
 
       if (prop) {
         return recurse(props.slice(1), context?.[prop]?.[0]);
