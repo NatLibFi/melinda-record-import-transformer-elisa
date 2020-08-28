@@ -268,10 +268,12 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
 
     function generate974() {
-      const getidvalue = getValue('ProductIdentifier', 'IDValue');
+      // Get IDValue from
+      // Product/RelatedMaterial/RelatedWork/WorkIdentifier/IDValue
+      const getidvalue = getValue('RelatedMaterial', 'RelatedWork', 'WorkIdentifier', 'IDValue');
 
       if (getidvalue) {
-        const gids = getValues('ProductIdentifier');
+        const gids = getValues('RelatedMaterial', 'RelatedWork', 'WorkIdentifier');
         const newDeal = gids.map(doEdits);
         return newDeal;
       }
@@ -279,11 +281,15 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       function doEdits(element) {
         return {
           tag: '974',
-          ind1: '0',
-          subfields: [{code: '9', value: element.IDValue[0]}]
+          subfields: [
+            {code: 'a', value: 'KV'},
+            {code: 'b', value: element.IDValue[0]},
+            {code: '5', value: 'FENNI'}
+          ]
         };
       }
 
+      return [];
     }
 
 
@@ -346,12 +352,21 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
 
     function generate490() {
-      // Field is repeated if ONIX contains several Collection elements with CollectionType = 10 // in CollectionIdentifier
+      //  Subfields x and v are left out if ONIX has no IDValue or PartNumber.
 
-      // Filter: only CollectionType = 10  will be used! ->
+      let output = [];
+
+      // FOR FIELDS EXISTENCE CHECK:
+      // Const gotTitleElementLevel = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleElementLevel');
+      const gotPartNumber = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'PartNumber');
+      // Const gotCollectionType = getValue('DescriptiveDetail', 'Collection', 'CollectionType');
+      // Const gotCollectionIdtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
+      const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
+
       const theData = getValues('DescriptiveDetail', 'Collection').filter(filter); // Collection
       const dataMapped = theData.map(makeFields);
-      return dataMapped;
+      return output; // dataMapped ???
+
 
       function filter({CollectionType}) {
         return ['10'].includes(CollectionType?.[0]);
@@ -359,95 +374,88 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
       function makeFields(element) {
 
-        const [TitleElementLevel, PartNumber] = [element.TitleDetail[0].TitleElement[0].TitleElementLevel[0], element.TitleDetail[0].TitleElement[0].PartNumber[0]];
-        const [IDValue, CollIdType] = [element.CollectionIdentifier[0].IDValue[0], element.CollectionIdentifier[0].CollectionIdtype[0]];
-        const [CollectionType] = [element.CollectionType[0]];
+        function buildFieldsav() {
+          if (element.CollectionType[0] === undefined && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+            return [];
+          }
 
-        function makeA() {
-          // Builds TitleText (if CollectionType=10 and TitleElementLevel=02)
-          // Subfields x and v are left out if ONIX has no IDValue or PartNumber.
-          // CollectionType = 10 is already checked : filtered elements
-          // Console.log('   QQQ      490  ... makeA ... TitleElementLevel: ', TitleElementLevel, ' - (Text:)', element.TitleDetail[0].TitleElement[0].TitleText[0]);
-          return {code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}; // <- TitleText, yes
+          if (element.CollectionType[0] !== '10' || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02') {
+            return [];
+          }
+
+
+          // Check if exists essentials:  TitleText/IDValue/PartNumber:
+          if (gotPartNumber === undefined || element.TitleDetail[0].TitleElement[0].PartNumber[0] === undefined) {
+            // Console.log('   QQQ   490      a&v:   leave out v! Make only a');
+
+            if (element.TitleDetail[0].TitleElement[0].TitleText[0] === undefined) {
+              // Console.log('   QQQ   490      a&v: can not make a, text = undefined');
+              return [];
+            }
+
+            return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}];
+
+          }
+
+
+          return [
+            {code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`},
+            {code: 'v', value: `${element.TitleDetail[0].TitleElement[0].PartNumber[0]}`}
+          ];
+
         }
 
-        function makeV() { // Builds 'PartNumber'
-          // Subfields x and v are left out if ONIX has no IDValue or PartNumber.
-          // ! PartNumber = checkFielPartNr()  // PartNumber is in TitleDetail
-          // CollectionType = 10 is already checked : filtered elements
-          // Console.log('   QQQ      490  ... makev ... PartNumber:', PartNumber, ' IDValue:', IDValue);
-          return {code: 'v', value: `${PartNumber}`};
-        }
 
-        function makeX() { // Builds 'IDValue'
-          // Subfields x and v are left out if ONIX has no IDValue or PartNumber.
-          // ${IDValue}    if CollectionIDType = 02
-          // Uses NO elements, so CollectionType=10-check-filtered NOT in use here!
-          // Console.log('   QQQ      490  ... makeX ... IDValue:', IDValue, '  checked PartNumber: ', PartNumber, '- CollIdType:', CollIdType);
-          return {code: 'x', value: `${IDValue}`};
+        const subfields = generateSubfields();
 
+
+        function generateSubfields () {
+          const fieldsav = buildFieldsav();
+          const fieldx = buildx();
+          return fieldsav.concat(fieldx);
         }
 
 
-        //    Possible cases: All matches / Nothing matches, i.e  no  a,x,v / Only x matches /  Only a & v matches
-        // All matches
-        if (CollectionType === '10' && TitleElementLevel === '02' && CollIdType === '02' && IDValue && PartNumber) {
-          // Console.log('All matches! : CollectionType:', CollectionType, ' -TitleElementLevel:', TitleElementLevel, 'CollIdType:', CollIdType);
-          return {
-            tag: '490',
-            ind1: '0',
-            subfields: [
-              makeA(),
-              makeX(),
-              makeV()
-            ]
-          };
-        }
+        function buildx() { // Generate x subfield  ( = IDValue)
+          if (gotIDValue === undefined || element.CollectionIdentifier[0].CollectionIdtype[0] === undefined || element.CollectionIdentifier[0].IDValue[0] === undefined) {
+            return [];
+          }
 
-        // Nothing matches, i.e  no  a,x,v
-        if (CollectionType !== '10' && TitleElementLevel !== '02' && CollIdType !== '02' && !IDValue && !PartNumber) {
-          // Console.log('Nothing matches: CollectionType:', CollectionType, ' -TitleElementLevel:', TitleElementLevel, 'CollIdType:', CollIdType);
+          if (element.CollectionIdentifier[0].CollectionIdtype[0] === '02') {
+            return [{code: 'x', value: `${element.CollectionIdentifier[0].IDValue[0]}`}];
+          }
+
           return [];
         }
 
-        // Only x matches
-        if (CollectionType !== '10' && TitleElementLevel !== '02' && CollIdType === '02' && IDValue && PartNumber) {
-          // Console.log('only x matches: CollectionType:', CollectionType, ' -TitleElementLevel:', TitleElementLevel, 'CollIdType:', CollIdType);
-          return {
-            tag: '490',
-            ind1: '0',
-            subfields: [makeX()]
-          };
+
+        function fieldsCombined () {
+
+          if (element.CollectionType[0] === undefined || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+            console.log('   QQQ   490      essentials undefined, SKIP !');
+            return [];
+          }
+
+          if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] !== '02') {
+            console.log('   QQQ   490      essentials got awrong values, SKIP !');
+            return [];
+          }
+
+          // ---> case: no a&v , CollectionType=2 BUT IDValue undefined = SKIP -->
+          if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] === '02' && element.CollectionIdentifier[0].IDValue[0] === undefined) {
+            console.log('   QQQ   490      SKIP!  no av-values match and for x is only CollectionIdType, IDValu undefined');
+            return [];
+          }
+
+          return [{tag: '490', ind1: '0', subfields}]; // <--- case OK
         }
 
-        // A & v matches ( = CollectionType & TitleElementLevel OK, but not for x)
-        // ... AND there IS IDValue & PartNumber
-        if (CollectionType === '10' && TitleElementLevel === '02' && CollIdType !== '02' && IDValue && PartNumber) {
-          // Console.log('Now   a & v matches: CollectionType:', CollectionType, ' -TitleElementLevel:', TitleElementLevel, 'CollIdType:', CollIdType);
-          return {
-            tag: '490',
-            ind1: '0',
-            subfields: [
-              makeA(),
-              makeV()
-            ]
-          };
-        }
 
-        // A&v = CollectionType & TitleElementLevel match, but not match for x)
-        // ...BUT there is NOT IDValue & PartNumber
-        if (CollectionType === '10' && TitleElementLevel === '02' && CollIdType !== '02' && !IDValue && !PartNumber) {
-          // Console.log('Now   a & v matches BUT NOT exists IDValue/PartNumber : CollectionType:', CollectionType, ' -TitleElementLevel:', TitleElementLevel, 'CollIdType:', CollIdType);
-          return {
-            tag: '490',
-            ind1: '0',
-            subfields: [makeA()]
-          };
-        }
+        output = fieldsCombined();
+        console.log('   QQQ   tulos: \n ', JSON.stringify(output));
 
-        return []; // If not found up there
-
-      } // <- makefields
+        return fieldsCombined();
+      }
 
     }
 
@@ -527,6 +535,11 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
 
     function generate511() {
+
+
+      if (getValue('NotificationType') !== 'E07' || !getValue('PersonName')) {
+        return [];
+      }
 
       const theData = getValues('DescriptiveDetail', 'Contributor').filter(filter);
       const dataMapped = theData.map(makeFields);
@@ -988,28 +1001,21 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       if (getValue('DescriptiveDetail', 'ProductForm')) {
         const form = getValue('DescriptiveDetail', 'ProductForm');
 
-
         if (['EB', 'EC', 'ED'].includes(form)) {
-
-
           return getLanguageRole() === '01' ? [
             {
               tag: '041', subfields: [{code: 'a', value: getLanguage()}]
             }
           ] : [];
-
         }
 
 
         if (form === 'AJ') {
-
-
           return getLanguageRole() === '01' ? [
             {
               tag: '041', subfields: [{code: 'd', value: getLanguage()}]
             }
           ] : [];
-
         }
 
 
@@ -1019,9 +1025,9 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
           }
         ] : [];
 
-
       }
 
+      return [];
     }
 
 
@@ -1080,7 +1086,6 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
       return [];
     }
-
 
     function generateAuthors() {
       return authors.map(({name, role}, index) => {

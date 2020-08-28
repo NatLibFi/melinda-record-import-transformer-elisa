@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
+ <Header>
+  <Sender>
+   <SenderName>Foobar</SenderName>
+   <ContactName>Yhteyshenkilö</ContactName>
+   <EmailAddress>tuotetiedot@foobar.fi</EmailAddress>
+  </Sender>
+  <Addressee>
+   <AddresseeName>ADDRESSEE</AddresseeName>
+  </Addressee>
+  <SentDateTime>20200409</SentDateTime>
+  <MessageNote>Foobar tuotesanoma</MessageNote>
+ </Header>
+ <Product>
+  <RecordReference>ABC1234567</RecordReference>
+  <NotificationType>02</NotificationType>
+  <ProductIdentifier>
+   <ProductIDType>03</ProductIDType>
+   <IDValue>9876543210123</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>15</ProductIDType>
+   <IDValue>9876543210123</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>01</ProductIDType>
+   <IDTypeName>Jokin tuotenumero</IDTypeName>
+   <IDValue>9876543210123</IDValue>
+  </ProductIdentifier>
+  <DescriptiveDetail>
+   <ProductComposition>00</ProductComposition>
+   <ProductForm>AJ</ProductForm>
+   <ProductFormDetail>A103</ProductFormDetail>
+   <ProductFormDescription>äänikirja</ProductFormDescription>
+   <PrimaryContentType>01</PrimaryContentType>
+   <EpubTechnicalProtection>02</EpubTechnicalProtection>
+   <Collection>
+    <CollectionType>10</CollectionType>
+    <TitleDetail>
+     <TitleType>01</TitleType>
+     <TitleElement>
+      <TitleElementLevel>02</TitleElementLevel>
+      <PartNumber>2</PartNumber>
+      <TitleText>Perveen Mistry</TitleText>
+     </TitleElement>
+    </TitleDetail>
+   </Collection>
+   <TitleDetail>
+    <TitleType>01</TitleType>
+    <TitleElement>
+     <TitleElementLevel>01</TitleElementLevel>
+     <TitleText>Satapurin jalokivi</TitleText>
+    </TitleElement>
+   </TitleDetail>
+   <TitleDetail>
+    <TitleType>03</TitleType>
+    <TitleElement>
+     <TitleElementLevel>01</TitleElementLevel>
+     <TitleText>The Satapur Moonstone</TitleText>
+    </TitleElement>
+   </TitleDetail>
+   <Contributor>
+    <SequenceNumber>1</SequenceNumber>
+    <ContributorRole>A01</ContributorRole>
+    <PersonName>Sujata Massey</PersonName>
+    <PersonNameInverted>Massey, Sujata</PersonNameInverted>
+    <NamesBeforeKey>Sujata</NamesBeforeKey>
+    <KeyNames>Massey</KeyNames>
+   </Contributor>
+   <Contributor>
+    <SequenceNumber>2</SequenceNumber>
+    <ContributorRole>B06</ContributorRole>
+    <PersonName>Maija Heikinheimo</PersonName>
+    <PersonNameInverted>Heikinheimo, Maija </PersonNameInverted>
+    <NamesBeforeKey>Maija</NamesBeforeKey>
+    <KeyNames>Heikinheimo</KeyNames>
+   </Contributor>
+   <Contributor>
+    <SequenceNumber>3</SequenceNumber>
+    <ContributorRole>E07</ContributorRole>
+    <PersonName>Erja Manto</PersonName>
+    <PersonNameInverted>Manto, Erja</PersonNameInverted>
+    <NamesBeforeKey>Erja</NamesBeforeKey>
+    <KeyNames>Manto</KeyNames>
+   </Contributor>
+   <Language>
+    <LanguageRole>01</LanguageRole>
+    <LanguageCode>fin</LanguageCode>
+   </Language>
+   <Subject>
+    <SubjectSchemeIdentifier>73</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Suomalainen Kirja-alan luokitus</SubjectSchemeName>
+    <SubjectCode>A</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
+    <SubjectSchemeName>YKL</SubjectSchemeName>
+    <SubjectCode>84.2</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Foobar tuoteryhmä</SubjectSchemeName>
+    <SubjectCode>01</SubjectCode>
+    <SubjectHeadingText>käännetty kaunokirjallisuus</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>80</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Fiktiivisen aineiston lisäluokitus</SubjectSchemeName>
+    <SubjectHeadingText>eläimet</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>80</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Fiktiivisen aineiston lisäluokitus</SubjectSchemeName>
+    <SubjectHeadingText>jännitys</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>Eläimet ja luonto</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>Romaanit</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>Jännitys</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>rikos</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>dekkari</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>Perhe</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>parisuhteet</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>ihmissuhteet</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>Maantiede</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>94</SubjectSchemeIdentifier>
+    <SubjectCode>1FKA</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>96</SubjectSchemeIdentifier>
+    <SubjectCode>3MPBGH</SubjectCode>
+   </Subject>
+   <Subject>
+    <MainSubject/>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>FFH</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>FYT</SubjectCode>
+   </Subject>
+  </DescriptiveDetail>
+  <CollateralDetail>
+   <TextContent>
+    <TextType>03</TextType>
+    <ContentAudience>00</ContentAudience>
+    <Text>Some text here.</Text>
+   </TextContent>
+   <SupportingResource>
+    <ResourceContentType>01</ResourceContentType>
+    <ContentAudience>00</ContentAudience>
+    <ResourceMode>03</ResourceMode>
+    <ResourceVersion>
+     <ResourceForm>02</ResourceForm>
+     <ResourceLink>https://foobar.fi/onix/media/2641721.jpg?size=original&amp;cl=20050&amp;ch=0517aa7067fafd152fc9c583073b7eda</ResourceLink>
+     <ContentDate>
+      <ContentDateRole>17</ContentDateRole>
+      <Date>20200408</Date>
+     </ContentDate>
+    </ResourceVersion>
+   </SupportingResource>
+  </CollateralDetail>
+  <PublishingDetail>
+   <Publisher>
+    <PublishingRole>01</PublishingRole>
+    <PublisherIdentifier>
+     <PublisherIDType>01</PublisherIDType>
+     <IDTypeName>Foobar kustantajanumero</IDTypeName>
+     <IDValue>12345</IDValue>
+    </PublisherIdentifier>
+    <PublisherName>Julkaisija</PublisherName>
+   </Publisher>
+   <CountryOfPublication>FI</CountryOfPublication>
+   <PublishingStatus>02</PublishingStatus>
+   <PublishingStatusNote>Uutuus, ei vielä ilmestynyt</PublishingStatusNote>
+   <PublishingDate>
+    <PublishingDateRole>01</PublishingDateRole>
+    <Date>20200413</Date>
+   </PublishingDate>
+   <PublishingDate>
+    <PublishingDateRole>12</PublishingDateRole>
+    <Date>2020</Date>
+   </PublishingDate>
+  </PublishingDetail>
+  <RelatedMaterial>
+   <RelatedWork>
+    <WorkRelationCode>01</WorkRelationCode>
+    <WorkIdentifier>
+     <WorkIDType>01</WorkIDType>
+     <IDTypeName>Foobar teostunniste</IDTypeName>
+     <IDValue>TT7777777</IDValue>
+    </WorkIdentifier>
+   </RelatedWork>
+  </RelatedMaterial>
+ </Product>
+ </ONIXMessage>

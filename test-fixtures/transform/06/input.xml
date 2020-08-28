@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
+ <Header>
+  <Sender>
+   <SenderName>Foobar</SenderName>
+   <ContactName>Yhteyshenkilön nimi</ContactName>
+   <EmailAddress>tuotetiedot@foobar.fi</EmailAddress>
+  </Sender>
+  <Addressee>
+   <AddresseeName>ADRESSEE</AddresseeName>
+  </Addressee>
+  <SentDateTime>20200409</SentDateTime>
+  <MessageNote>Foobar tuotesanoma</MessageNote>
+ </Header>
+<Product>
+  <RecordReference>CCC1234567</RecordReference>
+  <NotificationType>02</NotificationType>
+  <ProductIdentifier>
+   <ProductIDType>03</ProductIDType>
+   <IDValue>9999999999999</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>15</ProductIDType>
+   <IDValue>9999999999999</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>01</ProductIDType>
+   <IDTypeName>Foobar tuotenumero</IDTypeName>
+   <IDValue>9999999999999</IDValue>
+  </ProductIdentifier>
+  <DescriptiveDetail>
+   <ProductComposition>00</ProductComposition>
+   <ProductForm>AJ</ProductForm>
+   <ProductFormDetail>A103</ProductFormDetail>
+   <PrimaryContentType>01</PrimaryContentType>
+   <Collection>
+    <CollectionType>10</CollectionType>
+    <TitleDetail>
+     <TitleType>01</TitleType>
+     <TitleElement>
+      <TitleElementLevel>02</TitleElementLevel>
+      <TitleText>Cupido</TitleText>
+     </TitleElement>
+    </TitleDetail>
+   </Collection>
+   <TitleDetail>
+    <TitleType>01</TitleType>
+    <TitleElement>
+     <TitleElementLevel>01</TitleElementLevel>
+     <TitleText>Travel Companion</TitleText>
+    </TitleElement>
+   </TitleDetail>
+   <Contributor>
+    <SequenceNumber>1</SequenceNumber>
+    <ContributorRole>E07</ContributorRole>
+    <PersonName>Savanna Scarlett</PersonName>
+    <PersonNameInverted>Scarlett, Savanna</PersonNameInverted>
+    <NamesBeforeKey>Savanna</NamesBeforeKey>
+    <KeyNames>Scarlett</KeyNames>
+   </Contributor>
+   <Language>
+    <LanguageRole>01</LanguageRole>
+    <LanguageCode>eng</LanguageCode>
+   </Language>
+   <Extent>
+    <ExtentType>09</ExtentType>
+    <ExtentValue>0004200</ExtentValue>
+    <ExtentUnit>16</ExtentUnit>
+   </Extent>
+   <Subject>
+    <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
+    <SubjectSchemeName>YKL</SubjectSchemeName>
+    <SubjectCode>84.5</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Foobar tuoteryhmä</SubjectSchemeName>
+    <SubjectCode>01</SubjectCode>
+    <SubjectHeadingText>käännetty kaunokirjallisuus</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <MainSubject/>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>FP</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>FBA</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>FP</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>FRD</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>98</SubjectSchemeIdentifier>
+    <SubjectCode>5X</SubjectCode>
+   </Subject>
+  </DescriptiveDetail>
+  <CollateralDetail>
+   <TextContent>
+    <TextType>03</TextType>
+    <ContentAudience>00</ContentAudience>
+    <Text>Jotakin tekstiä.</Text>
+   </TextContent>
+   <SupportingResource>
+    <ResourceContentType>01</ResourceContentType>
+    <ContentAudience>00</ContentAudience>
+    <ResourceMode>03</ResourceMode>
+    <ResourceVersion>
+     <ResourceForm>02</ResourceForm>
+     <ResourceLink>https://foobar.fi/onix/media/2642205.jpg?size=original&amp;cl=20050&amp;ch=10f12b1ed3c72f62f085776b602028da</ResourceLink>
+     <ContentDate>
+      <ContentDateRole>17</ContentDateRole>
+      <Date>20200408</Date>
+     </ContentDate>
+    </ResourceVersion>
+   </SupportingResource>
+  </CollateralDetail>
+  <PublishingDetail>
+   <Imprint>
+    <ImprintName>Imprint</ImprintName>
+   </Imprint>
+   <Publisher>
+    <PublishingRole>01</PublishingRole>
+    <PublisherIdentifier>
+     <PublisherIDType>01</PublisherIDType>
+     <IDTypeName>Foobar kustantajanumero</IDTypeName>
+     <IDValue>87042</IDValue>
+    </PublisherIdentifier>
+    <PublisherName>Publisher</PublisherName>
+   </Publisher>
+   <CountryOfPublication>FI</CountryOfPublication>
+   <PublishingStatus>02</PublishingStatus>
+   <PublishingStatusNote>Uutuus, ei vielä ilmestynyt</PublishingStatusNote>
+   <PublishingDate>
+    <PublishingDateRole>01</PublishingDateRole>
+    <Date>20200421</Date>
+   </PublishingDate>
+   <PublishingDate>
+    <PublishingDateRole>12</PublishingDateRole>
+    <Date>2020</Date>
+   </PublishingDate>
+  </PublishingDetail>
+ </Product>
+</ONIXMessage> 
