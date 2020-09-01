@@ -44,8 +44,18 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
   const dataSource = getSource();
 
   if (dataSource === undefined) { // eslint-disable-line functional/no-conditional-statement
-    throw new Error('  No source found.');
+    throw new Error('  No data source found.');
   }
+
+  
+  checkSupplierData();
+
+  function checkSupplierData() {
+    if (dataSource !== sources.supplier) { // eslint-disable-line functional/no-conditional-statement
+      throw new Error('Exception: please check data source.');
+    }
+  }
+  
 
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
     throw new Error('Unsupported product identifier type & value');
@@ -122,7 +132,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       generate336(),
       generate347(),
       generate490(),
-      generate500(), // Only original is used (email SN 19.8.2020)
+      generate500(), // Only original is used now ( see email SN 19.8.2020)
       generate506(),
       generate511(),
       generate520(),
@@ -161,7 +171,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
     }
 
 
-    function generate263() { // Added 1.7.2020
+    function generate263() {
       // Generate only if:
       // NotificationType = 01 or 02  AND
       // PublishingDateRole = 01
@@ -188,7 +198,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
         return [];
       }
 
-      return []; // None fields exist
+      return []; 
 
     }
 
@@ -352,41 +362,18 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
 
     function generate490() {
-      // Field is repeated if ONIX contains several Collection elements
-      // With CollectionType = 10   [ <-  in CollectionIdentifier ]
-      /*
-      If CollectionType === 10 and TitleElementLevel === 02 you generate a and v subfields
-      If CollectionIDType === 02, you generate x subfield
+    //  - Subfields x and v are left out if ONIX has no IDValue or PartNumber.
 
-  - So implement function for each test which will return the subfields and then concat the returned subfields.
-  - The functions should return empty arrays if there is no match.
-  - If they aren't any subfields then don't generate   the 490 field at all.
-  - Subfields x and v are left out if ONIX has no IDValue or PartNumber.
-  */
-      let output = [];
-      // Console.log('   QQQ 490   CollectionIdtype.length :', getValues('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype').length);
-      // FIELDS EXISTENCE CHECK:
       const gotTitleElementLevel = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleElementLevel');
       const gotPartNumber = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'PartNumber');
-
       const gotCollectionType = getValue('DescriptiveDetail', 'Collection', 'CollectionType');
-      // Const gotCollectionIdtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
+      const gotCollectionIdtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
       const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
 
-
-      // TEMP: just for info -->
-      if (gotCollectionType !== '10' && gotTitleElementLevel !== '02') {
-        console.log('   QQQ   490         INFO: Do NOT make a & v ! [gotCollectionType / gotTitleElementLevel]');
-      }
-      // TEMP: just for info <--
-
-
       // Filter: only CollectionType = 10  will be used! ->
-      const theData = getValues('DescriptiveDetail', 'Collection').filter(filter); // Collection
-      // Console.log('   QQQ          theData: ', theData); // JSON.stringify(theData,null,1))
+      const theData = getValues('DescriptiveDetail', 'Collection').filter(filter);
       const dataMapped = theData.map(makeFields);
-      // Console.log('       dataMapped:',JSON.stringify(dataMapped,null,1));
-      return output; // DataMapped;  //<--- NIIN SIIS TÄMÄ palautetaan LOPULTA!
+      return dataMapped; 
 
 
       function filter({CollectionType}) {
@@ -395,29 +382,41 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
       function makeFields(element) {
 
-        /*
-        Const TitleElementLevel = element.TitleDetail[0].TitleElement[0].TitleElementLevel[0];
-        console.log('aaaa');
-        const PartNumber = element.TitleDetail[0].TitleElement[0].PartNumber[0];
-        console.log('bbb');
-        const IDValue = element.CollectionIdentifier[0].IDValue[0];
-        const CollIdType = element.CollectionIdentifier[0].CollectionIdtype[0];
-        console.log('ccc');
-        const [CollectionType] = [element.CollectionType[0]];
+        function generateFieldsCombined () {
+          // --->   if nothing matches -->
+          if (element.CollectionType[0] === undefined || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+            return [];
+          }
 
-        console.log('   QQQ   490/makeFields   TitleElementLevel:', TitleElementLevel,'CollectionType',CollectionType,' |  CollIdType',CollIdType,'   | PartNumber',PartNumber,'IDValue',IDValue);
-            */
+          if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] !== '02') {
+            return [];
+          }
 
-        const subfields = generateSubfields();
+          // ---> case: no a&v , CollectionType=2 BUT IDValue undefined = SKIP -->
+          if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] === '02' && element.CollectionIdentifier[0].IDValue[0] === undefined) {
+            return [];
+          }
 
-        function generateSubfields () {
-          const fieldsav = buildFieldsav();
-          const fieldx = buildx();
-          return fieldsav.concat(fieldx);
-        }
+
+          const subfields = generateSubfields();
+
+          function generateSubfields () {
+            const fieldsav = buildFieldsav();
+            const fieldx = buildx();
+            return fieldsav.concat(fieldx);
+          } 
+
+
+          return {tag: '490', ind1: '0', subfields}; 
+        } 
 
 
         function buildFieldsav() {
+          if (gotTitleElementLevel === undefined || gotCollectionType === undefined) {
+            console.log('   QQQ   a&v: Essential data undef: gotTitleElementLevel/gotCollectionType');
+            return [];
+          }
+
 
           if (element.CollectionType[0] === undefined && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
             console.log('   QQQ   490      a&v: SKIP... essential elements undefined in a&v');
@@ -451,12 +450,15 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
             {code: 'v', value: `${element.TitleDetail[0].TitleElement[0].PartNumber[0]}`}
           ];
 
-        } // <- buildFieldsav
+        } 
 
 
         function buildx() { // Generate x subfield  ( = IDValue)
+          if (gotCollectionIdtype === undefined || gotIDValue === undefined) {
+            return [];
+          }
+
           if (gotIDValue === undefined || element.CollectionIdentifier[0].CollectionIdtype[0] === undefined || element.CollectionIdentifier[0].IDValue[0] === undefined) {
-            console.log('   QQQ   490      x: SKIP... essential elements undefined in build x');
             return [];
           }
 
@@ -467,38 +469,10 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
           return [];
         }
 
+        return generateFieldsCombined();
 
-        function fieldsCombined () {
-          // --->   if nothing matches -->
-          if (element.CollectionType[0] === undefined || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
-            console.log('   QQQ   490      essentials undefined, SKIP !');
-            return [];
-          }
+      }
 
-          if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] !== '02') {
-            console.log('   QQQ   490      essentials got awrong values, SKIP !');
-            return [];
-          }
-
-          // ---> case: no a&v , CollectionType=2 BUT IDValue undefined = SKIP -->
-          if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] === '02' && element.CollectionIdentifier[0].IDValue[0] === undefined) {
-            console.log('   QQQ   490      SKIP!  no av-values match and for x is only CollectionIdType, IDValu undefined');
-            return [];
-          }
-
-          return [{tag: '490', ind1: '0', subfields}]; // <--- case OK
-        } // <-- fieldsCombined
-
-
-        output = fieldsCombined();
-        console.log('   QQQ   tulos: \n ', JSON.stringify(output)); // JSON.stringify(output,null,1)
-
-        // Return output;
-        return fieldsCombined();
-
-      } // <- makefields
-
-      // Return [];
     }
 
 
@@ -870,21 +844,17 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
 
     function generate884() {
-
-      const supplier = dataSource; // = getSource()
-
       return [
         {
           tag: '884',
           subfields: [
             {code: 'a', value: 'ONIX3 to MARC transformation'},
             {code: 'g', value: moment().format('YYYYMMDD')},
-            {code: 'k', value: sources[supplier]},
+            {code: 'k', value: sources.supplier},
             {code: 'q', value: 'FI-NL'}
           ]
         }
       ];
-
     }
 
 
@@ -1194,6 +1164,11 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
       if (form === 'AJ' && formDetail === 'A103') {
         return {isAudio: true};
+      }
+
+
+      if (form !== 'AJ' && formDetail !== 'A103') { // Add 31.8.2020
+        return {isAudio: false};
       }
 
       if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {

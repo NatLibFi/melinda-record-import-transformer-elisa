@@ -2,7 +2,7 @@
 <ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
  <Header>
   <Sender>
-   <SenderName>Foobar</SenderName>
+   <SenderName>foobar</SenderName>
    <ContactName>Yhteyshenkilön nimi</ContactName>
    <EmailAddress>tuotetiedot@foobar.fi</EmailAddress>
   </Sender>
@@ -76,7 +76,7 @@
     <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
     <SubjectSchemeName>Foobar tuoteryhmä</SubjectSchemeName>
     <SubjectCode>01</SubjectCode>
-    <SubjectHeadingText>käännetty kaunokirjallisuus</SubjectHeadingText>
+    <SubjectHeadingText>Käännetty kaunokirjallisuus</SubjectHeadingText>
    </Subject>
    <Subject>
     <MainSubject/>
