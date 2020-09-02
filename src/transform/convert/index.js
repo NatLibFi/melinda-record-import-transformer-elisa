@@ -47,15 +47,23 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     throw new Error('  No data source found.');
   }
 
-
+  // ---->
   checkSupplierData();
 
   function checkSupplierData() {
-    if (dataSource !== sources.supplier) { // eslint-disable-line functional/no-conditional-statement
-      throw new Error('Exception: please check data source.');
-    }
-  }
+    console.log('   START  dataSource/getSource::', dataSource, '   ENV/supplier:', sources.supplier);
 
+    if (dataSource !== sources.supplier) { // eslint-disable-line functional/no-conditional-statement
+      console.log('   START   checkSupplierEqual   STOP!   dataSource: ', dataSource, ' < >  ENV/supplier:', sources.supplier);
+      // Throw new Error('Exception: please check data source.'); ***
+    }
+
+    if (dataSource === sources.supplier) { // eslint-disable-line functional/no-conditional-statement
+      console.log('   START          checkSupplierEqual-test OK!   : ) ');
+    }
+
+  }
+  // <----
 
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
     throw new Error('Unsupported product identifier type & value');
@@ -132,7 +140,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       generate336(),
       generate347(),
       generate490(),
-      generate500(), // Only original is used (email SN 19.8.2020)
+      generate500(),
       generate506(),
       generate511(),
       generate520(),
@@ -277,6 +285,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       }
 
       function doEdits(element) {
+       
         return {
           tag: '974',
           subfields: [
@@ -350,7 +359,14 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
 
     function generate490() {
-      // - Subfields x and v are left out if ONIX has no IDValue or PartNumber.
+      // Field is repeated if ONIX contains several Collection elements
+      // With CollectionType = 10   [ <-  in CollectionIdentifier ]
+      /*
+      If CollectionType === 10 and TitleElementLevel === 02 you generate a and v subfields
+      If CollectionIDType === 02, you generate x subfield
+      - Subfields x and v are left out if ONIX has no IDValue or PartNumber.
+      */
+    
       const gotTitleElementLevel = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleElementLevel');
       const gotPartNumber = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'PartNumber');
 
@@ -358,6 +374,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const gotCollectionIdtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
       const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
 
+      // Filter: only CollectionType = 10  will be used! ->
       return getValues('DescriptiveDetail', 'Collection').filter(filter).map(makeFields);
 
 
@@ -370,18 +387,15 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         function generateFieldsCombined () {
           // --->   if nothing matches -->
           if (element.CollectionType[0] === undefined || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
-            console.log('   QQQ   490      essentials undefined, SKIP !');
             return [];
           }
 
           if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] !== '02') {
-            console.log('   QQQ   490      essentials got awrong values, SKIP !');
             return [];
           }
 
           // ---> case: no a&v , CollectionType=2 BUT IDValue undefined = SKIP -->
-          if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] === '02' && element.CollectionIdentifier[0].IDValue[0] === undefined) {
-            console.log('   QQQ   490      SKIP!  no av-values match and for x is only CollectionIdType, IDValu undefined');
+          if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] === '02' && element.CollectionIdentifier[0].IDValue[0] === undefined) {            
             return [];
           }
 
@@ -392,11 +406,11 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
             const fieldsav = buildFieldsav();
             const fieldx = buildx();
             return fieldsav.concat(fieldx);
-          }
+          } // <-- generateSubfields
 
 
-          return {tag: '490', ind1: '0', subfields};
-        }
+          return {tag: '490', ind1: '0', subfields}; // <--- case OK  HUOM! ilman hakasulkuja!!!
+        } // <-- fieldsCombined
 
 
         function buildFieldsav() {
@@ -426,21 +440,18 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           }
 
 
-          console.log('   QQQ   490       a&v: YES, generate both a and v subfields');
           return [
             {code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`},
             {code: 'v', value: `${element.TitleDetail[0].TitleElement[0].PartNumber[0]}`}
           ];
 
-        }
+        } 
 
 
         function buildx() { // Generate x subfield  ( = IDValue)
           if (gotCollectionIdtype === undefined || gotIDValue === undefined) {
             return [];
           }
-
-          console.log('   QQQ   490      x: now in x, CollIdTYpe/IDValue:', element.CollectionIdentifier[0].CollectionIdtype[0], ' / ', element.CollectionIdentifier[0].IDValue[0]);
 
           if (gotIDValue === undefined || element.CollectionIdentifier[0].CollectionIdtype[0] === undefined || element.CollectionIdentifier[0].IDValue[0] === undefined) {
             return [];
@@ -453,10 +464,11 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           return [];
         }
 
-        return generateFieldsCombined();
+        return generateFieldsCombined(); // GenerateFieldsCombined();
 
-      }
+      } // <- makefields
 
+      // Return [];
     }
 
 
@@ -511,6 +523,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
 
     function generate506() {
+  
       // Field added if NotificationType = 03 with legal deposit
       const notificType = getValue('NotificationType');
 
@@ -519,12 +532,12 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         return [
           {
             tag: '506',
-            ind1: '1',
+            ind1: '1',            
             subfields: [
               {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
               {code: 'f', value: 'Online access with authorization'},
               {code: '2', value: 'star'},
-              {code: '5', value: 'FI-Vapaa'},
+              {code: '5', value: 'FI-Vapaa'},              
               {code: '9', value: 'FENNI<KEEP>'}
             ]
           }
@@ -539,10 +552,11 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate511() {
 
+ 
       if (getValues('DescriptiveDetail', 'Contributor') === undefined || getValues('DescriptiveDetail', 'Contributor', 'PersonName') === undefined) {
         return [];
       }
-
+ 
       const theData = getValues('DescriptiveDetail', 'Contributor').filter(filter);
       const dataMapped = theData.map(makeFields);
 
@@ -552,7 +566,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         return ['E07'].includes(ContributorRole?.[0]);
       }
       function makeFields(element) {
-
         return {
           tag: '511',
           ind1: '0',
@@ -566,8 +579,11 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     }
 
     function generate540() {
+
       // Field added if NotificationType = 03 with legal deposit
-      if (getValue('NotificationType') !== undefined && getValue('NotificationType') === '03' && isLegalDeposit.true === 'true') {
+      const notificType = getValue('NotificationType');
+
+      if (notificType !== undefined && notificType === '03' && isLegalDeposit.true === 'true') {     
         return [
           {
             tag: '540',
@@ -581,6 +597,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
             ]
           }
         ];
+        
 
       }
       return [];
@@ -588,6 +605,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
 
     function generate594() {
+
       //  Field is left out if NotificationType = 03 with legal deposit
       //  If NotificationType = 01 or 02 : ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
       //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
@@ -601,6 +619,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         return []; //  Field is left out if NotificationType = 03 with legal deposit
       }
 
+      // ... no need to ignore so let's go on ->
       if (notificType === '01' || notificType === '02') {
         return [
           {
@@ -616,6 +635,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
       if (notificType === '03' && isLegalDeposit.true !== 'true') {
         //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
+
         return [
           {
             tag: '594',
@@ -993,6 +1013,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const form = getValue('DescriptiveDetail', 'ProductForm');
       const langCode = getValue('DescriptiveDetail', 'Language', 'LanguageCode');
 
+
       if (form !== undefined && langCode !== undefined) {
 
         if (['EB', 'EC', 'ED'].includes(form)) {
@@ -1023,13 +1044,11 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate084a() {
       // A-case:  SubjectCode Field added if if SubjectSchemeIdentifier = 66
-
       if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier')) {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
       }
 
       function getSSI(element) {
-
         return {
           tag: '084',
           subfields: [
@@ -1056,7 +1075,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       }
 
       function getSSI(element) {
-
         return {
           tag: '084',
           ind1: '9',
@@ -1143,7 +1161,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       }
 
 
-      if (form !== 'AJ' && formDetail !== 'A103') {
+      if (form !== 'AJ' && formDetail !== 'A103') { // Add 31.8.2020
         return {isAudio: false};
       }
 
