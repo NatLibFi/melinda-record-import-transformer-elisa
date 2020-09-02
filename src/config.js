@@ -30,6 +30,6 @@ import {Utils} from '@natlibfi/melinda-commons';
 const {readEnvironmentVariable} = Utils;
 
 export const sources = readEnvironmentVariable('SOURCES', {format: JSON.parse});
+export const isLegalDeposit = readEnvironmentVariable('IS_LEGAL_DEPOSIT', {format: JSON.parse}) || false;
 
-export const legalDeposit = readEnvironmentVariable('LEGALDEPOSIT', {format: JSON.parse});
 

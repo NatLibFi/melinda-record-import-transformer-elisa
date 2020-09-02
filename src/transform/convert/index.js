@@ -38,7 +38,7 @@ const {createLogger} = Utils;
 const logger = createLogger();
 
 
-export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Product: record}) => {
+export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Product: record}) => {
 
   const {getValue, getValues} = createValueInterface(record);
   const dataSource = getSource();
@@ -47,7 +47,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
     throw new Error('  No data source found.');
   }
 
-  
+
   checkSupplierData();
 
   function checkSupplierData() {
@@ -55,7 +55,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       throw new Error('Exception: please check data source.');
     }
   }
-  
+
 
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
     throw new Error('Unsupported product identifier type & value');
@@ -132,7 +132,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       generate336(),
       generate347(),
       generate490(),
-      generate500(), // Only original is used now ( see email SN 19.8.2020)
+      generate500(), // Only original is used (email SN 19.8.2020)
       generate506(),
       generate511(),
       generate520(),
@@ -153,10 +153,8 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
     function generate250() {
       // Generate only if EditionNumber exists!
-
-      if (getValue('DescriptiveDetail', 'EditionNumber')) {
-        const editionNr = getValue('DescriptiveDetail', 'EditionNumber');
-
+      const editionNr = getValue('DescriptiveDetail', 'EditionNumber');
+      if (editionNr !== undefined) {
         return [
           {
             tag: '250',
@@ -166,40 +164,33 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
           }
         ];
       }
-
       return [];
     }
 
 
     function generate263() {
-      // Generate only if:
-      // NotificationType = 01 or 02  AND
-      // PublishingDateRole = 01
+      // Generate only if: NotificationType = 01 or 02  AND PublishingDateRole = 01
+      const PubDatDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
+      const PubDatRole = getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole');
+      const NotifType = getValue('NotificationType');
 
+      if (PubDatDate && PubDatRole && NotifType) {
 
-      if (getValue('PublishingDetail', 'PublishingDate', 'Date') &&
-        getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole') &&
-        getValue('NotificationType')) {
-
-        if ((getValue('NotificationType') === '01' || getValue('NotificationType') === '02') &&
-              getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole') === '01') {
-
+        if ((NotifType === '01' || NotifType === '02') && PubDatRole === '01') {
           return [
             {
               tag: '263',
               ind1: ' ',
               ind2: ' ',
-              subfields: [{code: 'a', value: getValue('PublishingDetail', 'PublishingDate', 'Date')}]
+              subfields: [{code: 'a', value: PubDatDate}]
             }
           ];
-
         }
 
         return [];
       }
 
-      return []; 
-
+      return [];
     }
 
 
@@ -209,7 +200,8 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       const extValue = getValue('DescriptiveDetail', 'Extent', 'ExtentValue');
       const extUnit = getValue('DescriptiveDetail', 'Extent', 'ExtentUnit');
 
-      if (extType && extValue && extUnit) {
+
+      if (extValue) {
 
         // I A :  if ExtentType = 09 and ExtentUnit = 15 ( 15 -> HHHMM i.e. 5 digits)
         if (extType === '09' && extUnit === '15') {
@@ -234,7 +226,6 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
         }
 
         // II: extType 00 or 10      AND extUnit = 03      AND  ProductRorm = EB, EC, ED
-        //
         if ((extType === '00' || extType === '10') && extUnit === '03' && ['EB', 'EC', 'ED'].includes(getValue('DescriptiveDetail', 'ProductForm'))) {
           const outText = `1 verkkoaineisto (${extValue} sivua)`;
           return [
@@ -254,11 +245,10 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
     function generate600() {
 
-      if (getValue('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted')) {
-        const theData = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
-        const dataMapped = theData.map(getNames);
-        return dataMapped;
+      const getPersonNameInverted = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
 
+      if (getPersonNameInverted !== undefined) {
+        return getPersonNameInverted.map(getNames);
       }
 
       function getNames(element) {
@@ -278,14 +268,12 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
 
     function generate974() {
-      // Get IDValue from
-      // Product/RelatedMaterial/RelatedWork/WorkIdentifier/IDValue
-      const getidvalue = getValue('RelatedMaterial', 'RelatedWork', 'WorkIdentifier', 'IDValue');
+      // Get IDValue from      Product/RelatedMaterial/RelatedWork/WorkIdentifier/IDValue
+      const getIdvalue = getValue('RelatedMaterial', 'RelatedWork', 'WorkIdentifier', 'IDValue');
+      const gids = getValues('RelatedMaterial', 'RelatedWork', 'WorkIdentifier');
 
-      if (getidvalue) {
-        const gids = getValues('RelatedMaterial', 'RelatedWork', 'WorkIdentifier');
-        const newDeal = gids.map(doEdits);
-        return newDeal;
+      if (getIdvalue !== undefined && gids !== undefined) {
+        return gids.map(doEdits);
       }
 
       function doEdits(element) {
@@ -362,18 +350,15 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
 
     function generate490() {
-    //  - Subfields x and v are left out if ONIX has no IDValue or PartNumber.
-
+      // - Subfields x and v are left out if ONIX has no IDValue or PartNumber.
       const gotTitleElementLevel = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleElementLevel');
       const gotPartNumber = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'PartNumber');
+
       const gotCollectionType = getValue('DescriptiveDetail', 'Collection', 'CollectionType');
       const gotCollectionIdtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
       const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
 
-      // Filter: only CollectionType = 10  will be used! ->
-      const theData = getValues('DescriptiveDetail', 'Collection').filter(filter);
-      const dataMapped = theData.map(makeFields);
-      return dataMapped; 
+      return getValues('DescriptiveDetail', 'Collection').filter(filter).map(makeFields);
 
 
       function filter({CollectionType}) {
@@ -385,15 +370,18 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
         function generateFieldsCombined () {
           // --->   if nothing matches -->
           if (element.CollectionType[0] === undefined || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+            console.log('   QQQ   490      essentials undefined, SKIP !');
             return [];
           }
 
           if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] !== '02') {
+            console.log('   QQQ   490      essentials got awrong values, SKIP !');
             return [];
           }
 
           // ---> case: no a&v , CollectionType=2 BUT IDValue undefined = SKIP -->
           if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] === '02' && element.CollectionIdentifier[0].IDValue[0] === undefined) {
+            console.log('   QQQ   490      SKIP!  no av-values match and for x is only CollectionIdType, IDValu undefined');
             return [];
           }
 
@@ -404,38 +392,32 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
             const fieldsav = buildFieldsav();
             const fieldx = buildx();
             return fieldsav.concat(fieldx);
-          } 
+          }
 
 
-          return {tag: '490', ind1: '0', subfields}; 
-        } 
+          return {tag: '490', ind1: '0', subfields};
+        }
 
 
         function buildFieldsav() {
           if (gotTitleElementLevel === undefined || gotCollectionType === undefined) {
-            console.log('   QQQ   a&v: Essential data undef: gotTitleElementLevel/gotCollectionType');
             return [];
           }
 
 
           if (element.CollectionType[0] === undefined && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
-            console.log('   QQQ   490      a&v: SKIP... essential elements undefined in a&v');
             return [];
           }
 
           if (element.CollectionType[0] !== '10' || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02') {
-            console.log('   QQQ   490      a&v: SKIP... CollectionType/TitleElementLevel   not right values');
             return [];
           }
 
 
           // Check if exists essentials:  TitleText/IDValue/PartNumber:
           if (gotPartNumber === undefined || element.TitleDetail[0].TitleElement[0].PartNumber[0] === undefined) { // SKIP v!
-            console.log('   QQQ   490      a&v:   leave out v! Make only a');
-
 
             if (element.TitleDetail[0].TitleElement[0].TitleText[0] === undefined) {
-              console.log('   QQQ   490      a&v: can not make a, text = undefined');
               return [];
             }
 
@@ -450,13 +432,15 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
             {code: 'v', value: `${element.TitleDetail[0].TitleElement[0].PartNumber[0]}`}
           ];
 
-        } 
+        }
 
 
         function buildx() { // Generate x subfield  ( = IDValue)
           if (gotCollectionIdtype === undefined || gotIDValue === undefined) {
             return [];
           }
+
+          console.log('   QQQ   490      x: now in x, CollIdTYpe/IDValue:', element.CollectionIdentifier[0].CollectionIdtype[0], ' / ', element.CollectionIdentifier[0].IDValue[0]);
 
           if (gotIDValue === undefined || element.CollectionIdentifier[0].CollectionIdtype[0] === undefined || element.CollectionIdentifier[0].IDValue[0] === undefined) {
             return [];
@@ -478,7 +462,9 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
     function generate500() {
 
-      if (getValue('NotificationType') === '01' || getValue('NotificationType') === '02') {
+      const notificType = getValue('NotificationType');
+
+      if (notificType !== undefined && (notificType === '01' || notificType === '02')) {
 
         return [
           {
@@ -492,7 +478,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
       }
 
-      if (getValue('NotificationType') === '03' && legalDeposit.true !== 'true') {
+      if (notificType !== undefined && notificType === '03' && isLegalDeposit.true !== 'true') {
 
         return [
           {
@@ -506,7 +492,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
       }
 
-      if (getValue('NotificationType') === '03' && legalDeposit.true === 'true') {
+      if (notificType !== undefined && notificType === '03' && isLegalDeposit.true === 'true') {
 
         return [
           {
@@ -526,8 +512,9 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
     function generate506() {
       // Field added if NotificationType = 03 with legal deposit
+      const notificType = getValue('NotificationType');
 
-      if (getValue('NotificationType') === '03' && legalDeposit.true === 'true') {
+      if (notificType !== undefined && notificType === '03' && isLegalDeposit.true === 'true') {
 
         return [
           {
@@ -552,19 +539,18 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
     function generate511() {
 
-
-      if (getValue('NotificationType') !== 'E07' || !getValue('PersonName')) {
+      if (getValues('DescriptiveDetail', 'Contributor') === undefined || getValues('DescriptiveDetail', 'Contributor', 'PersonName') === undefined) {
         return [];
       }
 
       const theData = getValues('DescriptiveDetail', 'Contributor').filter(filter);
       const dataMapped = theData.map(makeFields);
+
       return dataMapped;
 
       function filter({ContributorRole}) {
         return ['E07'].includes(ContributorRole?.[0]);
       }
-
       function makeFields(element) {
 
         return {
@@ -579,11 +565,9 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
     }
 
-
     function generate540() {
       // Field added if NotificationType = 03 with legal deposit
-      if (getValue('NotificationType') === '03' && legalDeposit.true === 'true') {
-
+      if (getValue('NotificationType') !== undefined && getValue('NotificationType') === '03' && isLegalDeposit.true === 'true') {
         return [
           {
             tag: '540',
@@ -602,18 +586,22 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       return [];
     }
 
+
     function generate594() {
       //  Field is left out if NotificationType = 03 with legal deposit
       //  If NotificationType = 01 or 02 : ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
       //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
+      const notificType = getValue('NotificationType');
 
-      if (getValue('NotificationType') === '03' && legalDeposit.true === 'true') {
-        return [];
+      if (notificType === undefined || isLegalDeposit.true === undefined) {
+        return []; //  Skip
       }
 
-      // ... no need to ignore so let's go on ->
-      if (getValue('NotificationType') === '01' || getValue('NotificationType') === '02') {
-        //  If NotificationType = 01 or 02 : ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
+      if (notificType === '03' && isLegalDeposit.true === 'true') {
+        return []; //  Field is left out if NotificationType = 03 with legal deposit
+      }
+
+      if (notificType === '01' || notificType === '02') {
         return [
           {
             tag: '594',
@@ -626,7 +614,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       }
 
 
-      if (getValue('NotificationType') === '03' && legalDeposit.true !== 'true') {
+      if (notificType === '03' && isLegalDeposit.true !== 'true') {
         //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
         return [
           {
@@ -649,9 +637,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
 
       if (SubScheIde) {
-        const theData = getValues('DescriptiveDetail', 'Subject').filter(filter);
-        const dataMapped = theData.map(makeRows);
-        return dataMapped;
+        return getValues('DescriptiveDetail', 'Subject').filter(filter).map(makeRows);
       }
 
       return [];
@@ -674,41 +660,40 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
     function generate655() {
       // Make always when there is form = AJ & formDetail = A103
 
-      if (getValue('DescriptiveDetail', 'ProductFormDetail') &&
-        getValue('DescriptiveDetail', 'ProductForm')) {
 
-        const form = getValue('DescriptiveDetail', 'ProductForm');
-        const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
+      const form = getValue('DescriptiveDetail', 'ProductForm');
+      const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
 
-        if (form === 'AJ' && formDetail === 'A103') {
-          return [
-            {
-              tag: '655',
-              ind2: '7',
-              subfields: [
-                {code: 'a', value: 'äänikirjat'},
-                {code: '2', value: 'slm/fin'},
-                {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'},
-                {code: '9', value: 'FENNI<KEEP>'}
-              ]
-            },
-            {
-              tag: '655',
-              ind2: '7',
-              subfields: [
-                {code: 'a', value: 'e-äänikirjat'},
-                {code: '2', value: 'slm/fin'},
-                {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s1204'},
-                {code: '9', value: 'FENNI<KEEP>'}
-              ]
-            }
-          ];
-        }
-
+      if (formDetail === undefined && form === undefined) {
         return [];
       }
 
+      if (form === 'AJ' && formDetail === 'A103') {
+        return [
+          {
+            tag: '655',
+            ind2: '7',
+            subfields: [
+              {code: 'a', value: 'äänikirjat'},
+              {code: '2', value: 'slm/fin'},
+              {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'},
+              {code: '9', value: 'FENNI<KEEP>'}
+            ]
+          },
+          {
+            tag: '655',
+            ind2: '7',
+            subfields: [
+              {code: 'a', value: 'e-äänikirjat'},
+              {code: '2', value: 'slm/fin'},
+              {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s1204'},
+              {code: '9', value: 'FENNI<KEEP>'}
+            ]
+          }
+        ];
 
+      }
+      return [];
     }
 
 
@@ -717,11 +702,9 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       const contribrole = getValue('DescriptiveDetail', 'Contributor', 'ContributorRole');
 
       if (contribrole) {
-        const theData = getValues('DescriptiveDetail', 'Contributor').filter(filter);
-        // Console.log('   QQQ   700      theData: ', theData);
-        const dataMapped = theData.map(makeRows);
-        return dataMapped;
+        return getValues('DescriptiveDetail', 'Contributor').filter(filter).map(makeRows);
       }
+
       return [];
 
       function makeRows(element) {
@@ -755,9 +738,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
     function generate856() {
       // Field added    if NotificationType = 03 with legal deposit
       // WAITS FOR:  URN of legal deposit
-
-      if (getValue('NotificationType') === '03' && legalDeposit.true === 'true') {
-        // Console.log('   856   Now it is NotificationType 03 & legalDeposit true -> MAKE FIELD 856!');
+      if (getValue('NotificationType') === '03' && isLegalDeposit.true === 'true') {
 
         return [
           {
@@ -772,7 +753,6 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
           }
         ];
       }
-
 
       return [];
     }
@@ -1010,33 +990,31 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
     function generate041() {
 
-      if (getValue('DescriptiveDetail', 'ProductForm')) {
-        const form = getValue('DescriptiveDetail', 'ProductForm');
+      const form = getValue('DescriptiveDetail', 'ProductForm');
+      const langCode = getValue('DescriptiveDetail', 'Language', 'LanguageCode');
+
+      if (form !== undefined && langCode !== undefined) {
 
         if (['EB', 'EC', 'ED'].includes(form)) {
-          return getLanguageRole() === '01' ? [
+          return [
             {
-              tag: '041', subfields: [{code: 'a', value: getLanguage()}]
+              tag: '041',
+              subfields: [{code: 'a', value: langCode}]
             }
-          ] : [];
+          ];
         }
 
 
         if (form === 'AJ') {
-          return getLanguageRole() === '01' ? [
+          return [
             {
-              tag: '041', subfields: [{code: 'd', value: getLanguage()}]
+              tag: '041',
+              subfields: [{code: 'd', value: langCode}]
             }
-          ] : [];
+          ];
         }
 
-
-        return getLanguageRole() === '01' ? [
-          {
-            tag: '041', subfields: [{code: 'a', value: getLanguage()}]
-          }
-        ] : [];
-
+        return [];
       }
 
       return [];
@@ -1047,9 +1025,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       // A-case:  SubjectCode Field added if if SubjectSchemeIdentifier = 66
 
       if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier')) {
-        const theData = getValues('DescriptiveDetail', 'Subject').filter(filter);
-        const dataMapped = theData.map(getSSI);
-        return dataMapped;
+        return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
       }
 
       function getSSI(element) {
@@ -1074,10 +1050,9 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
     function generate084b() {
       // B-case:  SubjectHeadingText Field added if SubjectSchemeIdentifier = 80
+
       if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier')) {
-        const theData = getValues('DescriptiveDetail', 'Subject').filter(filter);
-        const dataMapped = theData.map(getSSI);
-        return dataMapped;
+        return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
       }
 
       function getSSI(element) {
@@ -1098,6 +1073,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
 
       return [];
     }
+
 
     function generateAuthors() {
       return authors.map(({name, role}, index) => {
@@ -1167,7 +1143,7 @@ export default ({legalDeposit, sources, sender, moment = momentOrig}) => ({Produ
       }
 
 
-      if (form !== 'AJ' && formDetail !== 'A103') { // Add 31.8.2020
+      if (form !== 'AJ' && formDetail !== 'A103') {
         return {isAudio: false};
       }
 
