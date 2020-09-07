@@ -149,6 +149,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     function generate250() {
       // Generate only if EditionNumber exists!
       const editionNr = getValue('DescriptiveDetail', 'EditionNumber');
+
       if (editionNr) {
         return [
           {
@@ -181,7 +182,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
             }
           ];
         }
-
         return [];
       }
 
@@ -195,8 +195,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const extValue = getValue('DescriptiveDetail', 'Extent', 'ExtentValue');
       const extUnit = getValue('DescriptiveDetail', 'Extent', 'ExtentUnit');
 
-
-      if (extValue) {
+      if (extValue && extType && extUnit) {
 
         // I A :  if ExtentType = 09 and ExtentUnit = 15 ( 15 -> HHHMM i.e. 5 digits)
         if (extType === '09' && extUnit === '15') {
@@ -293,6 +292,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           }
         ];
       }
+      return []; //  !! 7.9.2020
     }
 
 
@@ -304,6 +304,8 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const gotCollectionType = getValue('DescriptiveDetail', 'Collection', 'CollectionType');
       const gotCollectionIdtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
       const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
+
+
 
       // Filter: only CollectionType = 10  will be used! ->
       return getValues('DescriptiveDetail', 'Collection').filter(filter).map(makeFields);
@@ -336,11 +338,11 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
             const fieldsav = buildFieldsav();
             const fieldx = buildx();
             return fieldsav.concat(fieldx);
-          } 
+          }
 
 
           return {tag: '490', ind1: '0', subfields};
-        } 
+        }
 
 
         function buildFieldsav() {
@@ -392,8 +394,8 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           }
           return [];
         }
-        return generateFieldsCombined(); 
-      } 
+        return generateFieldsCombined();
+      }
 
     }
 
@@ -495,6 +497,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         };
       }
 
+      return [];
     }
 
 
@@ -524,7 +527,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
 
     function generate594() {
-
       //  Field is left out if NotificationType = 03 with legal deposit
       //  If NotificationType = 01 or 02 : ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
       //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
@@ -572,6 +574,10 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
       const getPersonNameInverted = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
 
+      if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0) {
+        return [];
+      }
+
       return getPersonNameInverted.map(getNames);
 
       function getNames(element) {
@@ -586,7 +592,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         };
       }
 
-      // Return [];
     }
 
     function generate653() {
@@ -598,7 +603,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(makeRows);
       }
 
-      return [];
 
       function makeRows(element) {
 
@@ -612,6 +616,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         return ['20', '64', '71', '72'].includes(SubjectSchemeIdentifier?.[0]);
       }
 
+      return [];
     }
 
 
@@ -802,7 +807,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       }
 
       function doEdits(element) {
-
         return {
           tag: '974',
           subfields: [
@@ -812,12 +816,12 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           ]
         };
       }
-
       return [];
     }
 
 
     function generate008() {
+
       const date = moment().format('YYMMDD');
       const language = generateLanguage();
       const publicationCountry = generatePublicationCountry();
@@ -865,18 +869,16 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         // Position 22 = target audience on MARC
 
         const CheckEditionType = getValue('DescriptiveDetail', 'EditionType');
-        const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
-        const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
+        // Const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier'); // alkup
+        const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'SubjectSchemeIdentifier');
+        // Const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');  //alkup
+        const CheckSubjectCode = getValue('DescriptiveDetail', 'SubjectCode');
 
-
-        if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && dataSource === 'Kirjavälitys Oy') {
-
-
+        if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && CheckEditionType && dataSource && dataSource === 'Kirjavälitys Oy') {
           if (CheckSubjectSchemeIdentifier === '73' && ((CheckSubjectCode === 'L' || CheckSubjectCode === 'N') && CheckEditionType !== 'SMP')) {
 
             return 'j';
           }
-
 
           if (CheckEditionType === 'SMP' && dataSource === 'Kirjavälitys Oy') {
 
@@ -889,7 +891,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
         return '|'; // Basic value
       }
-
 
     }
 
@@ -972,7 +973,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const form = getValue('DescriptiveDetail', 'ProductForm');
       const langCode = getValue('DescriptiveDetail', 'Language', 'LanguageCode');
 
-
       if (form !== undefined && langCode !== undefined) {
 
         if (['EB', 'EC', 'ED'].includes(form)) {
@@ -1002,6 +1002,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
 
     function generate084a() {
+
       // A-case:  SubjectCode Field added if if SubjectSchemeIdentifier = 66
       if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier')) {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
@@ -1021,14 +1022,12 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         return ['66'].includes(SubjectSchemeIdentifier?.[0]);
       }
 
-
       return [];
     }
 
 
     function generate084b() {
       // B-case:  SubjectHeadingText Field added if SubjectSchemeIdentifier = 80
-
       if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier')) {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
       }
@@ -1075,6 +1074,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     }
 
     function getAuthors() {
+
       return getValues('DescriptiveDetail', 'Contributor')
         .filter(filter)
         .map(normalize)
@@ -1108,12 +1108,10 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
   function getTypeInformation() {
 
-
     if (getValue('DescriptiveDetail', 'ProductFormDetail') && getValue('DescriptiveDetail', 'ProductForm')) {
 
       const form = getValue('DescriptiveDetail', 'ProductForm');
       const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
-
 
       if (form === 'AJ' && formDetail === 'A103') {
         return {isAudio: true};

@@ -7,7 +7,7 @@
     <Addressee>
       <AddresseeName>barfoo</AddresseeName>
     </Addressee>
-    <MessageNumber>0</MessageNumber>
+    <MessageNumber>1</MessageNumber>
     <SentDateTime>20190402T1042</SentDateTime>
   </Header>
   <Product>
@@ -15,16 +15,16 @@
     <NotificationType>03</NotificationType>
     <ProductIdentifier>
       <ProductIDType>01</ProductIDType>
-      <IDTypeName>AAA</IDTypeName>
-      <IDValue>123456</IDValue>
+      <IDTypeName>EFG</IDTypeName>
+      <IDValue>foobar</IDValue>
     </ProductIdentifier>
     <ProductIdentifier>
       <ProductIDType>03</ProductIDType>
-      <IDValue>1234567890111</IDValue>
+      <IDValue>7777777777777</IDValue>
     </ProductIdentifier>
     <ProductIdentifier>
-      <ProductIDType>15</ProductIDType>
-      <IDValue>1234567890111</IDValue>
+      <ProductIDType>02</ProductIDType>
+      <IDValue>7777777777777</IDValue>
     </ProductIdentifier>
     <DescriptiveDetail>
       <ProductComposition>00</ProductComposition>
@@ -50,13 +50,13 @@
       <TextContent>
         <TextType>03</TextType>
         <ContentAudience>00</ContentAudience>
-        <Text textformat="02">foobar foobar foobar</Text>
+        <Text textformat="02">foobar</Text>
       </TextContent>
     </CollateralDetail>
     <PublishingDetail>
       <Publisher>
         <PublishingRole>01</PublishingRole>
-        <PublisherName>StarPublisher</PublisherName>
+        <PublisherName>Publishermedia</PublisherName>
       </Publisher>
       <CountryOfPublication>FI</CountryOfPublication>
       <PublishingStatus>04</PublishingStatus>

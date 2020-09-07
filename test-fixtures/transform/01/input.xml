@@ -2,7 +2,7 @@
 <ONIXMessage xmlns="http://ns.editeur.org/onix/3.0/reference" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" release="3.0" xsi:schemaLocation="http://ns.editeur.org/onix/3.0/reference http://intranet/onix/ONIX_BookProduct_3.0_reference.xsd">
   <Header>
     <Sender>
-      <SenderName>Book Company</SenderName>
+      <SenderName>ABCDEF Kirja</SenderName>
       <Header>
         <Sender>
           <SenderName>foobar</SenderName>
@@ -10,26 +10,26 @@
         <Addressee>
           <AddresseeName>barfoo</AddresseeName>
         </Addressee>
-        <MessageNumber>0</MessageNumber>
+        <MessageNumber>1</MessageNumber>
         <SentDateTime>20190402T1042</SentDateTime>
       </Header>
     </Sender>
   </Header>
   <Product>
-    <RecordReference>CompanyBooks123456</RecordReference>
+    <RecordReference>ABCDEF123456</RecordReference>
     <NotificationType>03</NotificationType>
     <ProductIdentifier>
       <ProductIDType>01</ProductIDType>
       <IDTypeName>AAA</IDTypeName>
-      <IDValue>123456</IDValue>
+      <IDValue>654321</IDValue>
     </ProductIdentifier>
     <ProductIdentifier>
       <ProductIDType>03</ProductIDType>
-      <IDValue>1234567890111</IDValue>
+      <IDValue>1212121212121</IDValue>
     </ProductIdentifier>
     <ProductIdentifier>
       <ProductIDType>15</ProductIDType>
-      <IDValue>1234567890111</IDValue>
+      <IDValue>1212121212121</IDValue>
     </ProductIdentifier>
     <DescriptiveDetail>
       <ProductComposition>00</ProductComposition>
@@ -67,7 +67,7 @@
     <PublishingDetail>
       <Publisher>
         <PublishingRole>01</PublishingRole>
-        <PublisherName>Oak Publishing</PublisherName>
+        <PublisherName>PublisherCompany</PublisherName>
       </Publisher>
       <CountryOfPublication>FI</CountryOfPublication>
       <PublishingStatus>04</PublishingStatus>
