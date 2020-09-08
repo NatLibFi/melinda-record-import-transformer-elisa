@@ -305,31 +305,56 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const gotCollectionIdtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
       const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
 
+      
+      console.log('   QQQ   490   * Array-DescriptiveDetail: ', getValues('DescriptiveDetail').length);
+      console.log('   QQQ   490   * Array-DD->Collection: ', getValues('DescriptiveDetail', 'Collection').length);
+      console.log('   QQQ   490   DD gotTitleElementLevel:', gotTitleElementLevel);
+      console.log('   QQQ   490   DD gotPartNumber:', gotPartNumber);
+      console.log('   QQQ   490   DD gotCollectionType:', gotCollectionType);
+      console.log('   QQQ   490   DD gotCollectionIdtype:', gotCollectionIdtype);
+      console.log('   QQQ   490   DD gotIDValue:', gotIDValue);
+      console.log('   QQQ   490   DD Collection:', getValues('DescriptiveDetail', 'Collection'));
+      console.log('   QQQ   490   ----------------------------');
 
 
-      // Filter: only CollectionType = 10  will be used! ->
-      return getValues('DescriptiveDetail', 'Collection').filter(filter).map(makeFields);
+      // Return getValues('DescriptiveDetail', 'Collection').filter(filter).map(makeFields); // ALKUP!
+      return getValues('DescriptiveDetail', 'Collection').map(makeFields);
 
-      function filter({CollectionType}) {
+      /*
+      Function filter({CollectionType}) {
         return ['10'].includes(CollectionType?.[0]);
       }
+      */
 
       function makeFields(element) {
 
+        return generateFieldsCombined();
+
         function generateFieldsCombined () {
           // --->   if nothing matches -->
-          if (element.CollectionType[0] === undefined || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+          if (element.CollectionType[0] === undefined || 
+            element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+            console.log('   QQQ   490       return: empty now! 1');
+              return [];
+          }
+
+          // ---> case: no a&v , CollectionIDType=2 BUT IDValue undefined = SKIP -->
+          if (element.CollectionType[0] !== '10' && 
+            element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && 
+            element.CollectionIdentifier[0].CollectionIdtype[0] === '02' && 
+            element.CollectionIdentifier[0].IDValue[0] === undefined) {
+              console.log('   QQQ   490       return: empty now! 2');
             return [];
           }
 
-          if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] !== '02') {
+          // ---> case: no a&v , CollectionIDType not 2 AND IDValue undefined = SKIP -->
+          if (element.CollectionType[0] !== '10' && 
+            element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && 
+            ( element.CollectionIdentifier[0].CollectionIdtype[0] !== '02' || 
+            element.CollectionIdentifier[0].IDValue[0] === undefined) ) {
+              console.log('   QQQ   490       return: empty now! 3');
             return [];
-          }
-
-          // ---> case: no a&v , CollectionType=2 BUT IDValue undefined = SKIP -->
-          if (element.CollectionType[0] !== '10' && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && element.CollectionIdentifier[0].CollectionIdtype[0] === '02' && element.CollectionIdentifier[0].IDValue[0] === undefined) {
-            return [];
-          }
+          }          
 
 
           const subfields = generateSubfields();
@@ -337,12 +362,16 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           function generateSubfields () {
             const fieldsav = buildFieldsav();
             const fieldx = buildx();
+
+            console.log('   QQQ   490         fieldsav:', fieldsav);
+            console.log('   QQQ   490         fieldx:', fieldx);
+            console.log('   QQQ   490         concat:', fieldsav.concat(fieldx));
+
             return fieldsav.concat(fieldx);
           }
 
-
-          return {tag: '490', ind1: '0', subfields};
-        }
+           return {tag: '490', ind1: '0', subfields};   // <---return
+        } // <- f generateFieldsCombined
 
 
         function buildFieldsav() {
@@ -351,27 +380,33 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           }
 
 
-          if (element.CollectionType[0] === undefined && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+          if (element.CollectionType[0] === undefined ||
+            element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
             return [];
           }
 
-          if (element.CollectionType[0] !== '10' || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02') {
+          if (element.CollectionType[0] !== '10' ||
+            element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02') {
             return [];
+            // A&v: must be for both 10 & 02!  [ but not needed for x ]
           }
 
 
-          // Check if exists essentials:  TitleText/IDValue/PartNumber:
-          if (gotPartNumber === undefined || element.TitleDetail[0].TitleElement[0].PartNumber[0] === undefined) { // SKIP v!
+          // Check if exists essentials:  TitleText [for a] / IDValue/PartNumber [for v]:
+          if (gotPartNumber === undefined ||
+              element.TitleDetail[0].TitleElement[0].PartNumber[0] === undefined) { // SKIP v!
+            console.log('   QQQ   490   a&v: skip v');
 
             if (element.TitleDetail[0].TitleElement[0].TitleText[0] === undefined) {
-              return [];
+              console.log('   QQQ   490   a&v: skip also a');
+              return []; // Skip also a
             }
-
+            // So, now there is only a
+            console.log('   QQQ   490   a&v: so, now there is only a');
             return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}];
-
           }
 
-
+          console.log('   QQQ   490   a&v: return both');
           return [
             {code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`},
             {code: 'v', value: `${element.TitleDetail[0].TitleElement[0].PartNumber[0]}`}
@@ -381,25 +416,25 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
 
         function buildx() { // Generate x subfield  ( = IDValue)
-          if (gotCollectionIdtype === undefined || gotIDValue === undefined) {
-            return [];
-          }
 
-          if (gotIDValue === undefined || element.CollectionIdentifier[0].CollectionIdtype[0] === undefined || element.CollectionIdentifier[0].IDValue[0] === undefined) {
+          if (gotIDValue === undefined ||
+            gotCollectionIdtype === undefined ||
+            element.CollectionIdentifier[0].CollectionIdtype[0] === undefined ||
+            element.CollectionIdentifier[0].IDValue[0] === undefined) {
             return [];
           }
 
           if (element.CollectionIdentifier[0].CollectionIdtype[0] === '02') {
+            console.log('   QQQ   490   x:  yes, return x');
             return [{code: 'x', value: `${element.CollectionIdentifier[0].IDValue[0]}`}];
           }
           return [];
         }
-        return generateFieldsCombined();
-      }
 
-    }
-
-
+        // Return generateFieldsCombined();
+      } // Makefields
+      return [];
+    } // F490
     function generate500() {
       const notificType = getValue('NotificationType');
 
