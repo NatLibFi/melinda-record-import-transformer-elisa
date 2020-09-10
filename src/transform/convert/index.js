@@ -299,142 +299,156 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     function generate490() {
 
       const gotTitleElementLevel = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleElementLevel');
+      const gotCollectionType = getValue('DescriptiveDetail', 'Collection', 'CollectionType');
+      const gotCollectionIDtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
+      const gotTitleText = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleText');
+      const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
       const gotPartNumber = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'PartNumber');
 
-      const gotCollectionType = getValue('DescriptiveDetail', 'Collection', 'CollectionType');
-      const gotCollectionIdtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
-      const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
-
-      
-      console.log('   QQQ   490   * Array-DescriptiveDetail: ', getValues('DescriptiveDetail').length);
-      console.log('   QQQ   490   * Array-DD->Collection: ', getValues('DescriptiveDetail', 'Collection').length);
-      console.log('   QQQ   490   DD gotTitleElementLevel:', gotTitleElementLevel);
-      console.log('   QQQ   490   DD gotPartNumber:', gotPartNumber);
+      console.log('   QQQ   490   - Array-DescriptiveDetail: ', getValues('DescriptiveDetail').length);
+      console.log('   QQQ   490   - Array-Collection: ', getValues('DescriptiveDetail', 'Collection').length);
       console.log('   QQQ   490   DD gotCollectionType:', gotCollectionType);
-      console.log('   QQQ   490   DD gotCollectionIdtype:', gotCollectionIdtype);
+      console.log('   QQQ   490   DD gotTitleElementLevel:', gotTitleElementLevel);
+      console.log('   QQQ   490   DD gotCollectionIDtype:', gotCollectionIDtype);
+
+      console.log('   QQQ   490   DD gotTitleText:', gotTitleText);
+      console.log('   QQQ   490   DD gotPartNumber:', gotPartNumber);
       console.log('   QQQ   490   DD gotIDValue:', gotIDValue);
-      console.log('   QQQ   490   DD Collection:', getValues('DescriptiveDetail', 'Collection'));
+      // Console.log('   QQQ   490   DD - Collection:', getValues('DescriptiveDetail', 'Collection'));
       console.log('   QQQ   490   ----------------------------');
 
-
-      // Return getValues('DescriptiveDetail', 'Collection').filter(filter).map(makeFields); // ALKUP!
-      return getValues('DescriptiveDetail', 'Collection').map(makeFields);
-
-      /*
-      Function filter({CollectionType}) {
-        return ['10'].includes(CollectionType?.[0]);
+      // SKIP if none essential fields exist
+      if (!gotCollectionType && !gotTitleElementLevel && !gotCollectionIDtype) {
+        console.log('   QQQ   490      SKIP 490: NONE essentials (level 1) found!');
+        return [];
       }
-      */
+
+      if (!gotTitleText && !gotPartNumber && !gotIDValue) {
+        console.log('   QQQ   490      SKIP 490: NONE essentials (level 2) found!');
+        return [];
+      }
+
+
+      // Return [];   // dummy value for construction
+
+      const theResult = getValues('DescriptiveDetail', 'Collection').map(makeFields); // MakeFields(element);
+
+      console.log('   QQQ   490   theResult.length: ', theResult.length);
+      console.log('   QQQ   490   theResult: ', theResult);
+
+      if (theResult === undefined || theResult.length === 0) {
+        console.log('      *** Gives now empty dummy value for construction');
+        return []; // Dummy value for construction
+      }
+
+      const filtered = theResult.filter((el) => el !== null);
+
+      console.log('   QQQ   490   filtered:', filtered);
+
+      return filtered; // TheResult;
+
 
       function makeFields(element) {
 
-        return generateFieldsCombined();
+        const subfields = generateSubfields();
 
-        function generateFieldsCombined () {
-          // --->   if nothing matches -->
-          if (element.CollectionType[0] === undefined || 
-            element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
-            console.log('   QQQ   490       return: empty now! 1');
-              return [];
-          }
+        function generateSubfields () {
+          const fieldA = buildFieldA();
+          const fieldX = buildFieldX();
+          const fieldV = buildFieldV();
 
-          // ---> case: no a&v , CollectionIDType=2 BUT IDValue undefined = SKIP -->
-          if (element.CollectionType[0] !== '10' && 
-            element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && 
-            element.CollectionIdentifier[0].CollectionIdtype[0] === '02' && 
-            element.CollectionIdentifier[0].IDValue[0] === undefined) {
-              console.log('   QQQ   490       return: empty now! 2');
-            return [];
-          }
-
-          // ---> case: no a&v , CollectionIDType not 2 AND IDValue undefined = SKIP -->
-          if (element.CollectionType[0] !== '10' && 
-            element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02' && 
-            ( element.CollectionIdentifier[0].CollectionIdtype[0] !== '02' || 
-            element.CollectionIdentifier[0].IDValue[0] === undefined) ) {
-              console.log('   QQQ   490       return: empty now! 3');
-            return [];
-          }          
-
-
-          const subfields = generateSubfields();
-
-          function generateSubfields () {
-            const fieldsav = buildFieldsav();
-            const fieldx = buildx();
-
-            console.log('   QQQ   490         fieldsav:', fieldsav);
-            console.log('   QQQ   490         fieldx:', fieldx);
-            console.log('   QQQ   490         concat:', fieldsav.concat(fieldx));
-
-            return fieldsav.concat(fieldx);
-          }
-
-           return {tag: '490', ind1: '0', subfields};   // <---return
-        } // <- f generateFieldsCombined
-
-
-        function buildFieldsav() {
-          if (gotTitleElementLevel === undefined || gotCollectionType === undefined) {
-            return [];
-          }
-
-
-          if (element.CollectionType[0] === undefined ||
-            element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
-            return [];
-          }
-
-          if (element.CollectionType[0] !== '10' ||
-            element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02') {
-            return [];
-            // A&v: must be for both 10 & 02!  [ but not needed for x ]
-          }
-
-
-          // Check if exists essentials:  TitleText [for a] / IDValue/PartNumber [for v]:
-          if (gotPartNumber === undefined ||
-              element.TitleDetail[0].TitleElement[0].PartNumber[0] === undefined) { // SKIP v!
-            console.log('   QQQ   490   a&v: skip v');
-
-            if (element.TitleDetail[0].TitleElement[0].TitleText[0] === undefined) {
-              console.log('   QQQ   490   a&v: skip also a');
-              return []; // Skip also a
-            }
-            // So, now there is only a
-            console.log('   QQQ   490   a&v: so, now there is only a');
-            return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}];
-          }
-
-          console.log('   QQQ   490   a&v: return both');
-          return [
-            {code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`},
-            {code: 'v', value: `${element.TitleDetail[0].TitleElement[0].PartNumber[0]}`}
-          ];
-
+          const aplusx = fieldA.concat(fieldX);
+          // Return fieldsav.concat(fieldx);V
+          return aplusx.concat(fieldV);
         }
 
 
-        function buildx() { // Generate x subfield  ( = IDValue)
+        // Return 'none' ?;
+        // Console.log('   QQQ   490   subfields:',subfields);
+        if (subfields.length > 0 && subfields !== undefined) {
+          console.log('   QQQ   490   subfields length ok, NOW return: ', subfields);
+          return {tag: '490', ind1: '0', subfields};
+        }
 
-          if (gotIDValue === undefined ||
-            gotCollectionIdtype === undefined ||
-            element.CollectionIdentifier[0].CollectionIdtype[0] === undefined ||
-            element.CollectionIdentifier[0].IDValue[0] === undefined) {
+        console.log('       ... makefields gives empty');
+        console.log('   QQQ   490   empty: subfields:', subfields);
+        // Return ' ';
+
+
+        function buildFieldA() { // Needs TitleText
+          if (gotTitleElementLevel === undefined || gotCollectionType === undefined || gotTitleText === undefined) {
             return [];
           }
 
-          if (element.CollectionIdentifier[0].CollectionIdtype[0] === '02') {
-            console.log('   QQQ   490   x:  yes, return x');
-            return [{code: 'x', value: `${element.CollectionIdentifier[0].IDValue[0]}`}];
+          if (element.CollectionType[0] === undefined && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+            return [];
           }
-          return [];
+
+          if (element.CollectionType[0] !== '10' || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02') {
+            return [];
+          }
+
+          if (element.TitleDetail[0].TitleElement[0].TitleText[0] === undefined) {
+            console.log('   QQQ   490      in a:      skipped, nonexistent TitleText');
+            return [];
+          }
+          console.log('   QQQ   490   a returns:', element.TitleDetail[0].TitleElement[0].TitleText[0]);
+          return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}];
+          // Return []; // TEST
+          // Return [{code: 'a', value: 'AAAAAAAAA'}];
         }
 
-        // Return generateFieldsCombined();
-      } // Makefields
-      return [];
+        function buildFieldX() { // Needs IDValue
+          if (gotCollectionIDtype === undefined || gotIDValue === undefined) {
+            return [];
+          }
+
+          if (element.CollectionIdentifier[0].CollectionIdtype[0] === undefined || element.CollectionIdentifier[0].IDValue[0] === undefined) {
+            return [];
+          }
+
+          if (element.CollectionIdentifier[0].CollectionIdtype[0] !== '02') {
+            console.log('   QQQ   490      in x:      skipped, nonexistent CollectionIdtype');
+            return [];
+          }
+
+          console.log('   QQQ   490   x returns:', element.CollectionIdentifier[0].IDValue[0]);
+          return [{code: 'x', value: `${element.CollectionIdentifier[0].IDValue[0]}`}];
+          // Return []; // TEST
+          // Return [{code: 'x', value: 'TEST xxxxxxxxxxx'}];
+        }
+
+
+        function buildFieldV() { // Needs PartNumber
+          if (gotTitleElementLevel === undefined || gotCollectionType === undefined || gotPartNumber === undefined) {
+            return [];
+          }
+
+          if (element.CollectionType[0] === undefined && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+            return [];
+          }
+
+          if (element.CollectionType[0] !== '10' || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02') {
+            return [];
+          }
+
+          if (element.TitleDetail[0].TitleElement[0].PartNumber[0] === undefined) {
+            console.log('   QQQ   490      in v:      skipped, nonexistent PartNumber');
+            return [];
+          }
+          console.log('   QQQ   490   v returns:', element.TitleDetail[0].TitleElement[0].PartNumber[0]);
+          return [{code: 'v', value: `${element.TitleDetail[0].TitleElement[0].PartNumber[0]}`}];
+          // Return []; // TEST
+          // Return {code: 'v', value: 'TEST VVVVVVVVVV'}
+        }
+
+      } // MakeFields
+
+      // Return []; // Dummy value for construction
+
     } // F490
+
+
     function generate500() {
       const notificType = getValue('NotificationType');
 
