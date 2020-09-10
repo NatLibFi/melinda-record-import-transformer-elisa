@@ -292,9 +292,8 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           }
         ];
       }
-      return []; //  !! 7.9.2020
+      return [];
     }
-
 
     function generate490() {
 
@@ -305,47 +304,25 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
       const gotPartNumber = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'PartNumber');
 
-      console.log('   QQQ   490   - Array-DescriptiveDetail: ', getValues('DescriptiveDetail').length);
-      console.log('   QQQ   490   - Array-Collection: ', getValues('DescriptiveDetail', 'Collection').length);
-      console.log('   QQQ   490   DD gotCollectionType:', gotCollectionType);
-      console.log('   QQQ   490   DD gotTitleElementLevel:', gotTitleElementLevel);
-      console.log('   QQQ   490   DD gotCollectionIDtype:', gotCollectionIDtype);
 
-      console.log('   QQQ   490   DD gotTitleText:', gotTitleText);
-      console.log('   QQQ   490   DD gotPartNumber:', gotPartNumber);
-      console.log('   QQQ   490   DD gotIDValue:', gotIDValue);
-      // Console.log('   QQQ   490   DD - Collection:', getValues('DescriptiveDetail', 'Collection'));
-      console.log('   QQQ   490   ----------------------------');
-
-      // SKIP if none essential fields exist
+      // SKIP if none required fields exist
       if (!gotCollectionType && !gotTitleElementLevel && !gotCollectionIDtype) {
-        console.log('   QQQ   490      SKIP 490: NONE essentials (level 1) found!');
         return [];
       }
 
       if (!gotTitleText && !gotPartNumber && !gotIDValue) {
-        console.log('   QQQ   490      SKIP 490: NONE essentials (level 2) found!');
         return [];
       }
 
-
-      // Return [];   // dummy value for construction
-
-      const theResult = getValues('DescriptiveDetail', 'Collection').map(makeFields); // MakeFields(element);
-
-      console.log('   QQQ   490   theResult.length: ', theResult.length);
-      console.log('   QQQ   490   theResult: ', theResult);
+      const theResult = getValues('DescriptiveDetail', 'Collection').map(makeFields);
 
       if (theResult === undefined || theResult.length === 0) {
-        console.log('      *** Gives now empty dummy value for construction');
-        return []; // Dummy value for construction
+        return [];
       }
 
-      const filtered = theResult.filter((el) => el !== null);
+      const filtered = theResult.filter((v) => v !== undefined);
 
-      console.log('   QQQ   490   filtered:', filtered);
-
-      return filtered; // TheResult;
+      return filtered;
 
 
       function makeFields(element) {
@@ -356,26 +333,18 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           const fieldA = buildFieldA();
           const fieldX = buildFieldX();
           const fieldV = buildFieldV();
-
           const aplusx = fieldA.concat(fieldX);
-          // Return fieldsav.concat(fieldx);V
+
           return aplusx.concat(fieldV);
         }
 
 
-        // Return 'none' ?;
-        // Console.log('   QQQ   490   subfields:',subfields);
         if (subfields.length > 0 && subfields !== undefined) {
-          console.log('   QQQ   490   subfields length ok, NOW return: ', subfields);
           return {tag: '490', ind1: '0', subfields};
         }
 
-        console.log('       ... makefields gives empty');
-        console.log('   QQQ   490   empty: subfields:', subfields);
-        // Return ' ';
 
-
-        function buildFieldA() { // Needs TitleText
+        function buildFieldA() { // Requires TitleText
           if (gotTitleElementLevel === undefined || gotCollectionType === undefined || gotTitleText === undefined) {
             return [];
           }
@@ -389,16 +358,13 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           }
 
           if (element.TitleDetail[0].TitleElement[0].TitleText[0] === undefined) {
-            console.log('   QQQ   490      in a:      skipped, nonexistent TitleText');
             return [];
           }
-          console.log('   QQQ   490   a returns:', element.TitleDetail[0].TitleElement[0].TitleText[0]);
+
           return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}];
-          // Return []; // TEST
-          // Return [{code: 'a', value: 'AAAAAAAAA'}];
         }
 
-        function buildFieldX() { // Needs IDValue
+        function buildFieldX() { // Requires IDValue
           if (gotCollectionIDtype === undefined || gotIDValue === undefined) {
             return [];
           }
@@ -408,18 +374,14 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           }
 
           if (element.CollectionIdentifier[0].CollectionIdtype[0] !== '02') {
-            console.log('   QQQ   490      in x:      skipped, nonexistent CollectionIdtype');
             return [];
           }
 
-          console.log('   QQQ   490   x returns:', element.CollectionIdentifier[0].IDValue[0]);
           return [{code: 'x', value: `${element.CollectionIdentifier[0].IDValue[0]}`}];
-          // Return []; // TEST
-          // Return [{code: 'x', value: 'TEST xxxxxxxxxxx'}];
         }
 
 
-        function buildFieldV() { // Needs PartNumber
+        function buildFieldV() { // Requires PartNumber
           if (gotTitleElementLevel === undefined || gotCollectionType === undefined || gotPartNumber === undefined) {
             return [];
           }
@@ -433,20 +395,15 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           }
 
           if (element.TitleDetail[0].TitleElement[0].PartNumber[0] === undefined) {
-            console.log('   QQQ   490      in v:      skipped, nonexistent PartNumber');
             return [];
           }
-          console.log('   QQQ   490   v returns:', element.TitleDetail[0].TitleElement[0].PartNumber[0]);
+
           return [{code: 'v', value: `${element.TitleDetail[0].TitleElement[0].PartNumber[0]}`}];
-          // Return []; // TEST
-          // Return {code: 'v', value: 'TEST VVVVVVVVVV'}
         }
 
-      } // MakeFields
+      }
 
-      // Return []; // Dummy value for construction
-
-    } // F490
+    }
 
 
     function generate500() {
