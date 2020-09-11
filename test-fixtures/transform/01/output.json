@@ -113,7 +113,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "tietokonek├ñytt├Âinen"
+            "value": "tietokonekäyttöinen"
           },
           {
             "code": "b",
@@ -182,7 +182,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Aineisto on k├ñytett├ñviss├ñ vapaakappalekirjastoissa."
+            "value": "Aineisto on käytettävissä vapaakappalekirjastoissa."
           },
           {
             "code": "f",
@@ -208,7 +208,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Aineisto on k├ñytett├ñviss├ñ tutkimus- ja muihin tarkoituksiin;"
+            "value": "Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;"
           },
           {
             "code": "b",
@@ -216,7 +216,7 @@
           },
           {
             "code": "c",
-            "value": "Laki kulttuuriaineistojen tallettamisesta ja s├ñilytt├ñmisest├ñ"
+            "value": "Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä"
           },
           {
             "code": "u",
@@ -260,7 +260,7 @@
           },
           {
             "code": "z",
-            "value": "K├ñytett├ñviss├ñ vapaakappalekirjastoissa"
+            "value": "Käytettävissä vapaakappalekirjastoissa"
           },
           {
             "code": "5",

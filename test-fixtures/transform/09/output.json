@@ -17,14 +17,14 @@
       },
       {
         "tag": "008",
-        "value": "200910s2020    fi |||||o|||||||||||fin||"
+        "value": "200910s2020    fi |||||o|||||||||||eng||"
       },
       {
         "tag": "020",
         "subfields": [
           {
             "code": "a",
-            "value": "9876543210123"
+            "value": "4444444444444"
           },
           {
             "code": "q",
@@ -43,7 +43,7 @@
           },
           {
             "code": "b",
-            "value": "fin"
+            "value": "eng"
           },
           {
             "code": "e",
@@ -62,7 +62,7 @@
         "subfields": [
           {
             "code": "d",
-            "value": "fin"
+            "value": "eng"
           }
         ],
         "ind1": " ",
@@ -84,7 +84,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "84.2"
+            "value": "84.5"
           },
           {
             "code": "2",
@@ -92,36 +92,6 @@
           }
         ],
         "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "084",
-        "ind1": "9",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "eläimet"
-          },
-          {
-            "code": "2",
-            "value": "Ykl"
-          }
-        ],
-        "ind2": " "
-      },
-      {
-        "tag": "084",
-        "ind1": "9",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "jännitys"
-          },
-          {
-            "code": "2",
-            "value": "Ykl"
-          }
-        ],
         "ind2": " "
       },
       {
@@ -130,25 +100,14 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Massey, Sujata,"
+            "value": "Scarlett, Savanna,"
           },
           {
             "code": "e",
-            "value": "kirjoittaja."
+            "value": "lukija."
           }
         ],
         "ind2": " "
-      },
-      {
-        "tag": "245",
-        "ind1": "1",
-        "ind2": "0",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Satapurin jalokivi."
-          }
-        ]
       },
       {
         "tag": "263",
@@ -157,7 +116,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "20200413"
+            "value": "20200421"
           }
         ]
       },
@@ -167,14 +126,25 @@
         "subfields": [
           {
             "code": "b",
-            "value": "Julkaisija,"
+            "value": "Publisher,"
           },
           {
             "code": "c",
-            "value": "20200413."
+            "value": "20200421."
           }
         ],
         "ind1": " "
+      },
+      {
+        "tag": "300",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "1 verkkoaineisto ( h 42 min 0 s)"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
       },
       {
         "tag": "336",
@@ -273,11 +243,45 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Perveen Mistry"
+            "value": "Suomalaisen Kirjallisuuden Seuran toimituksia"
+          },
+          {
+            "code": "x",
+            "value": "19"
           },
           {
             "code": "v",
-            "value": "2"
+            "value": "11"
+          }
+        ],
+        "ind2": " "
+      },
+      {
+        "tag": "490",
+        "ind1": "0",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "CupidoAAA"
+          },
+          {
+            "code": "v",
+            "value": "22"
+          }
+        ],
+        "ind2": " "
+      },
+      {
+        "tag": "490",
+        "ind1": "0",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "CupidoBBB"
+          },
+          {
+            "code": "v",
+            "value": "33"
           }
         ],
         "ind2": " "
@@ -330,7 +334,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Lukija: Erja Manto."
+            "value": "Lukija: Savanna Scarlett."
           },
           {
             "code": "9",
@@ -380,105 +384,6 @@
           {
             "code": "5",
             "value": "FENNI"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Eläimet ja luonto"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Romaanit"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Jännitys"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "rikos"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "dekkari"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Perhe"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "parisuhteet"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "ihmissuhteet"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Maantiede"
           }
         ],
         "ind1": " ",
@@ -535,36 +440,10 @@
         "subfields": [
           {
             "code": "a",
-            "value": "kääntäjä."
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "700",
-        "subfields": [
-          {
-            "code": "a",
             "value": "lukija."
           }
         ],
         "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "700",
-        "ind1": "1",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Manto, Erja,"
-          },
-          {
-            "code": "e",
-            "value": "lukija."
-          }
-        ],
         "ind2": " "
       },
       {
@@ -574,11 +453,11 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:9876543210123"
+            "value": "http://urn.fi/URN:ISBN:4444444444444"
           },
           {
             "code": "z",
-            "value": "Käytettävissä vapaakappalekirjastoissa"
+            "value": "Köytettövissö vapaakappalekirjastoissa"
           },
           {
             "code": "5",
@@ -610,25 +489,6 @@
         "ind2": " "
       },
       {
-        "tag": "974",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "KV"
-          },
-          {
-            "code": "b",
-            "value": "TT7777777"
-          },
-          {
-            "code": "5",
-            "value": "FENNI"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
         "tag": "LOW",
         "subfields": [
           {
@@ -647,7 +507,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 9876543210123 is not valid"
+        "ISBN 4444444444444 is not valid"
       ]
     },
     {

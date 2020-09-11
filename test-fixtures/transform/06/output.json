@@ -181,7 +181,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "tietokonek├ñytt├Âinen"
+            "value": "tietokonekäyttöinen"
           },
           {
             "code": "b",
@@ -234,7 +234,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "├ñ├ñnitiedosto"
+            "value": "äänitiedosto"
           },
           {
             "code": "b",
@@ -264,7 +264,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "ENNAKKOTIETO / KIRJAV├äLITYS."
+            "value": "ENNAKKOTIETO / KIRJAVÄLITYS."
           },
           {
             "code": "9",
@@ -280,7 +280,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Aineisto on k├ñytett├ñviss├ñ vapaakappalekirjastoissa."
+            "value": "Aineisto on käytettävissä vapaakappalekirjastoissa."
           },
           {
             "code": "f",
@@ -321,7 +321,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Aineisto on k├ñytett├ñviss├ñ tutkimus- ja muihin tarkoituksiin;"
+            "value": "Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;"
           },
           {
             "code": "b",
@@ -329,7 +329,7 @@
           },
           {
             "code": "c",
-            "value": "Laki kulttuuriaineistojen tallettamisesta ja s├ñilytt├ñmisest├ñ"
+            "value": "Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä"
           },
           {
             "code": "u",
@@ -352,7 +352,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "ENNAKKOTIETO / KIRJAV├äLITYS"
+            "value": "ENNAKKOTIETO / KIRJAVÄLITYS"
           },
           {
             "code": "5",
@@ -368,7 +368,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "├ñ├ñnikirjat"
+            "value": "äänikirjat"
           },
           {
             "code": "2",
@@ -391,7 +391,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "e-├ñ├ñnikirjat"
+            "value": "e-äänikirjat"
           },
           {
             "code": "2",
@@ -430,7 +430,7 @@
           },
           {
             "code": "z",
-            "value": "K├ñytett├ñviss├ñ vapaakappalekirjastoissa"
+            "value": "Käytettävissä vapaakappalekirjastoissa"
           },
           {
             "code": "5",
