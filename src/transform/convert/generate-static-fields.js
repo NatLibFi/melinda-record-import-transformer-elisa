@@ -66,7 +66,7 @@ export default () => [
     subfields: [{code: 'a', value: 'FIKKA'}]
   }
 
-  /*  Blocked, see email by SN 21.8.2020 ->
+  /* Blocked, see email by SN 21.8.2020
   ,
   {
     tag: '500',

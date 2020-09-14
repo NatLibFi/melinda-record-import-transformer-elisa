@@ -39,6 +39,9 @@ const logger = createLogger();
 export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Product: record}) => {
 
   const {getValue, getValues} = createValueInterface(record);
+
+
+  const acceptedName = 'Kirjavalitys Oy'; // Temp. scandic characters problem
   const dataSource = getSource();
 
   if (dataSource === undefined) { // eslint-disable-line functional/no-conditional-statement
@@ -136,7 +139,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       generate653(),
       generate655(),
       generate700(),
-      generate856(),
+      // Generate856(),  // waits
       generate884(),
       generate974(),
       generateStandardIdentifiers(),
@@ -464,7 +467,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
             ind1: '1',
             subfields: [
               {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
-              {code: 'f', value: 'Online access with authorization'},
+              {code: 'f', value: 'Online access with authorization.'}, // Dot added 11.9.2020
               {code: '2', value: 'star'},
               {code: '5', value: 'FI-Vapaa'},
               {code: '9', value: 'FENNI<KEEP>'}
@@ -536,41 +539,46 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       //  Field is left out if NotificationType = 03 with legal deposit
       //  If NotificationType = 01 or 02 : ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
       //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
-      const notificType = getValue('NotificationType');
+      // ONLY FOR KV!
+      if (dataSource === acceptedName) { // < --- ONLY FOR KV!
 
-      if (notificType === undefined || isLegalDeposit === undefined) {
-        return []; //  Skip
-      }
+        const notificType = getValue('NotificationType');
 
-      if (notificType === '03' && isLegalDeposit === true) {
-        return []; //  Field is left out if NotificationType = 03 with legal deposit
-      }
+        if (notificType === undefined || isLegalDeposit === undefined) {
+          return []; //  Skip
+        }
 
-      if (notificType === '01' || notificType === '02') {
-        return [
-          {
-            tag: '594',
-            subfields: [
-              {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
-              {code: '5', value: 'FENNI'}
-            ]
-          }
-        ];
-      }
+        if (notificType === '03' && isLegalDeposit === true) {
+          return []; //  Field is left out if NotificationType = 03 with legal deposit
+        }
 
-      if (notificType === '03' && isLegalDeposit === false) {
+        if (notificType === '01' || notificType === '02') {
+          return [
+            {
+              tag: '594',
+              subfields: [
+                {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: '5', value: 'FENNI'}
+              ]
+            }
+          ];
+        }
+
+        if (notificType === '03' && isLegalDeposit === false) {
         //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
 
-        return [
-          {
-            tag: '594',
-            subfields: [
-              {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
-              {code: '5', value: 'FENNI'}
-            ]
-          }
-        ];
-      }
+          return [
+            {
+              tag: '594',
+              subfields: [
+                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: '5', value: 'FENNI'}
+              ]
+            }
+          ];
+        }
+
+      } // If dataSource match
 
       return [];
     }
@@ -701,9 +709,11 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       }
     }
 
+    /* WAITS  11.9.2020 ->
     function generate856() {
       // Field added    if NotificationType = 03 with legal deposit
       // WAITS FOR:  URN of legal deposit
+
       if (getValue('NotificationType') === '03' && isLegalDeposit === true) {
 
         return [
@@ -722,6 +732,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
       return [];
     }
+    */ // WAITS  11.9.2020 <-
 
 
     function generate006() {
@@ -858,9 +869,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
 
         if (CheckSubjectSchemeName && CheckSubjectCode) {
-
-          if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03' && dataSource === 'Kirjavälitys Oy') {
-
+          if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03' && dataSource === acceptedName) {
             return '0';
           }
 
@@ -880,14 +889,12 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         // Const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');  //alkup
         const CheckSubjectCode = getValue('DescriptiveDetail', 'SubjectCode');
 
-        if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && CheckEditionType && dataSource && dataSource === 'Kirjavälitys Oy') {
+        if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && CheckEditionType && dataSource && dataSource === acceptedName) {
           if (CheckSubjectSchemeIdentifier === '73' && ((CheckSubjectCode === 'L' || CheckSubjectCode === 'N') && CheckEditionType !== 'SMP')) {
-
             return 'j';
           }
 
-          if (CheckEditionType === 'SMP' && dataSource === 'Kirjavälitys Oy') {
-
+          if (CheckEditionType === 'SMP' && dataSource === acceptedName) {
             return 'f';
           }
 

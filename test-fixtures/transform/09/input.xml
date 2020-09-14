@@ -2,7 +2,7 @@
 <ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
  <Header>
   <Sender>
-   <SenderName>foobar</SenderName>
+   <SenderName>Kirjavalitys Oy</SenderName>
    <ContactName>Foo Bar</ContactName>
    <EmailAddress>tuotetiedot@something.fi</EmailAddress>
   </Sender>

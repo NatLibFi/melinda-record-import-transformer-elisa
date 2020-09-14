@@ -9,7 +9,7 @@
       },
       {
         "tag": "008",
-        "value": "200910s2018    fi |||||o|||||||||||fin||"
+        "value": "200911s2018    fi |||||o|||||||||||fin||"
       },
       {
         "tag": "020",
@@ -186,7 +186,7 @@
           },
           {
             "code": "f",
-            "value": "Online access with authorization"
+            "value": "Online access with authorization."
           },
           {
             "code": "2",
@@ -256,15 +256,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "URN of legal deposit XXXXXXXXXX under construction"
-          },
-          {
-            "code": "z",
-            "value": "Käytettävissä vapaakappalekirjastoissa"
-          },
-          {
-            "code": "5",
-            "value": "FI-Vapaa"
+            "value": "http://urn.fi/URN:ISBN:1212121212121"
           }
         ]
       },
@@ -277,7 +269,7 @@
           },
           {
             "code": "g",
-            "value": "20200910"
+            "value": "20200911"
           },
           {
             "code": "k",
@@ -315,7 +307,7 @@
     },
     {
       "description": "Adds URN for record, to 856-field (if not existing)",
-      "state": "valid"
+      "state": "fixed"
     },
     {
       "description": "Handles invalid/missing item language code",

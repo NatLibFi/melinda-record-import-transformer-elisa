@@ -17,7 +17,7 @@
       },
       {
         "tag": "008",
-        "value": "200910s2020    fi |||||o|||||||||||eng||"
+        "value": "200911s2020    fi |||||o|||||||||||eng||"
       },
       {
         "tag": "020",
@@ -457,7 +457,7 @@
           },
           {
             "code": "z",
-            "value": "Köytettövissö vapaakappalekirjastoissa"
+            "value": "Käytettävissä vapaakappalekirjastoissa"
           },
           {
             "code": "5",
@@ -474,11 +474,11 @@
           },
           {
             "code": "g",
-            "value": "20200910"
+            "value": "20200911"
           },
           {
             "code": "k",
-            "value": "foobar"
+            "value": "Kirjavalitys Oy"
           },
           {
             "code": "q",
