@@ -48,6 +48,8 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     throw new Error('  No data source found.');
   }
 
+  // Console.log('       sources from  config / dataSource:', sources, ' / ', dataSource);
+
   checkSupplierData();
 
   function checkSupplierData() {
@@ -132,7 +134,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       generate500(),
       generate506(),
       generate511(),
-      generate520(),
       generate540(),
       generate594(),
       generate600(),
@@ -153,7 +154,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       // Generate only if EditionNumber exists!
       const editionNr = getValue('DescriptiveDetail', 'EditionNumber');
 
-      if (editionNr) {
+      if (editionNr && dataSource === acceptedName) {
         return [
           {
             tag: '250',
@@ -163,6 +164,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           }
         ];
       }
+
       return [];
     }
 
@@ -173,7 +175,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const PubDatRole = getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole');
       const NotifType = getValue('NotificationType');
 
-      if (PubDatDate && PubDatRole && NotifType) {
+      if (PubDatDate && PubDatRole && NotifType && dataSource === acceptedName) {
 
         if ((NotifType === '01' || NotifType === '02') && PubDatRole === '01') {
           return [
@@ -410,72 +412,95 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
 
     function generate500() {
-      const notificType = getValue('NotificationType');
 
-      if (notificType && (notificType === '01' || notificType === '02')) {
-        return [
-          {
-            tag: '500',
-            subfields: [
-              {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
-              {code: '9', value: 'FENNI<KEEP>'}
-            ]
-          }
-        ];
+      if (dataSource === acceptedName) { // < --- ONLY FOR KV!
+        // Console.log('   QQQ   500   Now make for KV');
 
-      }
+        const notificType = getValue('NotificationType');
 
-      if (notificType && notificType === '03' && isLegalDeposit === false) {
-        return [
-          {
-            tag: '500',
-            subfields: [
-              {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
-              {code: '9', value: 'FENNI<KEEP>'}
-            ]
-          }
-        ];
+        if (notificType && (notificType === '01' || notificType === '02')) {
+          return [
+            {
+              tag: '500',
+              subfields: [
+                {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
 
-      }
+        }
 
-      if (notificType && notificType === '03' && isLegalDeposit === true) {
-        return [
-          {
-            tag: '500',
-            subfields: [
-              {code: 'a', value: 'Koneellisesti tuotettu tietue.'},
-              {code: '9', value: 'FENNI<KEEP>'}
-            ]
-          }
-        ];
+        if (notificType && notificType === '03' && isLegalDeposit === false) {
+          return [
+            {
+              tag: '500',
+              subfields: [
+                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
 
-      }
+        }
 
-      return [];
+        if (notificType && notificType === '03' && isLegalDeposit === true) {
+          return [
+            {
+              tag: '500',
+              subfields: [
+                {code: 'a', value: 'Koneellisesti tuotettu tietue.'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
+
+        }
+
+      } // Only for KV
+
+      // All others --->
+      // Console.log('   QQQ   500   Now make for NON-KV');
+      return [
+        {
+          tag: '500',
+          ind1: ' ',
+          ind2: ' ',
+          subfields: [
+            {code: 'a', value: 'Koneellisesti tuotettu tietue.'},
+            {code: '9', value: 'FENNI<KEEP>'}
+          ]
+        }
+      ];
+      // All others <---
+
     }
 
 
     function generate506() {
 
+      if (dataSource === acceptedName) { // < --- ONLY FOR KV!
       // Field added if NotificationType = 03 with legal deposit
-      const notificType = getValue('NotificationType');
+        const notificType = getValue('NotificationType');
 
-      if (notificType && notificType === '03' && isLegalDeposit === true) {
-        return [
-          {
-            tag: '506',
-            ind1: '1',
-            subfields: [
-              {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
-              {code: 'f', value: 'Online access with authorization.'}, // Dot added 11.9.2020
-              {code: '2', value: 'star'},
-              {code: '5', value: 'FI-Vapaa'},
-              {code: '9', value: 'FENNI<KEEP>'}
-            ]
-          }
-        ];
+        if (notificType && notificType === '03' && isLegalDeposit === true) {
+          return [
+            {
+              tag: '506',
+              ind1: '1',
+              subfields: [
+                {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
+                {code: 'f', value: 'Online access with authorization.'}, // Dot added 11.9.2020
+                {code: '2', value: 'star'},
+                {code: '5', value: 'FI-Vapaa'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
 
-      }
+        }
+
+      } // < --- ONLY FOR KV!
 
       return [];
 
@@ -512,25 +537,29 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate540() {
 
+      if (dataSource === acceptedName) { // < --- ONLY FOR KV!
       // Field added if NotificationType = 03 with legal deposit
-      const notificType = getValue('NotificationType');
+        const notificType = getValue('NotificationType');
 
-      if (notificType !== undefined && notificType === '03' && isLegalDeposit === true) {
-        return [
-          {
-            tag: '540',
-            subfields: [
-              {code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
-              {code: 'b', value: 'Kansalliskirjasto;'},
-              {code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
-              {code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
-              {code: '5', value: 'FI-Vapaa'},
-              {code: '9', value: 'FENNI<KEEP>'}
-            ]
-          }
-        ];
+        if (notificType !== undefined && notificType === '03' && isLegalDeposit === true) {
+          return [
+            {
+              tag: '540',
+              subfields: [
+                {code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
+                {code: 'b', value: 'Kansalliskirjasto;'},
+                {code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
+                {code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
+                {code: '5', value: 'FI-Vapaa'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
 
-      }
+        }
+
+      } // < --- ONLY FOR KV!
+
       return [];
     }
 
@@ -588,7 +617,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
       const getPersonNameInverted = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
 
-      if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0) {
+      if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0 || dataSource !== acceptedName) {
         return [];
       }
 
@@ -613,7 +642,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       // A| <- SubjectHeadingText
       const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
 
-      if (SubScheIde) {
+      if (SubScheIde && dataSource === acceptedName) {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(makeRows);
       }
 
@@ -639,7 +668,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const form = getValue('DescriptiveDetail', 'ProductForm');
       const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
 
-      if (formDetail === undefined && form === undefined) {
+      if (formDetail === undefined || form === undefined || dataSource !== acceptedName) {
         return [];
       }
 
@@ -714,7 +743,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       // Field added    if NotificationType = 03 with legal deposit
       // WAITS FOR:  URN of legal deposit
 
-      if (getValue('NotificationType') === '03' && isLegalDeposit === true) {
+      if (getValue('NotificationType') === '03' && isLegalDeposit === true && (dataSource === acceptedName) ) {
 
         return [
           {
@@ -819,7 +848,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const getIdvalue = getValue('RelatedMaterial', 'RelatedWork', 'WorkIdentifier', 'IDValue');
       const gids = getValues('RelatedMaterial', 'RelatedWork', 'WorkIdentifier');
 
-      if (getIdvalue && gids) {
+      if (getIdvalue && gids && dataSource === acceptedName) {
         return gids.map(doEdits);
       }
 
@@ -908,17 +937,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     }
 
 
-    function generate520() {
-      const summary = getSummary();
-      const textType = getValue('CollateralDetail', 'TextContent', 'TextType');
-
-      return summary && textType === '03' ? [
-        {
-          tag: '520', subfields: [{code: 'a', value: summary}]
-        }
-      ] : [];
-    }
-
     function generateStandardIdentifiers() {
       const isbn = getIsbn();
 
@@ -968,11 +986,26 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     }
 
     function generate040() {
+
+      if (dataSource === acceptedName) { // < --- a ONLY FOR KV!
+        return [
+          {
+            tag: '040',
+            subfields: [
+              {code: 'a', value: 'FI-KV'},
+              {code: 'b', value: getLanguage()},
+              {code: 'e', value: 'rda'},
+              {code: 'd', value: 'FI-NL'}
+            ]
+          }
+        ];
+
+      }
+
       return [
         {
           tag: '040',
           subfields: [
-            {code: 'a', value: 'FI-KV'},
             {code: 'b', value: getLanguage()},
             {code: 'e', value: 'rda'},
             {code: 'd', value: 'FI-NL'}
@@ -1017,7 +1050,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     function generate084a() {
 
       // A-case:  SubjectCode Field added if if SubjectSchemeIdentifier = 66
-      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier')) {
+      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === acceptedName) {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
       }
 
@@ -1041,7 +1074,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate084b() {
       // B-case:  SubjectHeadingText Field added if SubjectSchemeIdentifier = 80
-      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier')) {
+      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === acceptedName) {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
       }
 

@@ -17,7 +17,7 @@
       },
       {
         "tag": "008",
-        "value": "200910s2017    fi |||||o|||||||||||fin||"
+        "value": "000101s2017    fi |||||o|||||||||||fin||"
       },
       {
         "tag": "020",
@@ -37,10 +37,6 @@
       {
         "tag": "040",
         "subfields": [
-          {
-            "code": "a",
-            "value": "FI-KV"
-          },
           {
             "code": "b",
             "value": "fin"
@@ -213,6 +209,8 @@
       },
       {
         "tag": "500",
+        "ind1": " ",
+        "ind2": " ",
         "subfields": [
           {
             "code": "a",
@@ -222,113 +220,7 @@
             "code": "9",
             "value": "FENNI<KEEP>"
           }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "506",
-        "ind1": "1",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Aineisto on käytettävissä vapaakappalekirjastoissa."
-          },
-          {
-            "code": "f",
-            "value": "Online access with authorization"
-          },
-          {
-            "code": "2",
-            "value": "star"
-          },
-          {
-            "code": "5",
-            "value": "FI-Vapaa"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind2": " "
-      },
-      {
-        "tag": "540",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;"
-          },
-          {
-            "code": "b",
-            "value": "Kansalliskirjasto;"
-          },
-          {
-            "code": "c",
-            "value": "Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä"
-          },
-          {
-            "code": "u",
-            "value": "http://www.finlex.fi/fi/laki/ajantasa/2007/20071433"
-          },
-          {
-            "code": "5",
-            "value": "FI-Vapaa"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "655",
-        "ind2": "7",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "äänikirjat"
-          },
-          {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s579"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " "
-      },
-      {
-        "tag": "655",
-        "ind2": "7",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "e-äänikirjat"
-          },
-          {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s1204"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " "
+        ]
       },
       {
         "tag": "700",
@@ -363,15 +255,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "URN of legal deposit XXXXXXXXXX under construction"
-          },
-          {
-            "code": "z",
-            "value": "Käytettävissä vapaakappalekirjastoissa"
-          },
-          {
-            "code": "5",
-            "value": "FI-Vapaa"
+            "value": "http://urn.fi/URN:ISBN:555555555555"
           }
         ]
       },
@@ -384,7 +268,7 @@
           },
           {
             "code": "g",
-            "value": "20200910"
+            "value": "20000101"
           },
           {
             "code": "k",
@@ -422,7 +306,7 @@
     },
     {
       "description": "Adds URN for record, to 856-field (if not existing)",
-      "state": "valid"
+      "state": "fixed"
     },
     {
       "description": "Handles invalid/missing item language code",
@@ -433,10 +317,6 @@
     },
     {
       "description": "Checks that the record does not contain the configured fields",
-      "state": "fixed"
-    },
-    {
-      "description": "Adds access rights fields for a record (if not existing)",
       "state": "valid"
     },
     {

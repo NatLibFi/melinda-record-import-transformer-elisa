@@ -1,1 +1,6 @@
-2020-09-10T08:31:01+03:00 - error: Error: Unsupported product identifier type & value
+{
+    "failed": true,
+    "messages": [
+      "Unsupported product identifier type & value"
+    ]
+  }

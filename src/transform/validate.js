@@ -33,7 +33,6 @@ import {
   FieldExclusion as fieldExclusion,
   Urn as urn,
   EndingPunctuation as endingPunctuation,
-  AccessRights as accessRights,
   ItemLanguage as itemLanguage,
   Punctuation as punctuation
 } from '@natlibfi/marc-record-validators-melinda';
@@ -48,7 +47,7 @@ export default async () => {
         tag: /^520$/u
       }
     ]),
-    await accessRights(),
+    // Await accessRights(),
     await endingPunctuation(),
     await punctuation()
   ]);
@@ -56,7 +55,7 @@ export default async () => {
   return async (record, fix, validateFixes) => {
     const opts = fix ? {fix, validateFixes} : /* istanbul ignore next: The actual functionality is tested with the first condition */ {fix};
     const result = await validate(record, opts);
-    // Console.log('   QQQ   record:\n ', record); // ***
+
     return {
       record: result.record,
       failed: result.valid === false,
