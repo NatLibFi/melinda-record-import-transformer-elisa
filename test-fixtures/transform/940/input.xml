@@ -3,30 +3,30 @@
  <Header>
   <Sender>
    <SenderName>foobar</SenderName>
-   <ContactName>Yhteyshenkilö</ContactName>
+   <ContactName>ContactName</ContactName>
    <EmailAddress>tuotetiedot@foobar.fi</EmailAddress>
   </Sender>
   <Addressee>
-   <AddresseeName>ADDRESSEE</AddresseeName>
+   <AddresseeName>ADRESSEENAMEHERE</AddresseeName>
   </Addressee>
   <SentDateTime>20200409</SentDateTime>
-  <MessageNote>Foobar tuotesanoma</MessageNote>
+  <MessageNote>foobar tuotesanoma</MessageNote>
  </Header>
  <Product>
-  <RecordReference>ABC1234567</RecordReference>
+  <RecordReference>AAA1234567</RecordReference>
   <NotificationType>02</NotificationType>
   <ProductIdentifier>
    <ProductIDType>03</ProductIDType>
-   <IDValue>9876543210123</IDValue>
+   <IDValue>1111111111111</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>15</ProductIDType>
-   <IDValue>9876543210123</IDValue>
+   <IDValue>1111111111111</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>01</ProductIDType>
-   <IDTypeName>Jokin tuotenumero</IDTypeName>
-   <IDValue>9876543210123</IDValue>
+   <IDTypeName>foobar tuotenumero</IDTypeName>
+   <IDValue>1111111111111</IDValue>
   </ProductIdentifier>
   <DescriptiveDetail>
    <ProductComposition>00</ProductComposition>
@@ -95,12 +95,12 @@
    </Subject>
    <Subject>
     <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
-    <SubjectSchemeName>ABC</SubjectSchemeName>
+    <SubjectSchemeName>YKL</SubjectSchemeName>
     <SubjectCode>84.2</SubjectCode>
    </Subject>
    <Subject>
     <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
-    <SubjectSchemeName>Foobar tuoteryhmä</SubjectSchemeName>
+    <SubjectSchemeName>foobar tuoteryhmä</SubjectSchemeName>
     <SubjectCode>01</SubjectCode>
     <SubjectHeadingText>käännetty kaunokirjallisuus</SubjectHeadingText>
    </Subject>
@@ -172,7 +172,7 @@
    <TextContent>
     <TextType>03</TextType>
     <ContentAudience>00</ContentAudience>
-    <Text>Some text here.</Text>
+    <Text>Here some text.</Text>
    </TextContent>
    <SupportingResource>
     <ResourceContentType>01</ResourceContentType>
@@ -180,7 +180,7 @@
     <ResourceMode>03</ResourceMode>
     <ResourceVersion>
      <ResourceForm>02</ResourceForm>
-     <ResourceLink>https://foobar.fi/onix/media/2641721.jpg?size=original&amp;cl=20050&amp;ch=0517aa7067fafd152fc9c583073b7eda</ResourceLink>
+     <ResourceLink>https://some.company.fi/onix/media/2641721.jpg?size=original&amp;cl=20050&amp;ch=0517aa7067fafd152fc9c583073b7eda</ResourceLink>
      <ContentDate>
       <ContentDateRole>17</ContentDateRole>
       <Date>20200408</Date>
@@ -193,10 +193,10 @@
     <PublishingRole>01</PublishingRole>
     <PublisherIdentifier>
      <PublisherIDType>01</PublisherIDType>
-     <IDTypeName>Foobar kustantajanumero</IDTypeName>
-     <IDValue>12345</IDValue>
+     <IDTypeName>foobar kustantajanumero</IDTypeName>
+     <IDValue>22222</IDValue>
     </PublisherIdentifier>
-    <PublisherName>Julkaisija</PublisherName>
+    <PublisherName>PublisherNamehere</PublisherName>
    </Publisher>
    <CountryOfPublication>FI</CountryOfPublication>
    <PublishingStatus>02</PublishingStatus>
@@ -215,8 +215,8 @@
     <WorkRelationCode>01</WorkRelationCode>
     <WorkIdentifier>
      <WorkIDType>01</WorkIDType>
-     <IDTypeName>Foobar teostunniste</IDTypeName>
-     <IDValue>TT7777777</IDValue>
+     <IDTypeName>foobar teostunniste</IDTypeName>
+     <IDValue>AA7777777</IDValue>
     </WorkIdentifier>
    </RelatedWork>
   </RelatedMaterial>

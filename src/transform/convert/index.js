@@ -59,7 +59,8 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
   }
 
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
-    throw new Error('Unsupported product identifier type & value');
+    // Throw new Error('Unsupported product identifier type & value');
+    throw new NotSupportedError('Unsupported product identifier type & value');
   }
 
   const marcRecord = new MarcRecord();
@@ -238,7 +239,13 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
       }
 
-      return [];
+
+      return [
+        {
+          tag: '300',
+          subfields: [{code: 'a', value: `1 verkkoaineisto`}]
+        }
+      ];
     }
 
 
@@ -713,7 +720,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       function makeRows(element) {
         return {
           tag: '700',
-          subfields: [{code: 'a', value: changeValues(element.ContributorRole[0])}]
+          subfields: [{code: 'e', value: changeValues(element.ContributorRole[0])}]
         };
       }
 
@@ -1178,15 +1185,8 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     try {
       throw new Error('Unidentified: not audio, not text');
     } catch (e) {
-
       logger.log('debug', 'Exception!');
-
-      if (e instanceof NotSupportedError) { // eslint-disable-line functional/no-conditional-statement
-        throw new Error('   Not Supported Error');
-      }
-
     }
-
 
   }
 

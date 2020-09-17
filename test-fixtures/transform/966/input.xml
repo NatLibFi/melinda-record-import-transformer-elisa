@@ -2,31 +2,31 @@
 <ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
  <Header>
   <Sender>
-   <SenderName>Kirjavalitys Oy</SenderName>
-   <ContactName>Foo Bar</ContactName>
-   <EmailAddress>tuotetiedot@something.fi</EmailAddress>
+   <SenderName>foobar</SenderName>
+   <ContactName>ContactNameHere</ContactName>
+   <EmailAddress>tuotetiedot@foobar.fi</EmailAddress>
   </Sender>
   <Addressee>
-   <AddresseeName>FOOBAR</AddresseeName>
+   <AddresseeName>ADDRESSEENAME</AddresseeName>
   </Addressee>
-  <SentDateTime>20200411</SentDateTime>
-  <MessageNote>FOOB tuotesanoma</MessageNote>
+  <SentDateTime>20200409</SentDateTime>
+  <MessageNote>foobar tuotesanoma</MessageNote>
  </Header>
 <Product>
-  <RecordReference>ABC1234567</RecordReference>
+  <RecordReference>CCC7777777</RecordReference>
   <NotificationType>02</NotificationType>
   <ProductIdentifier>
    <ProductIDType>03</ProductIDType>
-   <IDValue>3333333333333</IDValue>
+   <IDValue>8888888888888</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>15</ProductIDType>
-   <IDValue>4444444444444</IDValue>
+   <IDValue>8888888888888</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>01</ProductIDType>
-   <IDTypeName>Company tuotenumero</IDTypeName>
-   <IDValue>5555555555555</IDValue>
+   <IDTypeName>foobar tuotenumero</IDTypeName>
+   <IDValue>8888888888888</IDValue>
   </ProductIdentifier>
   <DescriptiveDetail>
    <ProductComposition>00</ProductComposition>
@@ -35,49 +35,21 @@
    <PrimaryContentType>01</PrimaryContentType>
    <Collection>
     <CollectionType>10</CollectionType>
-    <CollectionIdentifier>
-     <CollectionIdtype>02</CollectionIdtype>
-     <IDValue>19</IDValue>
-    </CollectionIdentifier>
     <TitleDetail>
      <TitleType>01</TitleType>
      <TitleElement>
       <TitleElementLevel>02</TitleElementLevel>
-      <PartNumber>11</PartNumber>
-      <TitleText>Suomalaisen Kirjallisuuden Seuran toimituksia</TitleText>
+      <TitleText>Cupido</TitleText>
      </TitleElement>
     </TitleDetail>
-   </Collection>    
-   <Collection>
-    <CollectionType>10</CollectionType>
-    <CollectionIdentifier>
-     <CollectionIdtype>01</CollectionIdtype>
-     <IDValue>29</IDValue>
-    </CollectionIdentifier>	
-    <TitleDetail>
-     <TitleType>01</TitleType>
-     <TitleElement>
-      <TitleElementLevel>02</TitleElementLevel>
-	  <PartNumber>22</PartNumber>
-      <TitleText>CupidoAAA</TitleText>
-     </TitleElement>
-    </TitleDetail>
-   </Collection>   
-   <Collection>
-    <CollectionType>10</CollectionType>
-    <CollectionIdentifier>
-     <CollectionIdtype>03</CollectionIdtype>
-     <IDValue>39</IDValue>
-    </CollectionIdentifier>	
-    <TitleDetail>
-     <TitleType>01</TitleType>
-     <TitleElement>
-      <TitleElementLevel>02</TitleElementLevel>
-	  <PartNumber>33</PartNumber>
-      <TitleText>CupidoBBB</TitleText>
-     </TitleElement>
-    </TitleDetail>
-   </Collection>    
+   </Collection>
+   <TitleDetail>
+    <TitleType>01</TitleType>
+    <TitleElement>
+     <TitleElementLevel>01</TitleElementLevel>
+     <TitleText>Travel Companion</TitleText>
+    </TitleElement>
+   </TitleDetail>
    <Contributor>
     <SequenceNumber>1</SequenceNumber>
     <ContributorRole>E07</ContributorRole>
@@ -102,9 +74,9 @@
    </Subject>
    <Subject>
     <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
-    <SubjectSchemeName>Company tuoteryhmä</SubjectSchemeName>
+    <SubjectSchemeName>foobar tuoteryhmä</SubjectSchemeName>
     <SubjectCode>01</SubjectCode>
-    <SubjectHeadingText>käänetty kaunokirjallisuus</SubjectHeadingText>
+    <SubjectHeadingText>käännetty kaunokirjallisuus</SubjectHeadingText>
    </Subject>
    <Subject>
     <MainSubject/>
@@ -132,7 +104,7 @@
    <TextContent>
     <TextType>03</TextType>
     <ContentAudience>00</ContentAudience>
-    <Text>Here is some text content.</Text>
+    <Text>Some text here.</Text>
    </TextContent>
    <SupportingResource>
     <ResourceContentType>01</ResourceContentType>
@@ -140,7 +112,7 @@
     <ResourceMode>03</ResourceMode>
     <ResourceVersion>
      <ResourceForm>02</ResourceForm>
-     <ResourceLink>https://media.companyx.fi/onix/media/2642205.jpg?size=original&amp;cl=20050&amp;ch=10f12b1ed3c72f62f085776b602028da</ResourceLink>
+     <ResourceLink>https://some.company.fi/onix/media/2642205.jpg?size=original&amp;cl=20050&amp;ch=10f12b1ed3c72f62f085776b602028da</ResourceLink>
      <ContentDate>
       <ContentDateRole>17</ContentDateRole>
       <Date>20200408</Date>
@@ -150,16 +122,16 @@
   </CollateralDetail>
   <PublishingDetail>
    <Imprint>
-    <ImprintName>Imprintname</ImprintName>
+    <ImprintName>ImprintNameHere</ImprintName>
    </Imprint>
    <Publisher>
     <PublishingRole>01</PublishingRole>
     <PublisherIdentifier>
      <PublisherIDType>01</PublisherIDType>
-     <IDTypeName>CompanyX kustantajanumero</IDTypeName>
+     <IDTypeName>foobar kustantajanumero</IDTypeName>
      <IDValue>87042</IDValue>
     </PublisherIdentifier>
-    <PublisherName>Publisher</PublisherName>
+    <PublisherName>PublisherNameHere</PublisherName>
    </Publisher>
    <CountryOfPublication>FI</CountryOfPublication>
    <PublishingStatus>02</PublishingStatus>
@@ -174,4 +146,4 @@
    </PublishingDate>
   </PublishingDetail>
  </Product>
-</ONIXMessage>
+</ONIXMessage> 

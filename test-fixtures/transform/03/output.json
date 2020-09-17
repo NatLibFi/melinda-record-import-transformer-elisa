@@ -117,6 +117,17 @@
         "ind1": " "
       },
       {
+        "tag": "300",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "1 verkkoaineisto"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
         "tag": "336",
         "subfields": [
           {
@@ -226,7 +237,7 @@
         "tag": "700",
         "subfields": [
           {
-            "code": "a",
+            "code": "e",
             "value": "lukija."
           }
         ],

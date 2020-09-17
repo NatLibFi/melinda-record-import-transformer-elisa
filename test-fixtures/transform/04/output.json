@@ -109,6 +109,17 @@
         "ind1": " "
       },
       {
+        "tag": "300",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "1 verkkoaineisto"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
         "tag": "337",
         "subfields": [
           {

@@ -24,7 +24,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "9876543210123"
+            "value": "1111111111111"
           },
           {
             "code": "q",
@@ -37,10 +37,6 @@
       {
         "tag": "040",
         "subfields": [
-          {
-            "code": "a",
-            "value": "FI-KV"
-          },
           {
             "code": "b",
             "value": "fin"
@@ -80,51 +76,6 @@
         "ind2": " "
       },
       {
-        "tag": "084",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "84.2"
-          },
-          {
-            "code": "2",
-            "value": "Ykl"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "084",
-        "ind1": "9",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "eläimet"
-          },
-          {
-            "code": "2",
-            "value": "Ykl"
-          }
-        ],
-        "ind2": " "
-      },
-      {
-        "tag": "084",
-        "ind1": "9",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "jännitys"
-          },
-          {
-            "code": "2",
-            "value": "Ykl"
-          }
-        ],
-        "ind2": " "
-      },
-      {
         "tag": "100",
         "ind1": "1",
         "subfields": [
@@ -151,23 +102,12 @@
         ]
       },
       {
-        "tag": "263",
-        "ind1": " ",
-        "ind2": " ",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "20200413"
-          }
-        ]
-      },
-      {
         "tag": "264",
         "ind2": "1",
         "subfields": [
           {
             "code": "b",
-            "value": "Julkaisija,"
+            "value": "PublisherNamehere,"
           },
           {
             "code": "c",
@@ -175,6 +115,17 @@
           }
         ],
         "ind1": " "
+      },
+      {
+        "tag": "300",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "1 verkkoaineisto"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
       },
       {
         "tag": "336",
@@ -284,45 +235,18 @@
       },
       {
         "tag": "500",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "ENNAKKOTIETO / KIRJAVÄLITYS."
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
         "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "506",
-        "ind1": "1",
+        "ind2": " ",
         "subfields": [
           {
             "code": "a",
-            "value": "Aineisto on käytettävissä vapaakappalekirjastoissa."
-          },
-          {
-            "code": "f",
-            "value": "Online access with authorization."
-          },
-          {
-            "code": "2",
-            "value": "star"
-          },
-          {
-            "code": "5",
-            "value": "FI-Vapaa"
+            "value": "Koneellisesti tuotettu tietue."
           },
           {
             "code": "9",
             "value": "FENNI<KEEP>"
           }
-        ],
-        "ind2": " "
+        ]
       },
       {
         "tag": "511",
@@ -340,201 +264,10 @@
         "ind2": " "
       },
       {
-        "tag": "540",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;"
-          },
-          {
-            "code": "b",
-            "value": "Kansalliskirjasto;"
-          },
-          {
-            "code": "c",
-            "value": "Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä"
-          },
-          {
-            "code": "u",
-            "value": "http://www.finlex.fi/fi/laki/ajantasa/2007/20071433"
-          },
-          {
-            "code": "5",
-            "value": "FI-Vapaa"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "594",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "ENNAKKOTIETO / KIRJAVÄLITYS"
-          },
-          {
-            "code": "5",
-            "value": "FENNI"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Eläimet ja luonto"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Romaanit"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Jännitys"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "rikos"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "dekkari"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Perhe"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "parisuhteet"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "ihmissuhteet"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Maantiede"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "655",
-        "ind2": "7",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "äänikirjat"
-          },
-          {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s579"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " "
-      },
-      {
-        "tag": "655",
-        "ind2": "7",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "e-äänikirjat"
-          },
-          {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s1204"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " "
-      },
-      {
         "tag": "700",
         "subfields": [
           {
-            "code": "a",
+            "code": "e",
             "value": "kääntäjä."
           }
         ],
@@ -545,7 +278,7 @@
         "tag": "700",
         "subfields": [
           {
-            "code": "a",
+            "code": "e",
             "value": "lukija."
           }
         ],
@@ -574,15 +307,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:9876543210123"
-          },
-          {
-            "code": "z",
-            "value": "Käytettävissä vapaakappalekirjastoissa"
-          },
-          {
-            "code": "5",
-            "value": "FI-Vapaa"
+            "value": "http://urn.fi/URN:ISBN:1111111111111"
           }
         ]
       },
@@ -595,7 +320,7 @@
           },
           {
             "code": "g",
-            "value": "20200910"
+            "value": "20000101"
           },
           {
             "code": "k",
@@ -604,25 +329,6 @@
           {
             "code": "q",
             "value": "FI-NL"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "974",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "KV"
-          },
-          {
-            "code": "b",
-            "value": "TT7777777"
-          },
-          {
-            "code": "5",
-            "value": "FENNI"
           }
         ],
         "ind1": " ",
@@ -647,7 +353,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 9876543210123 is not valid"
+        "ISBN 1111111111111 is not valid"
       ]
     },
     {
@@ -663,11 +369,7 @@
     },
     {
       "description": "Checks that the record does not contain the configured fields",
-      "state": "fixed"
-    },
-    {
-      "description": "Adds access rights fields for a record (if not existing)",
-      "state": "fixed"
+      "state": "valid"
     },
     {
       "description": "Handles invalid ending punctuation",

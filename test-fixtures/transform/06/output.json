@@ -38,10 +38,6 @@
         "tag": "040",
         "subfields": [
           {
-            "code": "a",
-            "value": "FI-KV"
-          },
-          {
             "code": "b",
             "value": "eng"
           },
@@ -80,21 +76,6 @@
         "ind2": " "
       },
       {
-        "tag": "084",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "84.5"
-          },
-          {
-            "code": "2",
-            "value": "Ykl"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
         "tag": "100",
         "ind1": "1",
         "subfields": [
@@ -117,17 +98,6 @@
           {
             "code": "a",
             "value": "Travel Companion."
-          }
-        ]
-      },
-      {
-        "tag": "263",
-        "ind1": " ",
-        "ind2": " ",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "20200421"
           }
         ]
       },
@@ -261,45 +231,18 @@
       },
       {
         "tag": "500",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "ENNAKKOTIETO / KIRJAVÄLITYS."
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
         "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "506",
-        "ind1": "1",
+        "ind2": " ",
         "subfields": [
           {
             "code": "a",
-            "value": "Aineisto on käytettävissä vapaakappalekirjastoissa."
-          },
-          {
-            "code": "f",
-            "value": "Online access with authorization."
-          },
-          {
-            "code": "2",
-            "value": "star"
-          },
-          {
-            "code": "5",
-            "value": "FI-Vapaa"
+            "value": "Koneellisesti tuotettu tietue."
           },
           {
             "code": "9",
             "value": "FENNI<KEEP>"
           }
-        ],
-        "ind2": " "
+        ]
       },
       {
         "tag": "511",
@@ -317,102 +260,10 @@
         "ind2": " "
       },
       {
-        "tag": "540",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;"
-          },
-          {
-            "code": "b",
-            "value": "Kansalliskirjasto;"
-          },
-          {
-            "code": "c",
-            "value": "Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä"
-          },
-          {
-            "code": "u",
-            "value": "http://www.finlex.fi/fi/laki/ajantasa/2007/20071433"
-          },
-          {
-            "code": "5",
-            "value": "FI-Vapaa"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "594",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "ENNAKKOTIETO / KIRJAVÄLITYS"
-          },
-          {
-            "code": "5",
-            "value": "FENNI"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "655",
-        "ind2": "7",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "äänikirjat"
-          },
-          {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s579"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " "
-      },
-      {
-        "tag": "655",
-        "ind2": "7",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "e-äänikirjat"
-          },
-          {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s1204"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " "
-      },
-      {
         "tag": "700",
         "subfields": [
           {
-            "code": "a",
+            "code": "e",
             "value": "lukija."
           }
         ],
@@ -427,14 +278,6 @@
           {
             "code": "u",
             "value": "http://urn.fi/URN:ISBN:9999999999999"
-          },
-          {
-            "code": "z",
-            "value": "Käytettävissä vapaakappalekirjastoissa"
-          },
-          {
-            "code": "5",
-            "value": "FI-Vapaa"
           }
         ]
       },
@@ -447,7 +290,7 @@
           },
           {
             "code": "g",
-            "value": "20200910"
+            "value": "20000101"
           },
           {
             "code": "k",
@@ -496,11 +339,7 @@
     },
     {
       "description": "Checks that the record does not contain the configured fields",
-      "state": "fixed"
-    },
-    {
-      "description": "Adds access rights fields for a record (if not existing)",
-      "state": "fixed"
+      "state": "valid"
     },
     {
       "description": "Handles invalid ending punctuation",
