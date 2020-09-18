@@ -41,7 +41,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
   const {getValue, getValues} = createValueInterface(record);
 
 
-  const acceptedName = 'Kirjavalitys Oy'; // Temp. scandic characters problem
   const dataSource = getSource();
 
   if (dataSource === undefined) { // eslint-disable-line functional/no-conditional-statement
@@ -155,7 +154,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       // Generate only if EditionNumber exists!
       const editionNr = getValue('DescriptiveDetail', 'EditionNumber');
 
-      if (editionNr && dataSource === acceptedName) {
+      if (editionNr && dataSource === 'Kirjavälitys Oy') {
         return [
           {
             tag: '250',
@@ -176,7 +175,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const PubDatRole = getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole');
       const NotifType = getValue('NotificationType');
 
-      if (PubDatDate && PubDatRole && NotifType && dataSource === acceptedName) {
+      if (PubDatDate && PubDatRole && NotifType && dataSource === 'Kirjavälitys Oy') {
 
         if ((NotifType === '01' || NotifType === '02') && PubDatRole === '01') {
           return [
@@ -420,7 +419,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate500() {
 
-      if (dataSource === acceptedName) { // < --- ONLY FOR KV!
+      if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
         // Console.log('   QQQ   500   Now make for KV');
 
         const notificType = getValue('NotificationType');
@@ -486,7 +485,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate506() {
 
-      if (dataSource === acceptedName) { // < --- ONLY FOR KV!
+      if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
       // Field added if NotificationType = 03 with legal deposit
         const notificType = getValue('NotificationType');
 
@@ -544,7 +543,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate540() {
 
-      if (dataSource === acceptedName) { // < --- ONLY FOR KV!
+      if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
       // Field added if NotificationType = 03 with legal deposit
         const notificType = getValue('NotificationType');
 
@@ -576,7 +575,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       //  If NotificationType = 01 or 02 : ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
       //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
       // ONLY FOR KV!
-      if (dataSource === acceptedName) { // < --- ONLY FOR KV!
+      if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
 
         const notificType = getValue('NotificationType');
 
@@ -624,7 +623,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
       const getPersonNameInverted = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
 
-      if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0 || dataSource !== acceptedName) {
+      if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0 || dataSource !== 'Kirjavälitys Oy') {
         return [];
       }
 
@@ -649,7 +648,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       // A| <- SubjectHeadingText
       const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
 
-      if (SubScheIde && dataSource === acceptedName) {
+      if (SubScheIde && dataSource === 'Kirjavälitys Oy') {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(makeRows);
       }
 
@@ -675,7 +674,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const form = getValue('DescriptiveDetail', 'ProductForm');
       const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
 
-      if (formDetail === undefined || form === undefined || dataSource !== acceptedName) {
+      if (formDetail === undefined || form === undefined || dataSource !== 'Kirjavälitys Oy') {
         return [];
       }
 
@@ -750,7 +749,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       // Field added    if NotificationType = 03 with legal deposit
       // WAITS FOR:  URN of legal deposit
 
-      if (getValue('NotificationType') === '03' && isLegalDeposit === true && (dataSource === acceptedName) ) {
+      if (getValue('NotificationType') === '03' && isLegalDeposit === true && (dataSource === 'Kirjavälitys Oy') ) {
 
         return [
           {
@@ -855,7 +854,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const getIdvalue = getValue('RelatedMaterial', 'RelatedWork', 'WorkIdentifier', 'IDValue');
       const gids = getValues('RelatedMaterial', 'RelatedWork', 'WorkIdentifier');
 
-      if (getIdvalue && gids && dataSource === acceptedName) {
+      if (getIdvalue && gids && dataSource === 'Kirjavälitys Oy') {
         return gids.map(doEdits);
       }
 
@@ -905,7 +904,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
 
         if (CheckSubjectSchemeName && CheckSubjectCode) {
-          if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03' && dataSource === acceptedName) {
+          if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03' && dataSource === 'Kirjavälitys Oy') {
             return '0';
           }
 
@@ -925,12 +924,12 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         // Const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');  //alkup
         const CheckSubjectCode = getValue('DescriptiveDetail', 'SubjectCode');
 
-        if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && CheckEditionType && dataSource && dataSource === acceptedName) {
+        if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && CheckEditionType && dataSource && dataSource === 'Kirjavälitys Oy') {
           if (CheckSubjectSchemeIdentifier === '73' && ((CheckSubjectCode === 'L' || CheckSubjectCode === 'N') && CheckEditionType !== 'SMP')) {
             return 'j';
           }
 
-          if (CheckEditionType === 'SMP' && dataSource === acceptedName) {
+          if (CheckEditionType === 'SMP' && dataSource === 'Kirjavälitys Oy') {
             return 'f';
           }
 
@@ -994,7 +993,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate040() {
 
-      if (dataSource === acceptedName) { // < --- a ONLY FOR KV!
+      if (dataSource === 'Kirjavälitys Oy') { // < --- a ONLY FOR KV!
         return [
           {
             tag: '040',
@@ -1057,7 +1056,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     function generate084a() {
 
       // A-case:  SubjectCode Field added if if SubjectSchemeIdentifier = 66
-      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === acceptedName) {
+      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === 'Kirjavälitys Oy') {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
       }
 
@@ -1081,7 +1080,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate084b() {
       // B-case:  SubjectHeadingText Field added if SubjectSchemeIdentifier = 80
-      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === acceptedName) {
+      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === 'Kirjavälitys Oy') {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
       }
 

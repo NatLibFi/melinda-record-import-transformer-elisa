@@ -42,7 +42,9 @@ generateTests({callback,
 
 function callback({getFixture}) {
   const momentMock = () => moment('2000-01-01T00:00:00');
-  const transform = createTransformer({sources: {foobar: 'foobar'}, moment: momentMock});
+  // Const transform = createTransformer({sources: {foobar: 'foobar'}, moment: momentMock});
+  const transform = createTransformer({sources: {'Kirjavälitys Oy': 'foobar', foobar: 'foobar'}, moment: momentMock});
+
 
   const inputData = getFixture({components: ['input.xml'], reader: READERS.STREAM});
   const expectedRecord = getFixture({components: ['output.json'], reader: READERS.JSON});
