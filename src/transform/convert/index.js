@@ -48,7 +48,8 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
   }
 
   // Console.log('***       sources from  config / dataSource:', sources, ' / ', dataSource);
- 
+  console.log('   starts: legaldep:', isLegalDeposit);
+
   checkSupplierData();
 
   function checkSupplierData() {
@@ -580,6 +581,8 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
       // ONLY FOR KV!
       if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
+
+        console.log('   QQQ   594   is KV now, legaaldep: ', isLegalDeposit);
 
         const notificType = getValue('NotificationType');
 
