@@ -47,8 +47,8 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     throw new Error('  No data source found.');
   }
 
-  // Console.log('       sources from  config / dataSource:', sources, ' / ', dataSource);
-
+  // Console.log('***       sources from  config / dataSource:', sources, ' / ', dataSource);
+ 
   checkSupplierData();
 
   function checkSupplierData() {
@@ -487,6 +487,8 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
       if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
       // Field added if NotificationType = 03 with legal deposit
+        // Console.log('   QQQ   506   Now make for KV');
+
         const notificType = getValue('NotificationType');
 
         if (notificType && notificType === '03' && isLegalDeposit === true) {
@@ -545,6 +547,8 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
       if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
       // Field added if NotificationType = 03 with legal deposit
+        // Console.log('   QQQ   540   Now make for KV');
+
         const notificType = getValue('NotificationType');
 
         if (notificType !== undefined && notificType === '03' && isLegalDeposit === true) {
@@ -842,7 +846,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           subfields: [
             {code: 'a', value: 'ONIX3 to MARC transformation'},
             {code: 'g', value: moment().format('YYYYMMDD')},
-            {code: 'k', value: dataSource}, // Was: sources.supplier
+            {code: 'k', value: sources[dataSource]}, // Was: sources.supplier  //dataSource
             {code: 'q', value: 'FI-NL'}
           ]
         }

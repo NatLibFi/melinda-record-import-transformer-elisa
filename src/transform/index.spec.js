@@ -42,7 +42,6 @@ generateTests({callback,
 
 function callback({getFixture}) {
   const momentMock = () => moment('2000-01-01T00:00:00');
-  // Const transform = createTransformer({sources: {foobar: 'foobar'}, moment: momentMock});
   const transform = createTransformer({sources: {'Kirjavälitys Oy': 'foobar', foobar: 'foobar'}, moment: momentMock});
 
 
