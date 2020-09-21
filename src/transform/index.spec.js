@@ -30,6 +30,7 @@ import {READERS} from '@natlibfi/fixura';
 import moment from 'moment';
 import {expect} from 'chai';
 import generateTests from '@natlibfi/fixugen';
+import {parseBoolean} from '@natlibfi/melinda-commons';
 import createTransformer from '.';
 
 
@@ -42,12 +43,16 @@ generateTests({callback,
 
 function callback({getFixture}) {
   const momentMock = () => moment('2000-01-01T00:00:00');
-  const transform = createTransformer({sources: {'Kirjavälitys Oy': 'foobar', foobar: 'foobar'}, moment: momentMock});
 
-
+  const isLegalDeposit = getFixture('isLegalDeposit.txt');
   const inputData = getFixture({components: ['input.xml'], reader: READERS.STREAM});
   const expectedRecord = getFixture({components: ['output.json'], reader: READERS.JSON});
   const expectedError = getFixture('error.txt');
+
+  const transform = createTransformer({sources: {'Kirjavälitys Oy': 'foobar', foobar: 'foobar'},
+    isLegalDeposit: parseBoolean(isLegalDeposit),
+    moment: momentMock});
+
 
   return new Promise((resolve, reject) => {
     const results = [];
@@ -70,6 +75,7 @@ function callback({getFixture}) {
       .on('end', () => {
         try {
           expect(results).to.have.lengthOf(1);
+          console.log(JSON.stringify(results[0].record.toObject(), undefined, 2)); // eslint-disable-line no-console
           expect(results[0]).to.eql(expectedRecord);
           resolve();
         } catch (err) {
