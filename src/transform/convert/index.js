@@ -48,7 +48,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
   }
 
   // Console.log('***       sources from  config / dataSource:', sources, ' / ', dataSource);
- 
+
   checkSupplierData();
 
   function checkSupplierData() {
