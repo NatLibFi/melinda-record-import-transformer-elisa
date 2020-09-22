@@ -15,16 +15,16 @@
     <NotificationType>03</NotificationType>
     <ProductIdentifier>
       <ProductIDType>01</ProductIDType>
-      <IDTypeName>NID</IDTypeName>
+      <IDTypeName>EFG</IDTypeName>
       <IDValue>foobar</IDValue>
     </ProductIdentifier>
     <ProductIdentifier>
       <ProductIDType>03</ProductIDType>
-      <IDValue>3659991802</IDValue>
+      <IDValue>7777777777777</IDValue>
     </ProductIdentifier>
     <ProductIdentifier>
       <ProductIDType>02</ProductIDType>
-      <IDValue>3659991802</IDValue>
+      <IDValue>7777777777777</IDValue>
     </ProductIdentifier>
     <DescriptiveDetail>
       <ProductComposition>00</ProductComposition>
@@ -56,7 +56,7 @@
     <PublishingDetail>
       <Publisher>
         <PublishingRole>01</PublishingRole>
-        <PublisherName>Otavamedia</PublisherName>
+        <PublisherName>Publishermedia</PublisherName>
       </Publisher>
       <CountryOfPublication>FI</CountryOfPublication>
       <PublishingStatus>04</PublishingStatus>

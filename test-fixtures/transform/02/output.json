@@ -1,6 +1,6 @@
 {
-  "failed": true,
-  "messages": [
-    "Unsupported product identifier type & value"
-  ]
-}
+    "failed": true,
+    "messages": [
+      "Unsupported product identifier type & value"
+    ]
+  }

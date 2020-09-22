@@ -1,7 +1,7 @@
 {
   "record": {
     "_validationOptions": {},
-    "leader": "00000nim a22000008i 4500",
+    "leader": "00000nim a22000005i 4500",
     "fields": [
       {
         "tag": "006",
@@ -17,14 +17,14 @@
       },
       {
         "tag": "008",
-        "value": "000101s2017    fi |||||o|||||||||||fin||"
+        "value": "000101s2020    fi |||||o|||||||||||fin||"
       },
       {
         "tag": "020",
         "subfields": [
           {
             "code": "a",
-            "value": "555555555555"
+            "value": "1111111111111"
           },
           {
             "code": "q",
@@ -37,6 +37,10 @@
       {
         "tag": "040",
         "subfields": [
+          {
+            "code": "a",
+            "value": "FI-KV"
+          },
           {
             "code": "b",
             "value": "fin"
@@ -76,12 +80,57 @@
         "ind2": " "
       },
       {
+        "tag": "084",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "84.2"
+          },
+          {
+            "code": "2",
+            "value": "Ykl"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "084",
+        "ind1": "9",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "eläimet"
+          },
+          {
+            "code": "2",
+            "value": "Ykl"
+          }
+        ],
+        "ind2": " "
+      },
+      {
+        "tag": "084",
+        "ind1": "9",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "jännitys"
+          },
+          {
+            "code": "2",
+            "value": "Ykl"
+          }
+        ],
+        "ind2": " "
+      },
+      {
         "tag": "100",
         "ind1": "1",
         "subfields": [
           {
             "code": "a",
-            "value": "Cartland, Barbara,"
+            "value": "Massey, Sujata,"
           },
           {
             "code": "e",
@@ -97,7 +146,18 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Rakkaus piilottelee."
+            "value": "Satapurin jalokivi."
+          }
+        ]
+      },
+      {
+        "tag": "263",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "20200413"
           }
         ]
       },
@@ -107,11 +167,11 @@
         "subfields": [
           {
             "code": "b",
-            "value": "PublisherCompany,"
+            "value": "PublisherNamehere,"
           },
           {
             "code": "c",
-            "value": "2017."
+            "value": "20200413."
           }
         ],
         "ind1": " "
@@ -219,19 +279,220 @@
         "ind2": " "
       },
       {
-        "tag": "500",
-        "ind1": " ",
-        "ind2": " ",
+        "tag": "490",
+        "ind1": "0",
         "subfields": [
           {
             "code": "a",
-            "value": "Koneellisesti tuotettu tietue."
+            "value": "Perveen Mistry"
+          },
+          {
+            "code": "v",
+            "value": "2"
+          }
+        ],
+        "ind2": " "
+      },
+      {
+        "tag": "500",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "ENNAKKOTIETO / KIRJAVÄLITYS."
           },
           {
             "code": "9",
             "value": "FENNI<KEEP>"
           }
-        ]
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "511",
+        "ind1": "0",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Lukija: Erja Manto."
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind2": " "
+      },
+      {
+        "tag": "594",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "ENNAKKOTIETO / KIRJAVÄLITYS"
+          },
+          {
+            "code": "5",
+            "value": "FENNI"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Eläimet ja luonto"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Romaanit"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Jännitys"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "rikos"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "dekkari"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Perhe"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "parisuhteet"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "ihmissuhteet"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Maantiede"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "655",
+        "ind2": "7",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "äänikirjat"
+          },
+          {
+            "code": "2",
+            "value": "slm/fin"
+          },
+          {
+            "code": "0",
+            "value": "http://urn.fi/URN:NBN:fi:au:slm:s579"
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind1": " "
+      },
+      {
+        "tag": "655",
+        "ind2": "7",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "e-äänikirjat"
+          },
+          {
+            "code": "2",
+            "value": "slm/fin"
+          },
+          {
+            "code": "0",
+            "value": "http://urn.fi/URN:NBN:fi:au:slm:s1204"
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind1": " "
+      },
+      {
+        "tag": "700",
+        "subfields": [
+          {
+            "code": "e",
+            "value": "kääntäjä."
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
       },
       {
         "tag": "700",
@@ -250,7 +511,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Renwall, Mia,"
+            "value": "Manto, Erja,"
           },
           {
             "code": "e",
@@ -266,7 +527,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:555555555555"
+            "value": "http://urn.fi/URN:ISBN:1111111111111"
           }
         ]
       },
@@ -294,6 +555,25 @@
         "ind2": " "
       },
       {
+        "tag": "974",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "KV"
+          },
+          {
+            "code": "b",
+            "value": "AA7777777"
+          },
+          {
+            "code": "5",
+            "value": "FENNI"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
         "tag": "LOW",
         "subfields": [
           {
@@ -312,7 +592,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 555555555555 is not valid"
+        "ISBN 1111111111111 is not valid"
       ]
     },
     {

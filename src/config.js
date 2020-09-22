@@ -26,7 +26,9 @@
 *
 */
 
-import {Utils} from '@natlibfi/melinda-commons';
-const {readEnvironmentVariable} = Utils;
+import {parseBoolean} from '@natlibfi/melinda-commons';
+import {readEnvironmentVariable} from '@natlibfi/melinda-backend-commons';
 
 export const sources = readEnvironmentVariable('SOURCES', {format: JSON.parse});
+export const isLegalDeposit = readEnvironmentVariable('IS_LEGAL_DEPOSIT', {defaultValue: false, format: v => parseBoolean(v)});
+

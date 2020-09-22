@@ -1,22 +1,34 @@
 {
   "record": {
     "_validationOptions": {},
-    "leader": "00000n|| a22000008i 4500",
+    "leader": "00000nim a22000008i 4500",
     "fields": [
       {
         "tag": "006",
-        "value": "||||||||||||||||||"
+        "value": "m|||||o||h||||||||"
+      },
+      {
+        "tag": "007",
+        "value": "sr|uunnnnnuneu"
+      },
+      {
+        "tag": "007",
+        "value": "cr|nnannnuuuuu"
       },
       {
         "tag": "008",
-        "value": "000101s2018    fi |||||o|||||||||||fin||"
+        "value": "000101s2020    fi |||||o|||||||||||fin||"
       },
       {
         "tag": "020",
         "subfields": [
           {
             "code": "a",
-            "value": "1212121212121"
+            "value": "9999999999999"
+          },
+          {
+            "code": "q",
+            "value": "MP3"
           }
         ],
         "ind1": " ",
@@ -25,6 +37,10 @@
       {
         "tag": "040",
         "subfields": [
+          {
+            "code": "a",
+            "value": "FI-KV"
+          },
           {
             "code": "b",
             "value": "fin"
@@ -45,7 +61,7 @@
         "tag": "041",
         "subfields": [
           {
-            "code": "a",
+            "code": "d",
             "value": "fin"
           }
         ],
@@ -64,12 +80,27 @@
         "ind2": " "
       },
       {
+        "tag": "084",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "30.11"
+          },
+          {
+            "code": "2",
+            "value": "Ykl"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
         "tag": "100",
         "ind1": "1",
         "subfields": [
           {
             "code": "a",
-            "value": "Ristkari, Maiju,"
+            "value": "Aaltonen, Mika,"
           },
           {
             "code": "e",
@@ -85,7 +116,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Sukupuolena ihminen."
+            "value": "Huomisen yhteiskunta."
           }
         ]
       },
@@ -95,11 +126,11 @@
         "subfields": [
           {
             "code": "b",
-            "value": "PublisherCompany,"
+            "value": "barfoo,"
           },
           {
             "code": "c",
-            "value": "2018."
+            "value": "2020."
           }
         ],
         "ind1": " "
@@ -109,7 +140,26 @@
         "subfields": [
           {
             "code": "a",
-            "value": "1 verkkoaineisto"
+            "value": "1 verkkoaineisto (6 h 11 min 0 s)"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "336",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "puhe"
+          },
+          {
+            "code": "b",
+            "value": "spw"
+          },
+          {
+            "code": "2",
+            "value": "rdacontent"
           }
         ],
         "ind1": " ",
@@ -169,19 +219,125 @@
         "ind2": " "
       },
       {
-        "tag": "500",
-        "ind1": " ",
-        "ind2": " ",
+        "tag": "347",
         "subfields": [
           {
             "code": "a",
-            "value": "Koneellisesti tuotettu tietue."
+            "value": "äänitiedosto"
+          },
+          {
+            "code": "b",
+            "value": "MP3"
+          },
+          {
+            "code": "2",
+            "value": "rda"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "500",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS."
           },
           {
             "code": "9",
             "value": "FENNI<KEEP>"
           }
-        ]
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "511",
+        "ind1": "0",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Lukija: Aku Laitinen."
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind2": " "
+      },
+      {
+        "tag": "594",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS"
+          },
+          {
+            "code": "5",
+            "value": "FENNI"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "655",
+        "ind2": "7",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "äänikirjat"
+          },
+          {
+            "code": "2",
+            "value": "slm/fin"
+          },
+          {
+            "code": "0",
+            "value": "http://urn.fi/URN:NBN:fi:au:slm:s579"
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind1": " "
+      },
+      {
+        "tag": "655",
+        "ind2": "7",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "e-äänikirjat"
+          },
+          {
+            "code": "2",
+            "value": "slm/fin"
+          },
+          {
+            "code": "0",
+            "value": "http://urn.fi/URN:NBN:fi:au:slm:s1204"
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind1": " "
+      },
+      {
+        "tag": "700",
+        "subfields": [
+          {
+            "code": "e",
+            "value": "lukija."
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
       },
       {
         "tag": "700",
@@ -189,11 +345,11 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Suni, Nina,"
+            "value": "Laitinen, Aku,"
           },
           {
             "code": "e",
-            "value": "kirjoittaja."
+            "value": "lukija."
           }
         ],
         "ind2": " "
@@ -205,7 +361,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:1212121212121"
+            "value": "http://urn.fi/URN:ISBN:9999999999999"
           }
         ]
       },
@@ -233,6 +389,25 @@
         "ind2": " "
       },
       {
+        "tag": "974",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "KV"
+          },
+          {
+            "code": "b",
+            "value": "TT1234567"
+          },
+          {
+            "code": "5",
+            "value": "FENNI"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
         "tag": "LOW",
         "subfields": [
           {
@@ -251,7 +426,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 1212121212121 is not valid"
+        "ISBN 9999999999999 is not valid"
       ]
     },
     {

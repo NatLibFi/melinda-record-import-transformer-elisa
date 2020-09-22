@@ -31,23 +31,47 @@ import momentOrig from 'moment';
 import {createValueInterface} from './common';
 import generateTitles from './generate-titles';
 import generateStaticFields from './generate-static-fields';
+import NotSupportedError from './../../error';
+import {createLogger} from '@natlibfi/melinda-backend-commons';
 
-export default ({sources, moment = momentOrig}) => ({Product: record}) => {
+const logger = createLogger();
+
+export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Product: record}) => {
+
   const {getValue, getValues} = createValueInterface(record);
 
 
+  const dataSource = getSource();
+
+  if (dataSource === undefined) { // eslint-disable-line functional/no-conditional-statement
+    throw new Error('  No data source found.');
+  }
+
+  // Console.log('      isLegalDeposit = ', isLegalDeposit);
+
+  checkSupplierData();
+
+  function checkSupplierData() {
+    if ([dataSource] in sources === false) { // eslint-disable-line functional/no-conditional-statement
+      throw new Error('Exception: please check data source.');
+    }
+  }
+
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
-    throw new Error('Unsupported product identifier type & value');
+    // Throw new Error('Unsupported product identifier type & value');
+    throw new NotSupportedError('Unsupported product identifier type & value');
   }
 
   const marcRecord = new MarcRecord();
-
   const {isAudio, isText, textFormat} = getTypeInformation();
 
   marcRecord.leader = generateLeader(); // eslint-disable-line functional/immutable-data
+
   generateFields().forEach(f => marcRecord.insertField(f));
 
+
   return marcRecord;
+
 
   function generateLeader() {
     const type = generateType();
@@ -89,26 +113,140 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
   }
 
   function generateFields() {
+
     const authors = getAuthors();
 
     return [
       generate008(),
       generate006(),
       generate007(),
-      generate520(),
       generate040(),
       generate041(),
-      generate884(),
+      generate084a(),
+      generate084b(),
+      generate250(),
+      generate263(),
       generate264(),
+      generate300(),
       generate336(),
       generate347(),
+      generate490(),
       generate500(),
+      generate506(),
+      generate511(),
+      generate540(),
+      generate594(),
+      generate600(),
+      generate653(),
       generate655(),
+      generate700(),
+      // Generate856(),  // waits
+      generate884(),
+      generate974(),
       generateStandardIdentifiers(),
       generateTitles(record, authors),
       generateAuthors(),
       generateStaticFields()
     ].flat();
+
+
+    function generate250() {
+      // Generate only if EditionNumber exists!
+      const editionNr = getValue('DescriptiveDetail', 'EditionNumber');
+
+      if (editionNr && dataSource === 'Kirjavälitys Oy') {
+        return [
+          {
+            tag: '250',
+            ind1: ' ',
+            ind2: ' ',
+            subfields: [{code: 'a', value: `${editionNr}. painos`}]
+          }
+        ];
+      }
+
+      return [];
+    }
+
+
+    function generate263() {
+      // Generate only if: NotificationType = 01 or 02  AND PublishingDateRole = 01
+      const PubDatDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
+      const PubDatRole = getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole');
+      const NotifType = getValue('NotificationType');
+
+      if (PubDatDate && PubDatRole && NotifType && dataSource === 'Kirjavälitys Oy') {
+
+        if ((NotifType === '01' || NotifType === '02') && PubDatRole === '01') {
+          return [
+            {
+              tag: '263',
+              ind1: ' ',
+              ind2: ' ',
+              subfields: [{code: 'a', value: PubDatDate}]
+            }
+          ];
+        }
+        return [];
+      }
+
+      return [];
+    }
+
+
+    function generate300() {
+
+      const extType = getValue('DescriptiveDetail', 'Extent', 'ExtentType');
+      const extValue = getValue('DescriptiveDetail', 'Extent', 'ExtentValue');
+      const extUnit = getValue('DescriptiveDetail', 'Extent', 'ExtentUnit');
+
+      if (extValue && extType && extUnit) {
+
+        // I A :  if ExtentType = 09 and ExtentUnit = 15 ( 15 -> HHHMM i.e. 5 digits)
+        if (extType === '09' && extUnit === '15') {
+          const outText = `1 verkkoaineisto (${extValue.slice(0, 3).replace(/0/gu, '')}h ${extValue.slice(3, 5)} min)`;
+          return [
+            {
+              tag: '300',
+              subfields: [{code: 'a', value: outText}]
+            }
+          ];
+        }
+
+        // I B :  if ExtentType = 09 and ExtentUnit = 16 ( 16 -> HHHMMSS !!!  i.e. 7 digits)
+        if (extType === '09' && extUnit === '16') {
+          const outText = `1 verkkoaineisto (${extValue.slice(0, 3).replace(/0/gu, '')} h ${extValue.slice(3, 5)} min ${extValue.slice(6, 7)} s)`;
+          return [
+            {
+              tag: '300',
+              subfields: [{code: 'a', value: outText}]
+            }
+          ];
+        }
+
+        // II: extType 00 or 10      AND extUnit = 03      AND  ProductRorm = EB, EC, ED
+        if ((extType === '00' || extType === '10') && extUnit === '03' && ['EB', 'EC', 'ED'].includes(getValue('DescriptiveDetail', 'ProductForm'))) {
+          const outText = `1 verkkoaineisto (${extValue} sivua)`;
+          return [
+            {
+              tag: '300',
+              subfields: [{code: 'a', value: outText}]
+            }
+          ];
+        }
+
+
+      }
+
+
+      return [
+        {
+          tag: '300',
+          subfields: [{code: 'a', value: `1 verkkoaineisto`}]
+        }
+      ];
+    }
+
 
     function generate336() {
       if (isAudio) {
@@ -165,32 +303,476 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
           }
         ];
       }
+      return [];
     }
 
+    function generate490() {
+
+      const gotTitleElementLevel = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleElementLevel');
+      const gotCollectionType = getValue('DescriptiveDetail', 'Collection', 'CollectionType');
+      const gotCollectionIDtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
+      const gotTitleText = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleText');
+      const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
+      const gotPartNumber = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'PartNumber');
+
+
+      // SKIP if none required fields exist
+      if (!gotCollectionType && !gotTitleElementLevel && !gotCollectionIDtype) {
+        return [];
+      }
+
+      if (!gotTitleText && !gotPartNumber && !gotIDValue) {
+        return [];
+      }
+
+      const theResult = getValues('DescriptiveDetail', 'Collection').map(makeFields);
+
+      if (theResult === undefined || theResult.length === 0) {
+        return [];
+      }
+
+      const filtered = theResult.filter((v) => v !== undefined);
+
+      return filtered;
+
+
+      function makeFields(element) {
+
+        const subfields = generateSubfields();
+
+        function generateSubfields () {
+          const fieldA = buildFieldA();
+          const fieldX = buildFieldX();
+          const fieldV = buildFieldV();
+          const aplusx = fieldA.concat(fieldX);
+
+          return aplusx.concat(fieldV);
+        }
+
+
+        if (subfields.length > 0 && subfields !== undefined) {
+          return {tag: '490', ind1: '0', subfields};
+        }
+
+
+        function buildFieldA() { // Requires TitleText
+          if (gotTitleElementLevel === undefined || gotCollectionType === undefined || gotTitleText === undefined) {
+            return [];
+          }
+
+          if (element.CollectionType[0] === undefined && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+            return [];
+          }
+
+          if (element.CollectionType[0] !== '10' || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02') {
+            return [];
+          }
+
+          if (element.TitleDetail[0].TitleElement[0].TitleText[0] === undefined) {
+            return [];
+          }
+
+          return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}];
+        }
+
+        function buildFieldX() { // Requires IDValue
+          if (gotCollectionIDtype === undefined || gotIDValue === undefined) {
+            return [];
+          }
+
+          if (element.CollectionIdentifier[0].CollectionIdtype[0] === undefined || element.CollectionIdentifier[0].IDValue[0] === undefined) {
+            return [];
+          }
+
+          if (element.CollectionIdentifier[0].CollectionIdtype[0] !== '02') {
+            return [];
+          }
+
+          return [{code: 'x', value: `${element.CollectionIdentifier[0].IDValue[0]}`}];
+        }
+
+
+        function buildFieldV() { // Requires PartNumber
+          if (gotTitleElementLevel === undefined || gotCollectionType === undefined || gotPartNumber === undefined) {
+            return [];
+          }
+
+          if (element.CollectionType[0] === undefined && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+            return [];
+          }
+
+          if (element.CollectionType[0] !== '10' || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02') {
+            return [];
+          }
+
+          if (element.TitleDetail[0].TitleElement[0].PartNumber[0] === undefined) {
+            return [];
+          }
+
+          return [{code: 'v', value: `${element.TitleDetail[0].TitleElement[0].PartNumber[0]}`}];
+        }
+
+      }
+
+    }
+
+
     function generate500() {
-      return isAudio ? [
+
+      if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
+        // Console.log('   QQQ   500   Now make for KV');
+
+        const notificType = getValue('NotificationType');
+
+        if (notificType && (notificType === '01' || notificType === '02')) {
+          return [
+            {
+              tag: '500',
+              subfields: [
+                {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
+
+        }
+
+        if (notificType && notificType === '03' && isLegalDeposit === false) {
+          return [
+            {
+              tag: '500',
+              subfields: [
+                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
+
+        }
+
+        if (notificType && notificType === '03' && isLegalDeposit === true) {
+          return [
+            {
+              tag: '500',
+              subfields: [
+                {code: 'a', value: 'Koneellisesti tuotettu tietue.'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
+
+        }
+
+      } // Only for KV
+
+      // All others --->
+      // Console.log('   QQQ   500   Now make for NON-KV');
+      return [
         {
-          tag: '500', subfields: [
-            {code: 'a', value: 'Äänikirja.'},
+          tag: '500',
+          ind1: ' ',
+          ind2: ' ',
+          subfields: [
+            {code: 'a', value: 'Koneellisesti tuotettu tietue.'},
             {code: '9', value: 'FENNI<KEEP>'}
           ]
         }
-      ] : [];
+      ];
+      // All others <---
+
     }
 
-    function generate655() {
-      return isAudio ? [
-        {
-          tag: '655',
-          ind2: '7',
-          subfields: [
-            {code: 'a', value: 'äänikirjat'},
-            {code: '2', value: 'slm/fin'},
-            {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'}
-          ]
+
+    function generate506() {
+
+      if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
+      // Field added if NotificationType = 03 with legal deposit
+        // Console.log('   QQQ   506   Now make for KV');
+
+        const notificType = getValue('NotificationType');
+
+        if (notificType && notificType === '03' && isLegalDeposit === true) {
+          return [
+            {
+              tag: '506',
+              ind1: '1',
+              subfields: [
+                {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
+                {code: 'f', value: 'Online access with authorization.'}, // Dot added 11.9.2020
+                {code: '2', value: 'star'},
+                {code: '5', value: 'FI-Vapaa'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
+
         }
-      ] : [];
+
+      } // < --- ONLY FOR KV!
+
+      return [];
+
     }
+
+
+    function generate511() {
+
+      if (getValue('DescriptiveDetail', 'Contributor', 'PersonName')) {
+        const theData = getValues('DescriptiveDetail', 'Contributor').filter(filter);
+        const dataMapped = theData.map(makeFields);
+
+        return dataMapped;
+      }
+
+      function filter({ContributorRole}) {
+        return ['E07'].includes(ContributorRole?.[0]);
+      }
+
+      function makeFields(element) {
+        return {
+          tag: '511',
+          ind1: '0',
+          subfields: [
+            {code: 'a', value: `Lukija: ${element.PersonName[0]}.`},
+            {code: '9', value: 'FENNI<KEEP>'}
+          ]
+        };
+      }
+
+      return [];
+    }
+
+
+    function generate540() {
+
+      if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
+      // Field added if NotificationType = 03 with legal deposit
+        // Console.log('   QQQ   540   Now make for KV');
+
+        const notificType = getValue('NotificationType');
+
+        if (notificType !== undefined && notificType === '03' && isLegalDeposit === true) {
+          return [
+            {
+              tag: '540',
+              subfields: [
+                {code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
+                {code: 'b', value: 'Kansalliskirjasto;'},
+                {code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
+                {code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
+                {code: '5', value: 'FI-Vapaa'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
+
+        }
+
+      } // < --- ONLY FOR KV!
+
+      return [];
+    }
+
+
+    function generate594() {
+      //  Field is left out if NotificationType = 03 with legal deposit
+      //  If NotificationType = 01 or 02 : ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
+      //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
+      // ONLY FOR KV!
+      if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
+
+        const notificType = getValue('NotificationType');
+
+        if (notificType === undefined || isLegalDeposit === undefined) {
+          return []; //  Skip
+        }
+
+        if (notificType === '03' && isLegalDeposit === true) {
+          return []; //  Field is left out if NotificationType = 03 with legal deposit
+        }
+
+        if (notificType === '01' || notificType === '02') {
+          return [
+            {
+              tag: '594',
+              subfields: [
+                {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: '5', value: 'FENNI'}
+              ]
+            }
+          ];
+        }
+
+        if (notificType === '03' && isLegalDeposit === false) {
+        //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
+
+          return [
+            {
+              tag: '594',
+              subfields: [
+                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: '5', value: 'FENNI'}
+              ]
+            }
+          ];
+        }
+
+      } // If dataSource match
+
+      return [];
+    }
+
+
+    function generate600() {
+
+      const getPersonNameInverted = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
+
+      if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0 || dataSource !== 'Kirjavälitys Oy') {
+        return [];
+      }
+
+      return getPersonNameInverted.map(getNames);
+
+      function getNames(element) {
+        return {
+          tag: '600',
+          ind1: '1',
+          ind2: '4',
+          subfields: [
+            {code: 'a', value: element},
+            {code: '9', value: 'FENNI<KEEP>'}
+          ]
+        };
+      }
+
+    }
+
+    function generate653() {
+      // Added only if SubjectSchemeIdentifier = 20, 64, 71 or 72
+      // A| <- SubjectHeadingText
+      const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
+
+      if (SubScheIde && dataSource === 'Kirjavälitys Oy') {
+        return getValues('DescriptiveDetail', 'Subject').filter(filter).map(makeRows);
+      }
+
+
+      function makeRows(element) {
+
+        return {
+          tag: '653',
+          subfields: [{code: 'a', value: element.SubjectHeadingText[0]}]
+        };
+      }
+
+      function filter({SubjectSchemeIdentifier}) {
+        return ['20', '64', '71', '72'].includes(SubjectSchemeIdentifier?.[0]);
+      }
+
+      return [];
+    }
+
+
+    function generate655() {
+      // Make always when there is form = AJ & formDetail = A103
+      const form = getValue('DescriptiveDetail', 'ProductForm');
+      const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
+
+      if (formDetail === undefined || form === undefined || dataSource !== 'Kirjavälitys Oy') {
+        return [];
+      }
+
+      if (form === 'AJ' && formDetail === 'A103') {
+        return [
+          {
+            tag: '655',
+            ind2: '7',
+            subfields: [
+              {code: 'a', value: 'äänikirjat'},
+              {code: '2', value: 'slm/fin'},
+              {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'},
+              {code: '9', value: 'FENNI<KEEP>'}
+            ]
+          },
+          {
+            tag: '655',
+            ind2: '7',
+            subfields: [
+              {code: 'a', value: 'e-äänikirjat'},
+              {code: '2', value: 'slm/fin'},
+              {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s1204'},
+              {code: '9', value: 'FENNI<KEEP>'}
+            ]
+          }
+        ];
+
+      }
+      return [];
+    }
+
+
+    function generate700() {
+      const contribrole = getValue('DescriptiveDetail', 'Contributor', 'ContributorRole');
+
+      if (contribrole) {
+        return getValues('DescriptiveDetail', 'Contributor').filter(filter).map(makeRows);
+      }
+
+      return [];
+
+      function makeRows(element) {
+        return {
+          tag: '700',
+          subfields: [{code: 'e', value: changeValues(element.ContributorRole[0])}]
+        };
+      }
+
+      function filter({ContributorRole}) {
+        return ['B06', 'E07', 'A12', 'B01'].includes(ContributorRole?.[0]);
+      }
+
+      function changeValues(value) {
+        if (value === 'B06') {
+          return 'kääntäjä.';
+        }
+        if (value === 'E07') {
+          return 'lukija.';
+        }
+        if (value === 'A12') {
+          return 'kuvittaja.';
+        }
+        if (value === 'B01') {
+          return 'toimittaja.';
+        }
+        return value;
+      }
+    }
+
+    /* WAITS  11.9.2020 ->
+    function generate856() {
+      // Field added    if NotificationType = 03 with legal deposit
+      // WAITS FOR:  URN of legal deposit
+
+      if (getValue('NotificationType') === '03' && isLegalDeposit === true && (dataSource === 'Kirjavälitys Oy') ) {
+
+        return [
+          {
+            tag: '856',
+            ind1: '4',
+            ind2: '0',
+            subfields: [
+              {code: 'u', value: 'URN of legal deposit XXXXXXXXXX under construction'},
+              {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
+              {code: '5', value: 'FI-Vapaa'}
+            ]
+          }
+        ];
+      }
+
+      return [];
+    }
+    */ // WAITS  11.9.2020 <-
+
 
     function generate006() {
       const materialForm = isAudio || isText ? 'm' : '|';
@@ -256,28 +838,53 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
       return [];
     }
 
-    function generate884() {
-      const supplier = getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
 
+    function generate884() {
       return [
         {
           tag: '884',
           subfields: [
             {code: 'a', value: 'ONIX3 to MARC transformation'},
             {code: 'g', value: moment().format('YYYYMMDD')},
-            {code: 'k', value: sources[supplier]},
+            {code: 'k', value: sources[dataSource]}, // Was: sources.supplier  //dataSource
             {code: 'q', value: 'FI-NL'}
           ]
         }
       ];
     }
 
+    function generate974() {
+      // Get IDValue from      Product/RelatedMaterial/RelatedWork/WorkIdentifier/IDValue
+      const getIdvalue = getValue('RelatedMaterial', 'RelatedWork', 'WorkIdentifier', 'IDValue');
+      const gids = getValues('RelatedMaterial', 'RelatedWork', 'WorkIdentifier');
+
+      if (getIdvalue && gids && dataSource === 'Kirjavälitys Oy') {
+        return gids.map(doEdits);
+      }
+
+      function doEdits(element) {
+        return {
+          tag: '974',
+          subfields: [
+            {code: 'a', value: 'KV'},
+            {code: 'b', value: element.IDValue[0]},
+            {code: '5', value: 'FENNI'}
+          ]
+        };
+      }
+      return [];
+    }
+
+
     function generate008() {
+
       const date = moment().format('YYMMDD');
       const language = generateLanguage();
       const publicationCountry = generatePublicationCountry();
       const publishingYear = generatePublishingYear();
-      const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||||${language}||`;
+      const subjectSchemeName = generateSubjectSchemeName();
+      const targetAudience = generateTargetAudience();
+      const value = `${date}s${publishingYear}    ${publicationCountry} ||||${targetAudience}o|||||||||${subjectSchemeName}|${language}||`;
 
       return [{tag: '008', value}];
 
@@ -294,18 +901,51 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
         const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
         return publishingDate ? publishingDate.slice(0, 4) : '    ';
       }
-    }
 
-    function generate520() {
-      const summary = getSummary();
-      const textType = getValue('CollateralDetail', 'TextContent', 'TextType');
+      function generateSubjectSchemeName() { // Ns. 008/A
 
-      return summary && textType === '03' ? [
-        {
-          tag: '520', subfields: [{code: 'a', value: summary}]
+        const CheckSubjectSchemeName = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeName');
+        const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
+
+        if (CheckSubjectSchemeName && CheckSubjectCode) {
+          if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03' && dataSource === 'Kirjavälitys Oy') {
+            return '0';
+          }
+
+          return '|';
         }
-      ] : [];
+
+        return '|'; // Basic value
+      }
+
+
+      function generateTargetAudience() { // Ns. 008/B & C
+        // Position 22 = target audience on MARC
+
+        const CheckEditionType = getValue('DescriptiveDetail', 'EditionType');
+        // Const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier'); // alkup
+        const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'SubjectSchemeIdentifier');
+        // Const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');  //alkup
+        const CheckSubjectCode = getValue('DescriptiveDetail', 'SubjectCode');
+
+        if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && CheckEditionType && dataSource && dataSource === 'Kirjavälitys Oy') {
+          if (CheckSubjectSchemeIdentifier === '73' && ((CheckSubjectCode === 'L' || CheckSubjectCode === 'N') && CheckEditionType !== 'SMP')) {
+            return 'j';
+          }
+
+          if (CheckEditionType === 'SMP' && dataSource === 'Kirjavälitys Oy') {
+            return 'f';
+          }
+
+          return '|';
+        }
+
+
+        return '|'; // Basic value
+      }
+
     }
+
 
     function generateStandardIdentifiers() {
       const isbn = getIsbn();
@@ -356,6 +996,22 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
     }
 
     function generate040() {
+
+      if (dataSource === 'Kirjavälitys Oy') { // < --- a ONLY FOR KV!
+        return [
+          {
+            tag: '040',
+            subfields: [
+              {code: 'a', value: 'FI-KV'},
+              {code: 'b', value: getLanguage()},
+              {code: 'e', value: 'rda'},
+              {code: 'd', value: 'FI-NL'}
+            ]
+          }
+        ];
+
+      }
+
       return [
         {
           tag: '040',
@@ -369,12 +1025,87 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
     }
 
     function generate041() {
-      return getLanguageRole() === '01' ? [
-        {
-          tag: '041', subfields: [{code: 'a', value: getLanguage()}]
+
+      const form = getValue('DescriptiveDetail', 'ProductForm');
+      const langCode = getValue('DescriptiveDetail', 'Language', 'LanguageCode');
+
+      if (form !== undefined && langCode !== undefined) {
+
+        if (['EB', 'EC', 'ED'].includes(form)) {
+          return [
+            {
+              tag: '041',
+              subfields: [{code: 'a', value: langCode}]
+            }
+          ];
         }
-      ] : [];
+
+
+        if (form === 'AJ') {
+          return [
+            {
+              tag: '041',
+              subfields: [{code: 'd', value: langCode}]
+            }
+          ];
+        }
+
+        return [];
+      }
+
+      return [];
     }
+
+
+    function generate084a() {
+
+      // A-case:  SubjectCode Field added if if SubjectSchemeIdentifier = 66
+      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === 'Kirjavälitys Oy') {
+        return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
+      }
+
+      function getSSI(element) {
+        return {
+          tag: '084',
+          subfields: [
+            {code: 'a', value: element.SubjectCode[0]},
+            {code: '2', value: 'Ykl'}
+          ]
+        };
+      }
+
+      function filter({SubjectSchemeIdentifier}) {
+        return ['66'].includes(SubjectSchemeIdentifier?.[0]);
+      }
+
+      return [];
+    }
+
+
+    function generate084b() {
+      // B-case:  SubjectHeadingText Field added if SubjectSchemeIdentifier = 80
+      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === 'Kirjavälitys Oy') {
+        return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
+      }
+
+      function getSSI(element) {
+        return {
+          tag: '084',
+          ind1: '9',
+          subfields: [
+            {code: 'a', value: element.SubjectHeadingText[0]},
+            {code: '2', value: 'Ykl'}
+          ]
+        };
+      }
+
+      function filter({SubjectSchemeIdentifier}) {
+        return ['80'].includes(SubjectSchemeIdentifier?.[0]);
+      }
+
+      return [];
+    }
+
 
     function generateAuthors() {
       return authors.map(({name, role}, index) => {
@@ -399,6 +1130,7 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
     }
 
     function getAuthors() {
+
       return getValues('DescriptiveDetail', 'Contributor')
         .filter(filter)
         .map(normalize)
@@ -431,17 +1163,36 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
   }
 
   function getTypeInformation() {
-    const form = getValue('DescriptiveDetail', 'ProductForm');
-    const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
 
-    if (form === 'AJ' && formDetail === 'A103') {
-      return {isAudio: true};
+    if (getValue('DescriptiveDetail', 'ProductFormDetail') && getValue('DescriptiveDetail', 'ProductForm')) {
+
+      const form = getValue('DescriptiveDetail', 'ProductForm');
+      const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
+
+      if (form === 'AJ' && formDetail === 'A103') {
+        return {isAudio: true};
+      }
+
+
+      if (form !== 'AJ' && formDetail !== 'A103') { // Add 31.8.2020
+        return {isAudio: false};
+      }
+
+      if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
+        return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
+      }
+
     }
 
-    if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
-      return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
+
+    try {
+      throw new Error('Unidentified: not audio, not text');
+    } catch (e) {
+      logger.log('debug', 'Exception!');
     }
+
   }
+
 
   function getLanguageRole() {
     return getValue('DescriptiveDetail', 'Language', 'LanguageRole');
@@ -465,4 +1216,27 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
   function isNotSupported() {
     return getValues('ProductIdentifier').some(({ProductIDType: [type], IDValue: [value]}) => type === '02' && (/^(?<def>951|952)/u).test(value) === false);
   }
+
+
+  function getSource() {
+    // Check first suppliername then sender name
+
+    // SupplierName
+    if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName')) {
+      const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
+      return gvalue;
+    }
+
+    // SenderName
+    if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName')) {
+      const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName');
+      return gvalue;
+    }
+
+    return sender.name;
+  }
+
+
 };
+
+
