@@ -4,5 +4,3 @@ coverage
 dist
 .nyc_output
 env
-test-fixtures\transform\09
-test-fixtures\transform\100

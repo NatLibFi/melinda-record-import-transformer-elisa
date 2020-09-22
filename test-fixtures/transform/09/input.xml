@@ -3,43 +3,46 @@
  <Header>
   <Sender>
    <SenderName>Kirjavälitys Oy</SenderName>
-   <ContactName>ContactNameHere</ContactName>
+   <ContactName>ContactName</ContactName>
    <EmailAddress>tuotetiedot@foobar.fi</EmailAddress>
   </Sender>
   <Addressee>
-   <AddresseeName>ADDRESSEENAME</AddresseeName>
+   <AddresseeName>ADRESSEENAMEHERE</AddresseeName>
   </Addressee>
   <SentDateTime>20200409</SentDateTime>
   <MessageNote>foobar tuotesanoma</MessageNote>
  </Header>
-<Product>
-  <RecordReference>CCC7777777</RecordReference>
+ <Product>
+  <RecordReference>AAA1234567</RecordReference>
   <NotificationType>02</NotificationType>
   <ProductIdentifier>
    <ProductIDType>03</ProductIDType>
-   <IDValue>8888888888888</IDValue>
+   <IDValue>1111111111111</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>15</ProductIDType>
-   <IDValue>8888888888888</IDValue>
+   <IDValue>1111111111111</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>01</ProductIDType>
    <IDTypeName>foobar tuotenumero</IDTypeName>
-   <IDValue>8888888888888</IDValue>
+   <IDValue>1111111111111</IDValue>
   </ProductIdentifier>
   <DescriptiveDetail>
    <ProductComposition>00</ProductComposition>
    <ProductForm>AJ</ProductForm>
    <ProductFormDetail>A103</ProductFormDetail>
+   <ProductFormDescription>äänikirja</ProductFormDescription>
    <PrimaryContentType>01</PrimaryContentType>
+   <EpubTechnicalProtection>02</EpubTechnicalProtection>
    <Collection>
     <CollectionType>10</CollectionType>
     <TitleDetail>
      <TitleType>01</TitleType>
      <TitleElement>
       <TitleElementLevel>02</TitleElementLevel>
-      <TitleText>Cupido</TitleText>
+      <PartNumber>2</PartNumber>
+      <TitleText>Perveen Mistry</TitleText>
      </TitleElement>
     </TitleDetail>
    </Collection>
@@ -47,30 +50,53 @@
     <TitleType>01</TitleType>
     <TitleElement>
      <TitleElementLevel>01</TitleElementLevel>
-     <TitleText>Travel Companion</TitleText>
+     <TitleText>Satapurin jalokivi</TitleText>
+    </TitleElement>
+   </TitleDetail>
+   <TitleDetail>
+    <TitleType>03</TitleType>
+    <TitleElement>
+     <TitleElementLevel>01</TitleElementLevel>
+     <TitleText>The Satapur Moonstone</TitleText>
     </TitleElement>
    </TitleDetail>
    <Contributor>
     <SequenceNumber>1</SequenceNumber>
+    <ContributorRole>A01</ContributorRole>
+    <PersonName>Sujata Massey</PersonName>
+    <PersonNameInverted>Massey, Sujata</PersonNameInverted>
+    <NamesBeforeKey>Sujata</NamesBeforeKey>
+    <KeyNames>Massey</KeyNames>
+   </Contributor>
+   <Contributor>
+    <SequenceNumber>2</SequenceNumber>
+    <ContributorRole>B06</ContributorRole>
+    <PersonName>Maija Heikinheimo</PersonName>
+    <PersonNameInverted>Heikinheimo, Maija </PersonNameInverted>
+    <NamesBeforeKey>Maija</NamesBeforeKey>
+    <KeyNames>Heikinheimo</KeyNames>
+   </Contributor>
+   <Contributor>
+    <SequenceNumber>3</SequenceNumber>
     <ContributorRole>E07</ContributorRole>
-    <PersonName>Savanna Scarlett</PersonName>
-    <PersonNameInverted>Scarlett, Savanna</PersonNameInverted>
-    <NamesBeforeKey>Savanna</NamesBeforeKey>
-    <KeyNames>Scarlett</KeyNames>
+    <PersonName>Erja Manto</PersonName>
+    <PersonNameInverted>Manto, Erja</PersonNameInverted>
+    <NamesBeforeKey>Erja</NamesBeforeKey>
+    <KeyNames>Manto</KeyNames>
    </Contributor>
    <Language>
     <LanguageRole>01</LanguageRole>
-    <LanguageCode>eng</LanguageCode>
+    <LanguageCode>fin</LanguageCode>
    </Language>
-   <Extent>
-    <ExtentType>09</ExtentType>
-    <ExtentValue>0004200</ExtentValue>
-    <ExtentUnit>16</ExtentUnit>
-   </Extent>
+   <Subject>
+    <SubjectSchemeIdentifier>73</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Suomalainen Kirja-alan luokitus</SubjectSchemeName>
+    <SubjectCode>A</SubjectCode>
+   </Subject>
    <Subject>
     <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
     <SubjectSchemeName>YKL</SubjectSchemeName>
-    <SubjectCode>84.5</SubjectCode>
+    <SubjectCode>84.2</SubjectCode>
    </Subject>
    <Subject>
     <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
@@ -79,32 +105,74 @@
     <SubjectHeadingText>käännetty kaunokirjallisuus</SubjectHeadingText>
    </Subject>
    <Subject>
+    <SubjectSchemeIdentifier>80</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Fiktiivisen aineiston lisäluokitus</SubjectSchemeName>
+    <SubjectHeadingText>eläimet</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>80</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Fiktiivisen aineiston lisäluokitus</SubjectSchemeName>
+    <SubjectHeadingText>jännitys</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>Eläimet ja luonto</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>Romaanit</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>Jännitys</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>rikos</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>dekkari</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>Perhe</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>parisuhteet</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>ihmissuhteet</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>Maantiede</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>94</SubjectSchemeIdentifier>
+    <SubjectCode>1FKA</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>96</SubjectSchemeIdentifier>
+    <SubjectCode>3MPBGH</SubjectCode>
+   </Subject>
+   <Subject>
     <MainSubject/>
     <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
-    <SubjectCode>FP</SubjectCode>
+    <SubjectCode>FFH</SubjectCode>
    </Subject>
    <Subject>
     <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
-    <SubjectCode>FBA</SubjectCode>
-   </Subject>
-   <Subject>
-    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
-    <SubjectCode>FP</SubjectCode>
-   </Subject>
-   <Subject>
-    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
-    <SubjectCode>FRD</SubjectCode>
-   </Subject>
-   <Subject>
-    <SubjectSchemeIdentifier>98</SubjectSchemeIdentifier>
-    <SubjectCode>5X</SubjectCode>
+    <SubjectCode>FYT</SubjectCode>
    </Subject>
   </DescriptiveDetail>
   <CollateralDetail>
    <TextContent>
     <TextType>03</TextType>
     <ContentAudience>00</ContentAudience>
-    <Text>Some text here.</Text>
+    <Text>Here some text.</Text>
    </TextContent>
    <SupportingResource>
     <ResourceContentType>01</ResourceContentType>
@@ -112,7 +180,7 @@
     <ResourceMode>03</ResourceMode>
     <ResourceVersion>
      <ResourceForm>02</ResourceForm>
-     <ResourceLink>https://some.company.fi/onix/media/2642205.jpg?size=original&amp;cl=20050&amp;ch=10f12b1ed3c72f62f085776b602028da</ResourceLink>
+     <ResourceLink>https://some.company.fi/onix/media/2641721.jpg?size=original&amp;cl=20050&amp;ch=0517aa7067fafd152fc9c583073b7eda</ResourceLink>
      <ContentDate>
       <ContentDateRole>17</ContentDateRole>
       <Date>20200408</Date>
@@ -121,29 +189,36 @@
    </SupportingResource>
   </CollateralDetail>
   <PublishingDetail>
-   <Imprint>
-    <ImprintName>ImprintNameHere</ImprintName>
-   </Imprint>
    <Publisher>
     <PublishingRole>01</PublishingRole>
     <PublisherIdentifier>
      <PublisherIDType>01</PublisherIDType>
      <IDTypeName>foobar kustantajanumero</IDTypeName>
-     <IDValue>87042</IDValue>
+     <IDValue>22222</IDValue>
     </PublisherIdentifier>
-    <PublisherName>PublisherNameHere</PublisherName>
+    <PublisherName>PublisherNamehere</PublisherName>
    </Publisher>
    <CountryOfPublication>FI</CountryOfPublication>
    <PublishingStatus>02</PublishingStatus>
    <PublishingStatusNote>Uutuus, ei vielä ilmestynyt</PublishingStatusNote>
    <PublishingDate>
     <PublishingDateRole>01</PublishingDateRole>
-    <Date>20200421</Date>
+    <Date>20200413</Date>
    </PublishingDate>
    <PublishingDate>
     <PublishingDateRole>12</PublishingDateRole>
     <Date>2020</Date>
    </PublishingDate>
   </PublishingDetail>
+  <RelatedMaterial>
+   <RelatedWork>
+    <WorkRelationCode>01</WorkRelationCode>
+    <WorkIdentifier>
+     <WorkIDType>01</WorkIDType>
+     <IDTypeName>foobar teostunniste</IDTypeName>
+     <IDValue>AA7777777</IDValue>
+    </WorkIdentifier>
+   </RelatedWork>
+  </RelatedMaterial>
  </Product>
-</ONIXMessage> 
+ </ONIXMessage>
