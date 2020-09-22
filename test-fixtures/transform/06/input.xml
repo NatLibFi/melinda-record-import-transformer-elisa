@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
+ <Header>
+  <Sender>
+   <SenderName>Kirjavälitys Oy</SenderName>
+   <ContactName>ContactPersonName</ContactName>
+   <EmailAddress>email@foobar.fi</EmailAddress>
+  </Sender>
+  <Addressee>
+   <AddresseeName>ADDRESSEE</AddresseeName>
+  </Addressee>
+  <SentDateTime>20200409</SentDateTime>
+  <MessageNote>foobar tuotesanoma</MessageNote>
+ </Header>
+<Product>
+  <RecordReference>ABC7777777</RecordReference>
+  <NotificationType>03</NotificationType>
+  <ProductIdentifier>
+   <ProductIDType>03</ProductIDType>
+   <IDValue>9999999999999</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>15</ProductIDType>
+   <IDValue>9999999999999</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>01</ProductIDType>
+   <IDTypeName>foobar tuotenumero</IDTypeName>
+   <IDValue>9999999999999</IDValue>
+  </ProductIdentifier>
+  <DescriptiveDetail>
+   <ProductComposition>00</ProductComposition>
+   <ProductForm>AJ</ProductForm>
+   <ProductFormDetail>A103</ProductFormDetail>
+   <PrimaryContentType>01</PrimaryContentType>
+   <EpubTechnicalProtection>02</EpubTechnicalProtection>
+   <EpubUsageConstraint>
+    <EpubUsageType>01</EpubUsageType>
+    <EpubUsageStatus>02</EpubUsageStatus>
+    <EpubUsageLimit>
+     <Quantity>10</Quantity>
+     <EpubUsageUnit>04</EpubUsageUnit>
+    </EpubUsageLimit>
+   </EpubUsageConstraint>
+   <TitleDetail>
+    <TitleType>01</TitleType>
+    <TitleElement>
+     <TitleElementLevel>01</TitleElementLevel>
+     <TitleText>Huomisen yhteiskunta</TitleText>
+     <Subtitle>olosuhteet hyvinvoinnille</Subtitle>
+    </TitleElement>
+   </TitleDetail>
+   <Contributor>
+    <SequenceNumber>1</SequenceNumber>
+    <ContributorRole>A01</ContributorRole>
+    <PersonName>Mika Aaltonen</PersonName>
+    <PersonNameInverted>Aaltonen, Mika</PersonNameInverted>
+    <NamesBeforeKey>Mika</NamesBeforeKey>
+    <KeyNames>Aaltonen</KeyNames>
+   </Contributor>
+   <Contributor>
+    <SequenceNumber>2</SequenceNumber>
+    <ContributorRole>E07</ContributorRole>
+    <PersonName>Aku Laitinen</PersonName>
+    <PersonNameInverted>Laitinen, Aku</PersonNameInverted>
+    <NamesBeforeKey>Aku</NamesBeforeKey>
+    <KeyNames>Laitinen</KeyNames>
+   </Contributor>
+   <Language>
+    <LanguageRole>01</LanguageRole>
+    <LanguageCode>fin</LanguageCode>
+   </Language>
+   <Extent>
+    <ExtentType>09</ExtentType>
+    <ExtentValue>0061100</ExtentValue>
+    <ExtentUnit>16</ExtentUnit>
+   </Extent>
+   <Subject>
+    <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
+    <SubjectSchemeName>AAA</SubjectSchemeName>
+    <SubjectCode>30.11</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
+    <SubjectSchemeName>foobar tuoteryhmä</SubjectSchemeName>
+    <SubjectCode>03</SubjectCode>
+    <SubjectHeadingText>tietokirjallisuus</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <MainSubject/>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>KJ</SubjectCode>
+   </Subject>
+  </DescriptiveDetail>
+  <CollateralDetail>
+   <TextContent>
+    <TextType>03</TextType>
+    <ContentAudience>00</ContentAudience>
+    <Text>Some text here. aaa bbb ccc ddd eee ...</Text>
+   </TextContent>
+   <SupportingResource>
+    <ResourceContentType>01</ResourceContentType>
+    <ContentAudience>00</ContentAudience>
+    <ResourceMode>03</ResourceMode>
+    <ResourceVersion>
+     <ResourceForm>02</ResourceForm>
+     <ResourceLink>https://aaa.foobar.fi/onix/media/2641677.jpg?size=original&amp;cl=20050&amp;ch=bb64ea44e0b7743a814fd0f2245a1353</ResourceLink>
+     <ContentDate>
+      <ContentDateRole>17</ContentDateRole>
+      <Date>20200407</Date>
+     </ContentDate>
+    </ResourceVersion>
+   </SupportingResource>
+  </CollateralDetail>
+  <PublishingDetail>
+   <Publisher>
+    <PublishingRole>01</PublishingRole>
+    <PublisherIdentifier>
+     <PublisherIDType>01</PublisherIDType>
+     <IDTypeName>foobar kustantajanumero</IDTypeName>
+     <IDValue>72434</IDValue>
+    </PublisherIdentifier>
+    <PublisherName>barfoo</PublisherName>
+   </Publisher>
+   <CountryOfPublication>FI</CountryOfPublication>
+   <PublishingStatus>04</PublishingStatus>
+   <PublishingStatusNote>Saatavana/Tilattavissa</PublishingStatusNote>
+   <PublishingDate>
+    <PublishingDateRole>01</PublishingDateRole>
+    <Date>2020</Date>
+   </PublishingDate>
+   <PublishingDate>
+    <PublishingDateRole>12</PublishingDateRole>
+    <Date>2020</Date>
+   </PublishingDate>
+  </PublishingDetail>
+  <RelatedMaterial>
+   <RelatedWork>
+    <WorkRelationCode>01</WorkRelationCode>
+    <WorkIdentifier>
+     <WorkIDType>01</WorkIDType>
+     <IDTypeName>foobar teostunniste</IDTypeName>
+     <IDValue>TT1234567</IDValue>
+    </WorkIdentifier>
+   </RelatedWork>
+  </RelatedMaterial>
+ </Product>
+</ONIXMessage>
