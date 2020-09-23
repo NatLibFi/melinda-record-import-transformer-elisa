@@ -33,6 +33,7 @@ import generateTitles from './generate-titles';
 import generateStaticFields from './generate-static-fields';
 import NotSupportedError from './../../error';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
+// Import createClient from '@natlibfi/sru-client'; //  Add 23.9.2020
 
 const logger = createLogger();
 
@@ -140,6 +141,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       generate653(),
       generate655(),
       generate700(),
+      generate776(),
       // Generate856(),  // waits
       generate884(),
       generate974(),
@@ -748,6 +750,39 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       }
     }
 
+    // ---------- 776 ---------- >
+    function generate776() {
+      // This field requires searching Melinda
+      // For records with the same 974 |b values as the incoming record.
+      // Field is repeated if Melinda has several matches.
+
+      // Return []; // Force this output during cobstruction
+
+      if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
+
+        // Const match = ' get match here ';
+
+        return []; // Force this output during cobstruction
+
+        /*
+        Return {
+          tag: '776',
+          ind1: '0',
+          ind2: '8',
+          subfields: [
+            {code: 'i', value: 'Verkkoaineisto: XXXXXXXXXX'},
+            {code: 'z', value: match},
+            {code: '9', value: 'FENNI<KEEP>'}
+          ]
+        };
+        */
+
+      } // If; only for KV
+
+      return []; // Force this output during cobstruction
+    }
+    // <---------- 776 ----------
+
     /* WAITS  11.9.2020 ->
     function generate856() {
       // Field added    if NotificationType = 03 with legal deposit
@@ -1169,21 +1204,23 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const form = getValue('DescriptiveDetail', 'ProductForm');
       const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
 
-      if (form === 'AJ' && formDetail === 'A103') {
-        return {isAudio: true};
-      }
+      if (form && formDetail) {
 
+        if (form === 'AJ' && formDetail === 'A103') {
+          return {isAudio: true};
+        }
 
-      if (form !== 'AJ' && formDetail !== 'A103') { // Add 31.8.2020
-        return {isAudio: false};
-      }
+        if (form !== 'AJ' || formDetail !== 'A103') { // Add 31.8.2020  // changed: 23.9.2020: && -> ||
+          return {isAudio: false};
+        }
 
-      if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
-        return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
+        if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
+          return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
+        }
+
       }
 
     }
-
 
     try {
       throw new Error('Unidentified: not audio, not text');
