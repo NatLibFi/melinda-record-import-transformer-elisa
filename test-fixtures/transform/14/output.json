@@ -16,7 +16,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "4444444444444"
+            "value": "978-952-279-359-1"
           }
         ],
         "ind1": " ",
@@ -342,7 +342,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:4444444444444"
+            "value": "http://urn.fi/URN:ISBN:978-952-279-359-1"
           }
         ]
       },
@@ -407,7 +407,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 4444444444444 is not valid"
+        "ISBN 9789522793591 is not valid"
       ]
     },
     {

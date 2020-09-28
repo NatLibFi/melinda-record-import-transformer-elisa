@@ -24,7 +24,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "1111111111111"
+            "value": "978-951-24-1794-0"
           },
           {
             "code": "q",
@@ -527,7 +527,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:1111111111111"
+            "value": "http://urn.fi/URN:ISBN:978-951-24-1794-0"
           }
         ]
       },
@@ -592,7 +592,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 1111111111111 is not valid"
+        "ISBN 9789512417940 is not valid"
       ]
     },
     {

@@ -16,7 +16,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "1111111111111"
+            "value": "978-952-351-123-1"
           }
         ],
         "ind1": " ",
@@ -272,7 +272,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:1111111111111"
+            "value": "http://urn.fi/URN:ISBN:978-952-351-123-1"
           }
         ]
       },
@@ -337,7 +337,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 1111111111111 is not valid"
+        "ISBN 9789523511231 is not valid"
       ]
     },
     {

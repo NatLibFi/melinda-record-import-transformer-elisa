@@ -24,7 +24,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "9999999999999"
+            "value": "978-952-14-3915-5"
           },
           {
             "code": "q",
@@ -361,7 +361,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:9999999999999"
+            "value": "http://urn.fi/URN:ISBN:978-952-14-3915-5"
           }
         ]
       },
@@ -397,7 +397,7 @@
           },
           {
             "code": "b",
-            "value": "TT1234567"
+            "value": "TT0031387"
           },
           {
             "code": "5",
@@ -426,7 +426,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 9999999999999 is not valid"
+        "ISBN 9789521439155 is not valid"
       ]
     },
     {
