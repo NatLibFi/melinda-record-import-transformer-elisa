@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
+ <Header>
+  <Sender>
+   <SenderName>Kirjavälitys Oy</SenderName>
+   <ContactName>ContactPersonName</ContactName>
+   <EmailAddress>email@foobar.fi</EmailAddress>
+  </Sender>
+  <Addressee>
+   <AddresseeName>ADDRESSEE</AddresseeName>
+  </Addressee>
+  <SentDateTime>20200409</SentDateTime>
+  <MessageNote>foobar tuotesanoma</MessageNote>
+ </Header>
+ <Product>
+  <RecordReference>REF1234567</RecordReference>
+  <NotificationType>03</NotificationType>
+  <ProductIdentifier>
+   <ProductIDType>03</ProductIDType>
+   <IDValue>9789522918802</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>15</ProductIDType>
+   <IDValue>9789522918802</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>01</ProductIDType>
+   <IDTypeName>foobar tuotenumero</IDTypeName>
+   <IDValue>9789522918802</IDValue>
+  </ProductIdentifier>
+  <DescriptiveDetail>
+   <ProductComposition>00</ProductComposition>
+   <ProductForm>EB</ProductForm>
+   <ProductFormDetail>E101</ProductFormDetail>
+   <ProductFormFeature>
+    <ProductFormFeatureType>15</ProductFormFeatureType>
+    <ProductFormFeatureValue>101A</ProductFormFeatureValue>
+   </ProductFormFeature>
+   <PrimaryContentType>10</PrimaryContentType>
+   <TitleDetail>
+    <TitleType>01</TitleType>
+    <TitleElement>
+     <TitleElementLevel>01</TitleElementLevel>
+     <TitleText>Kuninkaallisessa seurassa</TitleText>
+     <Subtitle>Rojalistin käsikirja</Subtitle>
+    </TitleElement>
+   </TitleDetail>
+   <Contributor>
+    <SequenceNumber>1</SequenceNumber>
+    <ContributorRole>A01</ContributorRole>
+    <PersonName>Satu Jaatinen</PersonName>
+    <PersonNameInverted>Jaatinen, Satu</PersonNameInverted>
+    <NamesBeforeKey>Satu</NamesBeforeKey>
+    <KeyNames>Jaatinen</KeyNames>
+   </Contributor>
+   <Language>
+    <LanguageRole>01</LanguageRole>
+    <LanguageCode>fin</LanguageCode>
+   </Language>
+   <Extent>
+    <ExtentType>10</ExtentType>
+    <ExtentValue>140</ExtentValue>
+    <ExtentUnit>03</ExtentUnit>
+   </Extent>
+   <Subject>
+    <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
+    <SubjectSchemeName>YKL</SubjectSchemeName>
+    <SubjectCode>99.13</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
+    <SubjectSchemeName>foobar tuoteryhmä</SubjectSchemeName>
+    <SubjectCode>03</SubjectCode>
+    <SubjectHeadingText>tietokirjallisuus</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <MainSubject/>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>DNBR</SubjectCode>
+   </Subject>
+  </DescriptiveDetail>
+  <CollateralDetail>
+   <TextContent>
+    <TextType>03</TextType>
+    <ContentAudience>00</ContentAudience>
+    <Text>Some text here like this.</Text>
+   </TextContent>
+   <SupportingResource>
+    <ResourceContentType>01</ResourceContentType>
+    <ContentAudience>00</ContentAudience>
+    <ResourceMode>03</ResourceMode>
+    <ResourceVersion>
+     <ResourceForm>02</ResourceForm>
+     <ResourceLink>https://link.company.fi/onix/media/2643496.jpg?size=original&amp;cl=20050&amp;ch=7bc3b3f181e1f3fdfee83c20bfbcffab</ResourceLink>
+     <ContentDate>
+      <ContentDateRole>17</ContentDateRole>
+      <Date>20200414</Date>
+     </ContentDate>
+    </ResourceVersion>
+   </SupportingResource>
+  </CollateralDetail>
+  <PublishingDetail>
+   <Publisher>
+    <PublishingRole>01</PublishingRole>
+    <PublisherIdentifier>
+     <PublisherIDType>01</PublisherIDType>
+     <IDTypeName>ABC numero</IDTypeName>
+     <IDValue>27804</IDValue>
+    </PublisherIdentifier>
+    <PublisherName>Docendo</PublisherName>
+   </Publisher>
+   <CountryOfPublication>FI</CountryOfPublication>
+   <PublishingStatus>04</PublishingStatus>
+   <PublishingStatusNote>Saatavana/Tilattavissa</PublishingStatusNote>
+   <PublishingDate>
+    <PublishingDateRole>01</PublishingDateRole>
+    <Date>2020</Date>
+   </PublishingDate>
+   <PublishingDate>
+    <PublishingDateRole>12</PublishingDateRole>
+    <Date>2020</Date>
+   </PublishingDate>
+  </PublishingDetail>
+  <RelatedMaterial>
+   <RelatedWork>
+    <WorkRelationCode>01</WorkRelationCode>
+    <WorkIdentifier>
+     <WorkIDType>01</WorkIDType>
+     <IDTypeName>foobar teostunniste</IDTypeName>
+     <IDValue>TT0031780</IDValue>
+    </WorkIdentifier>
+   </RelatedWork>
+  </RelatedMaterial>
+ </Product>
+</ONIXMessage>
+
+

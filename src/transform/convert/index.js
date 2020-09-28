@@ -48,7 +48,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     throw new Error('  No data source found.');
   }
 
-  
+
   //    Console.log('      isLegalDeposit = ', isLegalDeposit);
 
   checkSupplierData();
