@@ -41,6 +41,7 @@
 		"@natlibfi/melinda-backend-commons": "^1.0.6",
 		"@natlibfi/melinda-commons": "^10.0.3",
 		"@natlibfi/melinda-record-import-commons": "^8.0.1",
+		"@natlibfi/sru-client": "^4.0.2",
 		"moment": "^2.22.2",
 		"xml-flow": "^1.0.4",
 		"xml2js": "^0.4.23"

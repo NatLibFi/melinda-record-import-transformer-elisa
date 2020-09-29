@@ -33,7 +33,7 @@ import generateTitles from './generate-titles';
 import generateStaticFields from './generate-static-fields';
 import NotSupportedError from './../../error';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
-// Import createClient from '@natlibfi/sru-client'; //  Add 23.9.2020
+// Import createClient from '@natlibfi/sru-client'; //  Add 29.9.2020
 
 const logger = createLogger();
 
@@ -758,7 +758,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       // Field is repeated if Melinda has several matches.
 
       // Return []; // Force this output during cobstruction
-
       if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
 
         // Const match = ' get match here ';
