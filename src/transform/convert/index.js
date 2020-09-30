@@ -762,7 +762,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
         // Const match = ' get match here ';
 
-        return []; // Force this output during cobstruction
+        return []; // Force this output during construction
 
         /*
         Return {
