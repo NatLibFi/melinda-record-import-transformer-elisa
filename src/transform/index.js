@@ -26,6 +26,8 @@
 *
 */
 
+import {createValueInterface} from './convert/common';
+
 import {MarcRecord} from '@natlibfi/marc-record';
 import {EventEmitter} from 'events';
 import createStreamParser, {toXml, ALWAYS as streamParserAlways} from 'xml-flow';
@@ -97,18 +99,44 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
         async function convert() {
           try {
             const obj = await convertToObject(node);
-            const convertRecord = await converterPromise;
-            const record = await convertRecord(obj);
+            // Const convertRecord = await converterPromise;
+            // Const record = await convertRecord(obj);
 
-            // Console.log('   QQQ   record:\n ', JSON.stringify(record,null,1) ); // ***
-            // Console.log('   QQQ   record:\n ', record); // ***
+            const theXmlFile = `${makeHeader() + toXml(obj)}</ONIXMessage>`;
+            // Console.log(theXmlFile); // *** OK
+
+                          const {getValue, getValues} = createValueInterface(record);
+                      if (['EB', 'EC', 'ED'].includes(getValue('DescriptiveDetail', 'ProductForm'))) {
+                        console.log(JSON.stringify(theXmlFile, null, 1));
+                      }
+
+
+
+            const {parseString} = require('xml2js');
+
+            parseString(theXmlFile, (err, result) => {
+              // console.log(JSON.stringify(result, null, 1)); // Listaa kaikki rivit
+
+              const {getValue, getValues} = createValueInterface(result);
+
+              // Console.log('    ------- :', getValue('ProductForm'),)
+
+              if (['EB', 'EC', 'ED'].includes(getValue('DescriptiveDetail', 'ProductForm'))) {
+                console.log(JSON.stringify(result, null, 1));
+              }
+
+            });
+
+            return;
+            // Return toXml(obj);
+
 
             if (validate === true || fix === true) {
               const result = await validateRecord(record, fix);
-
               emitter.emit('record', result);
               return;
             }
+
 
             /* istanbul ignore next: No tests without validators */ emitter.emit('record', {record});
           } catch (err) {
@@ -125,6 +153,28 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
 
           }
         }
+
+
+        function makeHeader() {
+          const headerString =
+          `<?xml version="1.0" encoding="UTF-8"?>
+<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
+ <Header>
+  <Sender>
+   <SenderName>Kirjavälitys Oy</SenderName>
+   <ContactName>ContactPersonName</ContactName>
+   <EmailAddress>email@foobar.fi</EmailAddress>
+  </Sender>
+  <Addressee>
+   <AddresseeName>ADDRESSEE</AddresseeName>
+  </Addressee>
+  <SentDateTime>20200409</SentDateTime>
+  <MessageNote>foobar tuotesanoma</MessageNote>
+ </Header>`;
+          return headerString;
+        }
+
+
       });
 
     function convertToObject(node) {

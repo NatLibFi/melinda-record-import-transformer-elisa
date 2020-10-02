@@ -29,7 +29,7 @@
 		"test": "npm run lint && npm run test:base -- src/*.spec.js src/**/*.spec.js",
 		"test:dev": "npm run lint:dev && npm run test:base -- src/**/*.spec.js && npm run coverage",
 		"coverage": "nyc check-coverage --per-file",
-		"build": "babel src --source-maps --copy-files --delete-dir-on-start --out-dir=dist --minified",
+		"build": "babel src --source-maps --copy-files --delete-dir-on-start --out-dir=dist",
 		"watch:test": "cross-env DEBUG=1 NODE_ENV=test nodemon -w src --exec 'npm run test:dev'"
 	},
 	"dependencies": {
