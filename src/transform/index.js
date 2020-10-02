@@ -26,8 +26,6 @@
 *
 */
 
-import {createValueInterface} from './convert/common';
-
 import {MarcRecord} from '@natlibfi/marc-record';
 import {EventEmitter} from 'events';
 import createStreamParser, {toXml, ALWAYS as streamParserAlways} from 'xml-flow';
@@ -41,7 +39,7 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
 
   const emitter = new class extends EventEmitter {}();
 
-  console.log(makeHeader());
+  console.log(makeHeader()); // eslint-disable-line no-console
 
   start();
 
@@ -66,8 +64,8 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
       .on('end', async () => {
         try {
           await Promise.all(promises);
-          emitter.emit('end', promises.length);      
-                   console.log('</ONIXMessage>')  
+          emitter.emit('end', promises.length);
+          console.log('</ONIXMessage>'); // eslint-disable-line no-console
 
         } catch (err) {
           /* istanbul ignore next: Generic error */ emitter.emit('error', err);
@@ -108,26 +106,27 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
             // Const convertRecord = await converterPromise;
             // Const record = await convertRecord(obj);
 
-            //const theXmlFile = `${makeHeader() + toXml(obj)}</ONIXMessage>`;
+            // Const theXmlFile = `${makeHeader() + toXml(obj)}</ONIXMessage>`;
             const printRow = toXml(obj);
-            const regExp = /ProductForm.AJ|ProductForm.AN|ProductForm.EB|ProductForm.EC|ProductForm.ED/g;  // only wanted cases
-            //console.log(theXmlFile.search(regExp)); // *** OK
-          
-            if (printRow.search(regExp) > 0){
-              console.log(printRow); // *** OK
+            const regExp = /ProductForm.AJ|ProductForm.AN|ProductForm.EB|ProductForm.EC|ProductForm.ED/gu; // Only wanted cases
+            // Console.log(theXmlFile.search(regExp)); // *** OK
+
+            if (printRow.search(regExp) > 0) { // eslint-disable-line functional/no-conditional-statement
+              console.log(printRow); // eslint-disable-line no-console
             }
+
+
+            return;
+
+            
+                if (validate === true || fix === true) {
+                  const result = await validateRecord(record, fix);
+                  emitter.emit('record', result);
+                  return;
+                }
+
             
            
-             return;
-            // Return toXml(obj);
-
-
-            if (validate === true || fix === true) {
-              const result = await validateRecord(record, fix);
-              emitter.emit('record', result);
-              return;
-            }
-
 
             /* istanbul ignore next: No tests without validators */ emitter.emit('record', {record});
           } catch (err) {
