@@ -35,12 +35,16 @@ import {Parser} from 'xml2js';
 import createConverter from './convert';
 import createValidator from './validate';
 import NotSupportedError from './../error'; // Added 23.6.2020
+
 export default options => (stream, {validate = true, fix = true} = {}) => {
   MarcRecord.setValidationOptions({subfieldValues: false});
 
   const emitter = new class extends EventEmitter {}();
 
+  console.log(makeHeader());
+
   start();
+
 
   return emitter;
 
@@ -62,7 +66,9 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
       .on('end', async () => {
         try {
           await Promise.all(promises);
-          emitter.emit('end', promises.length);
+          emitter.emit('end', promises.length);      
+                   console.log('</ONIXMessage>')  
+
         } catch (err) {
           /* istanbul ignore next: Generic error */ emitter.emit('error', err);
         }
@@ -102,32 +108,17 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
             // Const convertRecord = await converterPromise;
             // Const record = await convertRecord(obj);
 
-            const theXmlFile = `${makeHeader() + toXml(obj)}</ONIXMessage>`;
-            // Console.log(theXmlFile); // *** OK
-
-                          const {getValue, getValues} = createValueInterface(record);
-                      if (['EB', 'EC', 'ED'].includes(getValue('DescriptiveDetail', 'ProductForm'))) {
-                        console.log(JSON.stringify(theXmlFile, null, 1));
-                      }
-
-
-
-            const {parseString} = require('xml2js');
-
-            parseString(theXmlFile, (err, result) => {
-              // console.log(JSON.stringify(result, null, 1)); // Listaa kaikki rivit
-
-              const {getValue, getValues} = createValueInterface(result);
-
-              // Console.log('    ------- :', getValue('ProductForm'),)
-
-              if (['EB', 'EC', 'ED'].includes(getValue('DescriptiveDetail', 'ProductForm'))) {
-                console.log(JSON.stringify(result, null, 1));
-              }
-
-            });
-
-            return;
+            //const theXmlFile = `${makeHeader() + toXml(obj)}</ONIXMessage>`;
+            const printRow = toXml(obj);
+            const regExp = /ProductForm.AJ|ProductForm.AN|ProductForm.EB|ProductForm.EC|ProductForm.ED/g;  // only wanted cases
+            //console.log(theXmlFile.search(regExp)); // *** OK
+          
+            if (printRow.search(regExp) > 0){
+              console.log(printRow); // *** OK
+            }
+            
+           
+             return;
             // Return toXml(obj);
 
 
@@ -155,26 +146,6 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
         }
 
 
-        function makeHeader() {
-          const headerString =
-          `<?xml version="1.0" encoding="UTF-8"?>
-<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
- <Header>
-  <Sender>
-   <SenderName>Kirjavälitys Oy</SenderName>
-   <ContactName>ContactPersonName</ContactName>
-   <EmailAddress>email@foobar.fi</EmailAddress>
-  </Sender>
-  <Addressee>
-   <AddresseeName>ADDRESSEE</AddresseeName>
-  </Addressee>
-  <SentDateTime>20200409</SentDateTime>
-  <MessageNote>foobar tuotesanoma</MessageNote>
- </Header>`;
-          return headerString;
-        }
-
-
       });
 
     function convertToObject(node) {
@@ -194,4 +165,24 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
       }
     }
   }
+
+  function makeHeader() {
+    const headerString =
+    `<?xml version="1.0" encoding="UTF-8"?>
+<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
+<Header>
+<Sender>
+<SenderName>Kirjavälitys Oy</SenderName>
+<ContactName>ContactPersonName</ContactName>
+<EmailAddress>email@foobar.fi</EmailAddress>
+</Sender>
+<Addressee>
+<AddresseeName>ADDRESSEE</AddresseeName>
+</Addressee>
+<SentDateTime>20200409</SentDateTime>
+<MessageNote>foobar tuotesanoma</MessageNote>
+</Header>`;
+    return headerString;
+  }
+
 };
