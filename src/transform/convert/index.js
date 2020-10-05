@@ -1178,6 +1178,10 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         return {isAudio: false};
       }
 
+      if (form === 'AN' && formDetail === 'A103') { // Add. 5.10.2020
+        return {isAudio: true};
+      }
+
       if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
         return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
       }
