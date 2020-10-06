@@ -24,7 +24,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "8888888888888"
+            "value": "978-87-26-40896-6"
           },
           {
             "code": "q",
@@ -137,7 +137,7 @@
         "subfields": [
           {
             "code": "b",
-            "value": "PublisherNameHere,"
+            "value": "Saga Egmont,"
           },
           {
             "code": "c",
@@ -368,7 +368,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:8888888888888"
+            "value": "http://urn.fi/URN:ISBN:978-87-26-40896-6"
           }
         ]
       },
@@ -414,7 +414,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 8888888888888 is not valid"
+        "ISBN 9788726408966 is not valid"
       ]
     },
     {

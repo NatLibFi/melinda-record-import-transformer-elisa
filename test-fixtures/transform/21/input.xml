@@ -12,91 +12,92 @@
   <SentDateTime>20200409</SentDateTime>
   <MessageNote>foobar tuotesanoma</MessageNote>
  </Header>
-<Product>
-  <RecordReference>ABC7777777</RecordReference>
+ <Product>
+  <RecordReference>GGG9876543210123</RecordReference>
   <NotificationType>03</NotificationType>
   <ProductIdentifier>
    <ProductIDType>03</ProductIDType>
-   <IDValue>9789521439155</IDValue>
+   <IDValue>9789510398814</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>15</ProductIDType>
-   <IDValue>9789521439155</IDValue>
+   <IDValue>9789510398814</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>01</ProductIDType>
-   <IDTypeName>foobar tuotenumero</IDTypeName>
-   <IDValue>9789521439155</IDValue>
+   <IDTypeName>Number</IDTypeName>
+   <IDValue>9789510398814</IDValue>
   </ProductIdentifier>
   <DescriptiveDetail>
    <ProductComposition>00</ProductComposition>
-   <ProductForm>AJ</ProductForm>
-   <ProductFormDetail>A103</ProductFormDetail>
-   <PrimaryContentType>01</PrimaryContentType>
+   <ProductForm>ED</ProductForm>
+   <ProductFormDetail>E101</ProductFormDetail>
+   <ProductFormFeature>
+    <ProductFormFeatureType>15</ProductFormFeatureType>
+    <ProductFormFeatureValue>101A</ProductFormFeatureValue>
+   </ProductFormFeature>
+   <PrimaryContentType>10</PrimaryContentType>
    <EpubTechnicalProtection>02</EpubTechnicalProtection>
-   <EpubUsageConstraint>
-    <EpubUsageType>01</EpubUsageType>
-    <EpubUsageStatus>02</EpubUsageStatus>
-    <EpubUsageLimit>
-     <Quantity>10</Quantity>
-     <EpubUsageUnit>04</EpubUsageUnit>
-    </EpubUsageLimit>
-   </EpubUsageConstraint>
    <TitleDetail>
     <TitleType>01</TitleType>
     <TitleElement>
      <TitleElementLevel>01</TitleElementLevel>
-     <TitleText>Huomisen yhteiskunta</TitleText>
-     <Subtitle>olosuhteet hyvinvoinnille</Subtitle>
+     <TitleText>Ollin oppivuodet</TitleText>
     </TitleElement>
    </TitleDetail>
    <Contributor>
     <SequenceNumber>1</SequenceNumber>
     <ContributorRole>A01</ContributorRole>
-    <PersonName>Mika Aaltonen</PersonName>
-    <PersonNameInverted>Aaltonen, Mika</PersonNameInverted>
-    <NamesBeforeKey>Mika</NamesBeforeKey>
-    <KeyNames>Aaltonen</KeyNames>
-   </Contributor>
-   <Contributor>
-    <SequenceNumber>2</SequenceNumber>
-    <ContributorRole>E07</ContributorRole>
-    <PersonName>Aku Laitinen</PersonName>
-    <PersonNameInverted>Laitinen, Aku</PersonNameInverted>
-    <NamesBeforeKey>Aku</NamesBeforeKey>
-    <KeyNames>Laitinen</KeyNames>
+    <PersonName>Anni Swan</PersonName>
+    <PersonNameInverted>Swan, Anni</PersonNameInverted>
+    <NamesBeforeKey>Anni</NamesBeforeKey>
+    <KeyNames>Swan</KeyNames>
    </Contributor>
    <Language>
     <LanguageRole>01</LanguageRole>
     <LanguageCode>fin</LanguageCode>
    </Language>
    <Extent>
-    <ExtentType>09</ExtentType>
-    <ExtentValue>0061100</ExtentValue>
-    <ExtentUnit>16</ExtentUnit>
+    <ExtentType>10</ExtentType>
+    <ExtentValue>130</ExtentValue>
+    <ExtentUnit>03</ExtentUnit>
    </Extent>
    <Subject>
+    <SubjectSchemeIdentifier>73</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Suomalainen Kirja-alan luokitus</SubjectSchemeName>
+    <SubjectCode>N</SubjectCode>
+   </Subject>
+   <Subject>
     <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
-    <SubjectSchemeName>AAA</SubjectSchemeName>
-    <SubjectCode>30.11</SubjectCode>
+    <SubjectSchemeName>YKL</SubjectSchemeName>
+    <SubjectCode>84.2</SubjectCode>
    </Subject>
    <Subject>
     <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
-    <SubjectSchemeName>foobar tuoteryhmä</SubjectSchemeName>
-    <SubjectCode>03</SubjectCode>
-    <SubjectHeadingText>tietokirjallisuus</SubjectHeadingText>
+    <SubjectSchemeName>Kirjavälityksen tuoteryhmä</SubjectSchemeName>
+    <SubjectCode>04</SubjectCode>
+    <SubjectHeadingText>lasten ja nuorten kirjat</SubjectHeadingText>
    </Subject>
    <Subject>
     <MainSubject/>
     <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
-    <SubjectCode>KJ</SubjectCode>
+    <SubjectCode>YFA</SubjectCode>
    </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>98</SubjectSchemeIdentifier>
+    <SubjectCode>5AL</SubjectCode>
+   </Subject>
+   <AudienceRange>
+    <AudienceRangeQualifier>17</AudienceRangeQualifier>
+    <AudienceRangePrecision>03</AudienceRangePrecision>
+    <AudienceRangeValue>6</AudienceRangeValue>
+   </AudienceRange>
   </DescriptiveDetail>
   <CollateralDetail>
    <TextContent>
     <TextType>03</TextType>
     <ContentAudience>00</ContentAudience>
-    <Text>Some text here. aaa bbb ccc ddd eee ...</Text>
+    <Text>Some text here like this.</Text>
    </TextContent>
    <SupportingResource>
     <ResourceContentType>01</ResourceContentType>
@@ -104,10 +105,10 @@
     <ResourceMode>03</ResourceMode>
     <ResourceVersion>
      <ResourceForm>02</ResourceForm>
-     <ResourceLink>https://aaa.foobar.fi/onix/media/2641677.jpg?size=original&amp;cl=20050&amp;ch=bb64ea44e0b7743a814fd0f2245a1353</ResourceLink>
+     <ResourceLink>https://abcdefg.fi/onix/media/2639426.jpg?size=original&amp;cl=20050&amp;ch=b8eed511e50008f9feafde325a4d59fb</ResourceLink>
      <ContentDate>
       <ContentDateRole>17</ContentDateRole>
-      <Date>20200407</Date>
+      <Date>20200406</Date>
      </ContentDate>
     </ResourceVersion>
    </SupportingResource>
@@ -117,21 +118,21 @@
     <PublishingRole>01</PublishingRole>
     <PublisherIdentifier>
      <PublisherIDType>01</PublisherIDType>
-     <IDTypeName>foobar kustantajanumero</IDTypeName>
-     <IDValue>72434</IDValue>
+     <IDTypeName>Number</IDTypeName>
+     <IDValue>75154</IDValue>
     </PublisherIdentifier>
-    <PublisherName>Alma Talent</PublisherName>
+    <PublisherName>WSOY</PublisherName>
    </Publisher>
    <CountryOfPublication>FI</CountryOfPublication>
    <PublishingStatus>04</PublishingStatus>
    <PublishingStatusNote>Saatavana/Tilattavissa</PublishingStatusNote>
    <PublishingDate>
     <PublishingDateRole>01</PublishingDateRole>
-    <Date>2020</Date>
+    <Date>2012</Date>
    </PublishingDate>
    <PublishingDate>
     <PublishingDateRole>12</PublishingDateRole>
-    <Date>2020</Date>
+    <Date>2012</Date>
    </PublishingDate>
   </PublishingDetail>
   <RelatedMaterial>
@@ -139,8 +140,8 @@
     <WorkRelationCode>01</WorkRelationCode>
     <WorkIdentifier>
      <WorkIDType>01</WorkIDType>
-     <IDTypeName>foobar teostunniste</IDTypeName>
-     <IDValue>TT0031387</IDValue>
+     <IDTypeName>Number</IDTypeName>
+     <IDValue>TT0031788</IDValue>
     </WorkIdentifier>
    </RelatedWork>
   </RelatedMaterial>

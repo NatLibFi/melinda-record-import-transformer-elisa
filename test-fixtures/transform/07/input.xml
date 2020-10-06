@@ -17,16 +17,16 @@
   <NotificationType>03</NotificationType>
   <ProductIdentifier>
    <ProductIDType>03</ProductIDType>
-   <IDValue>9999999999999</IDValue>
+   <IDValue>9789521439155</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>15</ProductIDType>
-   <IDValue>9999999999999</IDValue>
+   <IDValue>9789521439155</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>01</ProductIDType>
    <IDTypeName>foobar tuotenumero</IDTypeName>
-   <IDValue>9999999999999</IDValue>
+   <IDValue>9789521439155</IDValue>
   </ProductIdentifier>
   <DescriptiveDetail>
    <ProductComposition>00</ProductComposition>
@@ -120,7 +120,7 @@
      <IDTypeName>foobar kustantajanumero</IDTypeName>
      <IDValue>72434</IDValue>
     </PublisherIdentifier>
-    <PublisherName>barfoo</PublisherName>
+    <PublisherName>Alma Talent</PublisherName>
    </Publisher>
    <CountryOfPublication>FI</CountryOfPublication>
    <PublishingStatus>04</PublishingStatus>
@@ -140,7 +140,7 @@
     <WorkIdentifier>
      <WorkIDType>01</WorkIDType>
      <IDTypeName>foobar teostunniste</IDTypeName>
-     <IDValue>TT1234567</IDValue>
+     <IDValue>TT0031387</IDValue>
     </WorkIdentifier>
    </RelatedWork>
   </RelatedMaterial>

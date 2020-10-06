@@ -12,73 +12,60 @@
   <SentDateTime>20200409</SentDateTime>
   <MessageNote>foobar tuotesanoma</MessageNote>
  </Header>
-<Product>
-  <RecordReference>ABC7777777</RecordReference>
+ <Product>
+  <RecordReference>REF1234567</RecordReference>
   <NotificationType>03</NotificationType>
   <ProductIdentifier>
    <ProductIDType>03</ProductIDType>
-   <IDValue>9789521439155</IDValue>
+   <IDValue>9789522918802</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>15</ProductIDType>
-   <IDValue>9789521439155</IDValue>
+   <IDValue>9789522918802</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>01</ProductIDType>
    <IDTypeName>foobar tuotenumero</IDTypeName>
-   <IDValue>9789521439155</IDValue>
+   <IDValue>9789522918802</IDValue>
   </ProductIdentifier>
   <DescriptiveDetail>
    <ProductComposition>00</ProductComposition>
-   <ProductForm>AJ</ProductForm>
-   <ProductFormDetail>A103</ProductFormDetail>
-   <PrimaryContentType>01</PrimaryContentType>
-   <EpubTechnicalProtection>02</EpubTechnicalProtection>
-   <EpubUsageConstraint>
-    <EpubUsageType>01</EpubUsageType>
-    <EpubUsageStatus>02</EpubUsageStatus>
-    <EpubUsageLimit>
-     <Quantity>10</Quantity>
-     <EpubUsageUnit>04</EpubUsageUnit>
-    </EpubUsageLimit>
-   </EpubUsageConstraint>
+   <ProductForm>EB</ProductForm>
+   <ProductFormDetail>E101</ProductFormDetail>
+   <ProductFormFeature>
+    <ProductFormFeatureType>15</ProductFormFeatureType>
+    <ProductFormFeatureValue>101A</ProductFormFeatureValue>
+   </ProductFormFeature>
+   <PrimaryContentType>10</PrimaryContentType>
    <TitleDetail>
     <TitleType>01</TitleType>
     <TitleElement>
      <TitleElementLevel>01</TitleElementLevel>
-     <TitleText>Huomisen yhteiskunta</TitleText>
-     <Subtitle>olosuhteet hyvinvoinnille</Subtitle>
+     <TitleText>Kuninkaallisessa seurassa</TitleText>
+     <Subtitle>Rojalistin käsikirja</Subtitle>
     </TitleElement>
    </TitleDetail>
    <Contributor>
     <SequenceNumber>1</SequenceNumber>
     <ContributorRole>A01</ContributorRole>
-    <PersonName>Mika Aaltonen</PersonName>
-    <PersonNameInverted>Aaltonen, Mika</PersonNameInverted>
-    <NamesBeforeKey>Mika</NamesBeforeKey>
-    <KeyNames>Aaltonen</KeyNames>
-   </Contributor>
-   <Contributor>
-    <SequenceNumber>2</SequenceNumber>
-    <ContributorRole>E07</ContributorRole>
-    <PersonName>Aku Laitinen</PersonName>
-    <PersonNameInverted>Laitinen, Aku</PersonNameInverted>
-    <NamesBeforeKey>Aku</NamesBeforeKey>
-    <KeyNames>Laitinen</KeyNames>
+    <PersonName>Satu Jaatinen</PersonName>
+    <PersonNameInverted>Jaatinen, Satu</PersonNameInverted>
+    <NamesBeforeKey>Satu</NamesBeforeKey>
+    <KeyNames>Jaatinen</KeyNames>
    </Contributor>
    <Language>
     <LanguageRole>01</LanguageRole>
     <LanguageCode>fin</LanguageCode>
    </Language>
    <Extent>
-    <ExtentType>09</ExtentType>
-    <ExtentValue>0061100</ExtentValue>
-    <ExtentUnit>16</ExtentUnit>
+    <ExtentType>10</ExtentType>
+    <ExtentValue>140</ExtentValue>
+    <ExtentUnit>03</ExtentUnit>
    </Extent>
    <Subject>
     <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
-    <SubjectSchemeName>AAA</SubjectSchemeName>
-    <SubjectCode>30.11</SubjectCode>
+    <SubjectSchemeName>YKL</SubjectSchemeName>
+    <SubjectCode>99.13</SubjectCode>
    </Subject>
    <Subject>
     <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
@@ -89,14 +76,14 @@
    <Subject>
     <MainSubject/>
     <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
-    <SubjectCode>KJ</SubjectCode>
+    <SubjectCode>DNBR</SubjectCode>
    </Subject>
   </DescriptiveDetail>
   <CollateralDetail>
    <TextContent>
     <TextType>03</TextType>
     <ContentAudience>00</ContentAudience>
-    <Text>Some text here. aaa bbb ccc ddd eee ...</Text>
+    <Text>Some text here like this.</Text>
    </TextContent>
    <SupportingResource>
     <ResourceContentType>01</ResourceContentType>
@@ -104,10 +91,10 @@
     <ResourceMode>03</ResourceMode>
     <ResourceVersion>
      <ResourceForm>02</ResourceForm>
-     <ResourceLink>https://aaa.foobar.fi/onix/media/2641677.jpg?size=original&amp;cl=20050&amp;ch=bb64ea44e0b7743a814fd0f2245a1353</ResourceLink>
+     <ResourceLink>https://link.company.fi/onix/media/2643496.jpg?size=original&amp;cl=20050&amp;ch=7bc3b3f181e1f3fdfee83c20bfbcffab</ResourceLink>
      <ContentDate>
       <ContentDateRole>17</ContentDateRole>
-      <Date>20200407</Date>
+      <Date>20200414</Date>
      </ContentDate>
     </ResourceVersion>
    </SupportingResource>
@@ -117,10 +104,10 @@
     <PublishingRole>01</PublishingRole>
     <PublisherIdentifier>
      <PublisherIDType>01</PublisherIDType>
-     <IDTypeName>foobar kustantajanumero</IDTypeName>
-     <IDValue>72434</IDValue>
+     <IDTypeName>ABC numero</IDTypeName>
+     <IDValue>27804</IDValue>
     </PublisherIdentifier>
-    <PublisherName>Alma Talent</PublisherName>
+    <PublisherName>Docendo</PublisherName>
    </Publisher>
    <CountryOfPublication>FI</CountryOfPublication>
    <PublishingStatus>04</PublishingStatus>
@@ -140,9 +127,11 @@
     <WorkIdentifier>
      <WorkIDType>01</WorkIDType>
      <IDTypeName>foobar teostunniste</IDTypeName>
-     <IDValue>TT0031387</IDValue>
+     <IDValue>TT0031780</IDValue>
     </WorkIdentifier>
    </RelatedWork>
   </RelatedMaterial>
  </Product>
 </ONIXMessage>
+
+

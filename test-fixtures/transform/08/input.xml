@@ -17,16 +17,16 @@
   <NotificationType>02</NotificationType>
   <ProductIdentifier>
    <ProductIDType>03</ProductIDType>
-   <IDValue>1111111111111</IDValue>
+   <IDValue>9789512417940</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>15</ProductIDType>
-   <IDValue>1111111111111</IDValue>
+   <IDValue>9789512417940</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>01</ProductIDType>
    <IDTypeName>foobar tuotenumero</IDTypeName>
-   <IDValue>1111111111111</IDValue>
+   <IDValue>9789512417940</IDValue>
   </ProductIdentifier>
   <DescriptiveDetail>
    <ProductComposition>00</ProductComposition>
@@ -196,7 +196,7 @@
      <IDTypeName>foobar kustantajanumero</IDTypeName>
      <IDValue>22222</IDValue>
     </PublisherIdentifier>
-    <PublisherName>PublisherNamehere</PublisherName>
+    <PublisherName>Gummerus</PublisherName>
    </Publisher>
    <CountryOfPublication>FI</CountryOfPublication>
    <PublishingStatus>02</PublishingStatus>
@@ -216,7 +216,7 @@
     <WorkIdentifier>
      <WorkIDType>01</WorkIDType>
      <IDTypeName>foobar teostunniste</IDTypeName>
-     <IDValue>AA7777777</IDValue>
+     <IDValue>TT0028082</IDValue>
     </WorkIdentifier>
    </RelatedWork>
   </RelatedMaterial>

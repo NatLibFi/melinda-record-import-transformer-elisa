@@ -1,19 +1,11 @@
 {
   "record": {
     "_validationOptions": {},
-    "leader": "00000nim a22000008i 4500",
+    "leader": "00000n|| a22000008i 4500",
     "fields": [
       {
         "tag": "006",
-        "value": "m|||||o||h||||||||"
-      },
-      {
-        "tag": "007",
-        "value": "sr|uunnnnnuneu"
-      },
-      {
-        "tag": "007",
-        "value": "cr|nnannnuuuuu"
+        "value": "||||||||||||||||||"
       },
       {
         "tag": "008",
@@ -24,11 +16,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "978-952-14-3915-5"
-          },
-          {
-            "code": "q",
-            "value": "MP3"
+            "value": "978-952-291-880-2"
           }
         ],
         "ind1": " ",
@@ -61,7 +49,7 @@
         "tag": "041",
         "subfields": [
           {
-            "code": "d",
+            "code": "a",
             "value": "fin"
           }
         ],
@@ -84,7 +72,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "30.11"
+            "value": "99.13"
           },
           {
             "code": "2",
@@ -100,7 +88,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Aaltonen, Mika,"
+            "value": "Jaatinen, Satu,"
           },
           {
             "code": "e",
@@ -116,7 +104,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Huomisen yhteiskunta."
+            "value": "Kuninkaallisessa seurassa."
           }
         ]
       },
@@ -126,7 +114,7 @@
         "subfields": [
           {
             "code": "b",
-            "value": "Alma Talent,"
+            "value": "Docendo,"
           },
           {
             "code": "c",
@@ -140,26 +128,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "1 verkkoaineisto (6 h 11 min 0 s)"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "336",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "puhe"
-          },
-          {
-            "code": "b",
-            "value": "spw"
-          },
-          {
-            "code": "2",
-            "value": "rdacontent"
+            "value": "1 verkkoaineisto (140 sivua)"
           }
         ],
         "ind1": " ",
@@ -219,30 +188,11 @@
         "ind2": " "
       },
       {
-        "tag": "347",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "äänitiedosto"
-          },
-          {
-            "code": "b",
-            "value": "MP3"
-          },
-          {
-            "code": "2",
-            "value": "rda"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
         "tag": "500",
         "subfields": [
           {
             "code": "a",
-            "value": "TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS."
+            "value": "Koneellisesti tuotettu tietue."
           },
           {
             "code": "9",
@@ -253,105 +203,61 @@
         "ind2": " "
       },
       {
-        "tag": "511",
-        "ind1": "0",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Lukija: Aku Laitinen."
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind2": " "
-      },
-      {
-        "tag": "594",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS"
-          },
-          {
-            "code": "5",
-            "value": "FENNI"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "655",
-        "ind2": "7",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "äänikirjat"
-          },
-          {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s579"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " "
-      },
-      {
-        "tag": "655",
-        "ind2": "7",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "e-äänikirjat"
-          },
-          {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s1204"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " "
-      },
-      {
-        "tag": "700",
-        "subfields": [
-          {
-            "code": "e",
-            "value": "lukija."
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "700",
+        "tag": "506",
         "ind1": "1",
         "subfields": [
           {
             "code": "a",
-            "value": "Laitinen, Aku,"
+            "value": "Aineisto on käytettävissä vapaakappalekirjastoissa."
           },
           {
-            "code": "e",
-            "value": "lukija."
+            "code": "f",
+            "value": "Online access with authorization."
+          },
+          {
+            "code": "2",
+            "value": "star"
+          },
+          {
+            "code": "5",
+            "value": "FI-Vapaa"
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
           }
         ],
+        "ind2": " "
+      },
+      {
+        "tag": "540",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;"
+          },
+          {
+            "code": "b",
+            "value": "Kansalliskirjasto;"
+          },
+          {
+            "code": "c",
+            "value": "Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä"
+          },
+          {
+            "code": "u",
+            "value": "http://www.finlex.fi/fi/laki/ajantasa/2007/20071433"
+          },
+          {
+            "code": "5",
+            "value": "FI-Vapaa"
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind1": " ",
         "ind2": " "
       },
       {
@@ -361,7 +267,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:978-952-14-3915-5"
+            "value": "http://urn.fi/URN:ISBN:978-952-291-880-2"
           }
         ]
       },
@@ -397,7 +303,7 @@
           },
           {
             "code": "b",
-            "value": "TT0031387"
+            "value": "TT0031780"
           },
           {
             "code": "5",
@@ -426,7 +332,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 9789521439155 is not valid"
+        "ISBN 9789522918802 is not valid"
       ]
     },
     {

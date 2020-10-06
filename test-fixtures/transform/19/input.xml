@@ -3,43 +3,43 @@
  <Header>
   <Sender>
    <SenderName>Kirjavälitys Oy</SenderName>
-   <ContactName>ContactNameHere</ContactName>
-   <EmailAddress>tuotetiedot@foobar.fi</EmailAddress>
+   <ContactName>ContactPersonName</ContactName>
+   <EmailAddress>email@foobar.fi</EmailAddress>
   </Sender>
   <Addressee>
-   <AddresseeName>ADDRESSEENAME</AddresseeName>
+   <AddresseeName>ADDRESSEE</AddresseeName>
   </Addressee>
   <SentDateTime>20200409</SentDateTime>
   <MessageNote>foobar tuotesanoma</MessageNote>
  </Header>
 <Product>
-  <RecordReference>CCC7777777</RecordReference>
-  <NotificationType>02</NotificationType>
+  <RecordReference>CCC1234567</RecordReference>
+  <NotificationType>03</NotificationType>
   <ProductIdentifier>
    <ProductIDType>03</ProductIDType>
-   <IDValue>9788726408966</IDValue>
+   <IDValue>9789510441619</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>15</ProductIDType>
-   <IDValue>9788726408966</IDValue>
+   <IDValue>9789510441619</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>01</ProductIDType>
-   <IDTypeName>foobar tuotenumero</IDTypeName>
-   <IDValue>9788726408966</IDValue>
+   <IDTypeName>Number</IDTypeName>
+   <IDValue>1234567890987</IDValue>
   </ProductIdentifier>
   <DescriptiveDetail>
    <ProductComposition>00</ProductComposition>
-   <ProductForm>AJ</ProductForm>
+   <ProductForm>AN</ProductForm>
    <ProductFormDetail>A103</ProductFormDetail>
-   <PrimaryContentType>01</PrimaryContentType>
+   <EpubTechnicalProtection>02</EpubTechnicalProtection>
    <Collection>
     <CollectionType>10</CollectionType>
     <TitleDetail>
      <TitleType>01</TitleType>
      <TitleElement>
       <TitleElementLevel>02</TitleElementLevel>
-      <TitleText>Cupido</TitleText>
+      <TitleText>Studio</TitleText>
      </TitleElement>
     </TitleDetail>
    </Collection>
@@ -47,64 +47,56 @@
     <TitleType>01</TitleType>
     <TitleElement>
      <TitleElementLevel>01</TitleElementLevel>
-     <TitleText>Travel Companion</TitleText>
+     <TitleText>Vilpittömästi sinun</TitleText>
     </TitleElement>
    </TitleDetail>
    <Contributor>
     <SequenceNumber>1</SequenceNumber>
+    <ContributorRole>A01</ContributorRole>
+    <PersonName>Pekka Hiltunen</PersonName>
+    <PersonNameInverted>Hiltunen, Pekka</PersonNameInverted>
+    <NamesBeforeKey>Pekka</NamesBeforeKey>
+    <KeyNames>Hiltunen</KeyNames>
+   </Contributor>
+   <Contributor>
+    <SequenceNumber>2</SequenceNumber>
     <ContributorRole>E07</ContributorRole>
-    <PersonName>Savanna Scarlett</PersonName>
-    <PersonNameInverted>Scarlett, Savanna</PersonNameInverted>
-    <NamesBeforeKey>Savanna</NamesBeforeKey>
-    <KeyNames>Scarlett</KeyNames>
+    <PersonName>Satu Paavola</PersonName>
+    <PersonNameInverted>Paavola, Satu</PersonNameInverted>
+    <NamesBeforeKey>Satu</NamesBeforeKey>
+    <KeyNames>Paavola</KeyNames>
    </Contributor>
    <Language>
     <LanguageRole>01</LanguageRole>
-    <LanguageCode>eng</LanguageCode>
+    <LanguageCode>fin</LanguageCode>
    </Language>
    <Extent>
     <ExtentType>09</ExtentType>
-    <ExtentValue>0004200</ExtentValue>
+    <ExtentValue>0121300</ExtentValue>
     <ExtentUnit>16</ExtentUnit>
    </Extent>
    <Subject>
     <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
     <SubjectSchemeName>YKL</SubjectSchemeName>
-    <SubjectCode>84.5</SubjectCode>
+    <SubjectCode>84.2</SubjectCode>
    </Subject>
    <Subject>
     <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
-    <SubjectSchemeName>foobar tuoteryhmä</SubjectSchemeName>
-    <SubjectCode>01</SubjectCode>
-    <SubjectHeadingText>käännetty kaunokirjallisuus</SubjectHeadingText>
+    <SubjectSchemeName>Kirjavälityksen tuoteryhmä</SubjectSchemeName>
+    <SubjectCode>00</SubjectCode>
+    <SubjectHeadingText>kotimainen kaunokirjallisuus</SubjectHeadingText>
    </Subject>
    <Subject>
     <MainSubject/>
     <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
-    <SubjectCode>FP</SubjectCode>
-   </Subject>
-   <Subject>
-    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
-    <SubjectCode>FBA</SubjectCode>
-   </Subject>
-   <Subject>
-    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
-    <SubjectCode>FP</SubjectCode>
-   </Subject>
-   <Subject>
-    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
-    <SubjectCode>FRD</SubjectCode>
-   </Subject>
-   <Subject>
-    <SubjectSchemeIdentifier>98</SubjectSchemeIdentifier>
-    <SubjectCode>5X</SubjectCode>
+    <SubjectCode>FH</SubjectCode>
    </Subject>
   </DescriptiveDetail>
   <CollateralDetail>
    <TextContent>
     <TextType>03</TextType>
     <ContentAudience>00</ContentAudience>
-    <Text>Some text here.</Text>
+    <Text>Jotakin tekstiä.</Text>
    </TextContent>
    <SupportingResource>
     <ResourceContentType>01</ResourceContentType>
@@ -112,38 +104,45 @@
     <ResourceMode>03</ResourceMode>
     <ResourceVersion>
      <ResourceForm>02</ResourceForm>
-     <ResourceLink>https://some.company.fi/onix/media/2642205.jpg?size=original&amp;cl=20050&amp;ch=10f12b1ed3c72f62f085776b602028da</ResourceLink>
+     <ResourceLink>https://.aaaa.fi/onix/media/2642830.jpg?size=original&amp;cl=20050&amp;ch=88b2256b67571a96610c36b2c7c92683</ResourceLink>
      <ContentDate>
       <ContentDateRole>17</ContentDateRole>
-      <Date>20200408</Date>
+      <Date>20200409</Date>
      </ContentDate>
     </ResourceVersion>
    </SupportingResource>
   </CollateralDetail>
   <PublishingDetail>
-   <Imprint>
-    <ImprintName>ImprintNameHere</ImprintName>
-   </Imprint>
    <Publisher>
     <PublishingRole>01</PublishingRole>
     <PublisherIdentifier>
      <PublisherIDType>01</PublisherIDType>
-     <IDTypeName>foobar kustantajanumero</IDTypeName>
-     <IDValue>87042</IDValue>
+     <IDTypeName>Number</IDTypeName>
+     <IDValue>54321</IDValue>
     </PublisherIdentifier>
-    <PublisherName>Saga Egmont</PublisherName>
+    <PublisherName>WSOY</PublisherName>
    </Publisher>
    <CountryOfPublication>FI</CountryOfPublication>
-   <PublishingStatus>02</PublishingStatus>
-   <PublishingStatusNote>Uutuus, ei vielä ilmestynyt</PublishingStatusNote>
+   <PublishingStatus>04</PublishingStatus>
+   <PublishingStatusNote>Saatavana/Tilattavissa</PublishingStatusNote>
    <PublishingDate>
     <PublishingDateRole>01</PublishingDateRole>
-    <Date>20200421</Date>
+    <Date>2019</Date>
    </PublishingDate>
    <PublishingDate>
     <PublishingDateRole>12</PublishingDateRole>
-    <Date>2020</Date>
+    <Date>2019</Date>
    </PublishingDate>
   </PublishingDetail>
+  <RelatedMaterial>
+   <RelatedWork>
+    <WorkRelationCode>01</WorkRelationCode>
+    <WorkIdentifier>
+     <WorkIDType>01</WorkIDType>
+     <IDTypeName>Number</IDTypeName>
+     <IDValue>QQ7654321</IDValue>
+    </WorkIdentifier>
+   </RelatedWork>
+  </RelatedMaterial>
  </Product>
-</ONIXMessage> 
+</ONIXMessage>

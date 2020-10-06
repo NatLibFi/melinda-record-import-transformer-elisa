@@ -3,100 +3,112 @@
  <Header>
   <Sender>
    <SenderName>Kirjavälitys Oy</SenderName>
-   <ContactName>ContactPersonName</ContactName>
-   <EmailAddress>email@foobar.fi</EmailAddress>
+   <ContactName>ContactName</ContactName>
+   <EmailAddress>tuotetiedot@foobar.fi</EmailAddress>
   </Sender>
   <Addressee>
-   <AddresseeName>ADDRESSEE</AddresseeName>
+   <AddresseeName>ADRESSEENAMEHERE</AddresseeName>
   </Addressee>
   <SentDateTime>20200409</SentDateTime>
   <MessageNote>foobar tuotesanoma</MessageNote>
  </Header>
-<Product>
-  <RecordReference>ABC7777777</RecordReference>
+ <Product>
+  <RecordReference>ABC1234567</RecordReference>
   <NotificationType>03</NotificationType>
   <ProductIdentifier>
    <ProductIDType>03</ProductIDType>
-   <IDValue>9789521439155</IDValue>
+   <IDValue>9789523511231</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>15</ProductIDType>
-   <IDValue>9789521439155</IDValue>
+   <IDValue>9789523511231</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>01</ProductIDType>
    <IDTypeName>foobar tuotenumero</IDTypeName>
-   <IDValue>9789521439155</IDValue>
+   <IDValue>9789523511231</IDValue>
   </ProductIdentifier>
   <DescriptiveDetail>
    <ProductComposition>00</ProductComposition>
-   <ProductForm>AJ</ProductForm>
-   <ProductFormDetail>A103</ProductFormDetail>
-   <PrimaryContentType>01</PrimaryContentType>
+   <ProductForm>ED</ProductForm>
+   <ProductFormDetail>E101</ProductFormDetail>
+   <ProductFormFeature>
+    <ProductFormFeatureType>15</ProductFormFeatureType>
+    <ProductFormFeatureValue>101A</ProductFormFeatureValue>
+   </ProductFormFeature>
+   <PrimaryContentType>10</PrimaryContentType>
    <EpubTechnicalProtection>02</EpubTechnicalProtection>
-   <EpubUsageConstraint>
-    <EpubUsageType>01</EpubUsageType>
-    <EpubUsageStatus>02</EpubUsageStatus>
-    <EpubUsageLimit>
-     <Quantity>10</Quantity>
-     <EpubUsageUnit>04</EpubUsageUnit>
-    </EpubUsageLimit>
-   </EpubUsageConstraint>
    <TitleDetail>
     <TitleType>01</TitleType>
     <TitleElement>
      <TitleElementLevel>01</TitleElementLevel>
-     <TitleText>Huomisen yhteiskunta</TitleText>
-     <Subtitle>olosuhteet hyvinvoinnille</Subtitle>
+     <TitleText>Kun kello lyö viisi</TitleText>
     </TitleElement>
    </TitleDetail>
    <Contributor>
     <SequenceNumber>1</SequenceNumber>
     <ContributorRole>A01</ContributorRole>
-    <PersonName>Mika Aaltonen</PersonName>
-    <PersonNameInverted>Aaltonen, Mika</PersonNameInverted>
-    <NamesBeforeKey>Mika</NamesBeforeKey>
-    <KeyNames>Aaltonen</KeyNames>
+    <PersonName>Denise Rudberg</PersonName>
+    <PersonNameInverted>Rudberg, Denise</PersonNameInverted>
+    <NamesBeforeKey>Denise</NamesBeforeKey>
+    <KeyNames>Rudberg</KeyNames>
    </Contributor>
    <Contributor>
     <SequenceNumber>2</SequenceNumber>
-    <ContributorRole>E07</ContributorRole>
-    <PersonName>Aku Laitinen</PersonName>
-    <PersonNameInverted>Laitinen, Aku</PersonNameInverted>
-    <NamesBeforeKey>Aku</NamesBeforeKey>
-    <KeyNames>Laitinen</KeyNames>
+    <ContributorRole>B06</ContributorRole>
+    <PersonName>Anu Koivunen</PersonName>
+    <PersonNameInverted>Koivunen, Anu</PersonNameInverted>
+    <NamesBeforeKey>Anu</NamesBeforeKey>
+    <KeyNames>Koivunen</KeyNames>
    </Contributor>
    <Language>
     <LanguageRole>01</LanguageRole>
     <LanguageCode>fin</LanguageCode>
    </Language>
    <Extent>
-    <ExtentType>09</ExtentType>
-    <ExtentValue>0061100</ExtentValue>
-    <ExtentUnit>16</ExtentUnit>
+    <ExtentType>10</ExtentType>
+    <ExtentValue>275</ExtentValue>
+    <ExtentUnit>03</ExtentUnit>
    </Extent>
    <Subject>
     <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
     <SubjectSchemeName>AAA</SubjectSchemeName>
-    <SubjectCode>30.11</SubjectCode>
+    <SubjectCode>84.2</SubjectCode>
    </Subject>
    <Subject>
     <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
     <SubjectSchemeName>foobar tuoteryhmä</SubjectSchemeName>
-    <SubjectCode>03</SubjectCode>
-    <SubjectHeadingText>tietokirjallisuus</SubjectHeadingText>
+    <SubjectCode>01</SubjectCode>
+    <SubjectHeadingText>käännetty kaunokirjallisuus</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>80</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Fiktiivisen aineiston lisäluokitus</SubjectSchemeName>
+    <SubjectHeadingText>jännitys</SubjectHeadingText>
    </Subject>
    <Subject>
     <MainSubject/>
     <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
-    <SubjectCode>KJ</SubjectCode>
+    <SubjectCode>FF</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>FYT</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>dekkarit</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>rikoskirjallisuus</SubjectHeadingText>
    </Subject>
   </DescriptiveDetail>
   <CollateralDetail>
    <TextContent>
     <TextType>03</TextType>
     <ContentAudience>00</ContentAudience>
-    <Text>Some text here. aaa bbb ccc ddd eee ...</Text>
+    <Text>Here is some text.</Text>
    </TextContent>
    <SupportingResource>
     <ResourceContentType>01</ResourceContentType>
@@ -104,10 +116,10 @@
     <ResourceMode>03</ResourceMode>
     <ResourceVersion>
      <ResourceForm>02</ResourceForm>
-     <ResourceLink>https://aaa.foobar.fi/onix/media/2641677.jpg?size=original&amp;cl=20050&amp;ch=bb64ea44e0b7743a814fd0f2245a1353</ResourceLink>
+     <ResourceLink>https://some.media.fi/onix/media/2314938.jpg?size=original&amp;cl=20050&amp;ch=715c83ea2a2d62f65d72e84b6b3990bd</ResourceLink>
      <ContentDate>
       <ContentDateRole>17</ContentDateRole>
-      <Date>20200407</Date>
+      <Date>20190130</Date>
      </ContentDate>
     </ResourceVersion>
    </SupportingResource>
@@ -118,20 +130,20 @@
     <PublisherIdentifier>
      <PublisherIDType>01</PublisherIDType>
      <IDTypeName>foobar kustantajanumero</IDTypeName>
-     <IDValue>72434</IDValue>
+     <IDValue>12345</IDValue>
     </PublisherIdentifier>
-    <PublisherName>Alma Talent</PublisherName>
+    <PublisherName>Into Kustannus</PublisherName>
    </Publisher>
    <CountryOfPublication>FI</CountryOfPublication>
-   <PublishingStatus>04</PublishingStatus>
-   <PublishingStatusNote>Saatavana/Tilattavissa</PublishingStatusNote>
+   <PublishingStatus>07</PublishingStatus>
+   <PublishingStatusNote>Loppuunmyyty</PublishingStatusNote>
    <PublishingDate>
     <PublishingDateRole>01</PublishingDateRole>
-    <Date>2020</Date>
+    <Date>2019</Date>
    </PublishingDate>
    <PublishingDate>
     <PublishingDateRole>12</PublishingDateRole>
-    <Date>2020</Date>
+    <Date>2019</Date>
    </PublishingDate>
   </PublishingDetail>
   <RelatedMaterial>
@@ -140,9 +152,9 @@
     <WorkIdentifier>
      <WorkIDType>01</WorkIDType>
      <IDTypeName>foobar teostunniste</IDTypeName>
-     <IDValue>TT0031387</IDValue>
+     <IDValue>AA7654321</IDValue>
     </WorkIdentifier>
    </RelatedWork>
   </RelatedMaterial>
  </Product>
-</ONIXMessage>
+ </ONIXMessage>
