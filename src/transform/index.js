@@ -108,8 +108,14 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
 
             // Const theXmlFile = `${makeHeader() + toXml(obj)}</ONIXMessage>`;
             const printRow = toXml(obj);
+
             const regExp = /ProductForm.AJ|ProductForm.AN|ProductForm.EB|ProductForm.EC|ProductForm.ED/gu; // Only wanted cases
+            
+            //const regExp = /ProductForm.AJ/gu; // Only wanted cases
+            //const regExp = /ProductForm.AN/gu; // Only wanted cases
+            //const regExp = /ProductForm.EB/gu; // Only wanted cases
             //const regExp = /ProductForm.EC/gu; // Only wanted cases
+            //const regExp = /ProductForm.ED/gu; // Only wanted cases
             // Console.log(theXmlFile.search(regExp)); // *** OK
 
             if (printRow.search(regExp) > 0) { // eslint-disable-line functional/no-conditional-statement
