@@ -32,17 +32,13 @@ import createStreamParser, {toXml, ALWAYS as streamParserAlways} from 'xml-flow'
 import {Parser} from 'xml2js';
 import createConverter from './convert';
 import createValidator from './validate';
-import NotSupportedError from './../error'; // Added 23.6.2020
-
+import NotSupportedError from './../error';
 export default options => (stream, {validate = true, fix = true} = {}) => {
   MarcRecord.setValidationOptions({subfieldValues: false});
 
   const emitter = new class extends EventEmitter {}();
 
-  console.log(makeHeader()); // eslint-disable-line no-console
-
   start();
-
 
   return emitter;
 
@@ -65,8 +61,6 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
         try {
           await Promise.all(promises);
           emitter.emit('end', promises.length);
-          console.log('</ONIXMessage>'); // eslint-disable-line no-console
-
         } catch (err) {
           /* istanbul ignore next: Generic error */ emitter.emit('error', err);
         }
@@ -103,37 +97,18 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
         async function convert() {
           try {
             const obj = await convertToObject(node);
-            // Const convertRecord = await converterPromise;
-            // Const record = await convertRecord(obj);
+            const convertRecord = await converterPromise;
+            const record = await convertRecord(obj);
 
-            // Const theXmlFile = `${makeHeader() + toXml(obj)}</ONIXMessage>`;
-            const printRow = toXml(obj);
+            // Console.log('   QQQ   record:\n ', JSON.stringify(record,null,1) ); // ***
+            // Console.log('   QQQ   record:\n ', record); // ***
 
-            const regExp = /ProductForm.AJ|ProductForm.AN|ProductForm.EB|ProductForm.EC|ProductForm.ED/gu; // Only wanted cases
-            
-            //const regExp = /ProductForm.AJ/gu; // Only wanted cases
-            //const regExp = /ProductForm.AN/gu; // Only wanted cases
-            //const regExp = /ProductForm.EB/gu; // Only wanted cases
-            //const regExp = /ProductForm.EC/gu; // Only wanted cases
-            //const regExp = /ProductForm.ED/gu; // Only wanted cases
-            // Console.log(theXmlFile.search(regExp)); // *** OK
+            if (validate === true || fix === true) {
+              const result = await validateRecord(record, fix);
 
-            if (printRow.search(regExp) > 0) { // eslint-disable-line functional/no-conditional-statement
-              console.log(printRow); // eslint-disable-line no-console
+              emitter.emit('record', result);
+              return;
             }
-
-
-            return;
-
-            
-                if (validate === true || fix === true) {
-                  const result = await validateRecord(record, fix);
-                  emitter.emit('record', result);
-                  return;
-                }
-
-            
-           
 
             /* istanbul ignore next: No tests without validators */ emitter.emit('record', {record});
           } catch (err) {
@@ -150,8 +125,6 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
 
           }
         }
-
-
       });
 
     function convertToObject(node) {
@@ -171,24 +144,4 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
       }
     }
   }
-
-  function makeHeader() {
-    const headerString =
-    `<?xml version="1.0" encoding="UTF-8"?>
-<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
-<Header>
-<Sender>
-<SenderName>Kirjavälitys Oy</SenderName>
-<ContactName>ContactPersonName</ContactName>
-<EmailAddress>email@foobar.fi</EmailAddress>
-</Sender>
-<Addressee>
-<AddresseeName>ADDRESSEE</AddresseeName>
-</Addressee>
-<SentDateTime>20200409</SentDateTime>
-<MessageNote>foobar tuotesanoma</MessageNote>
-</Header>`;
-    return headerString;
-  }
-
 };
