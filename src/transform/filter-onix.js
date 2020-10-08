@@ -31,10 +31,15 @@ import createStreamParser, {toXml, ALWAYS as streamParserAlways} from 'xml-flow'
 import {Parser} from 'xml2js';
 
 /*
+
 Import {createLogger} from '@natlibfi/melinda-backend-commons';
 const logger = createLogger();
-logger.log('debug', 'ALOITETAAN HAKU! ');
+logger.log('info', 'ALOITETAAN HAKU! ');
+
 */
+
+//import {createValueInterface} from './convert/common';
+//const getValue = createValueInterface(record);
 
 const emitter = new class extends EventEmitter {}();
 
@@ -70,9 +75,9 @@ async function start() {
         try {
           const obj = await convertToObject(node);
 
-          console.log(`<?xml version="1.0" encoding="UTF-8"?>
-          <ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">`);
-          console.log(toXml(obj)); // <---- yes! obj
+          console.log(`<?xml version="1.0" encoding="UTF-8"?> 
+          <ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">`); // eslint-disable-line no-console
+          console.log(toXml(obj)); // eslint-disable-line no-console
         } catch (err) {
           /* istanbul ignore next: Generic error */ emitter.emit('error', err);
         }
@@ -96,11 +101,20 @@ async function start() {
           const regExp = /ProductForm.AJ|ProductForm.AN|ProductForm.EB|ProductForm.EC|ProductForm.ED/gu; // Only wanted cases
           // Const regExp = /ProductForm.EC/gu; // Only wanted cases
 
+          /*           
+            const getValue = createValueInterface({Product: printRow});
+          if (['AJ', 'AN', 'EB', 'EC', 'ED'].includes(getValue('DescriptiveDetail', 'ProductForm'))) {
+            console.log(printRow); // eslint-disable-line no-console
+            return;
+          }
+          */
 
+          
           if (printRow.search(regExp) > 0) { // eslint-disable-line functional/no-conditional-statement
             console.log(printRow); // eslint-disable-line no-console
             return;
           }
+          
 
           /* istanbul ignore next: No tests without validators */ // Emitter.emit('record', {record});
         } catch (err) {
