@@ -1,3 +1,4 @@
+
 /**
 *
 * @licstart  The following is the entire license notice for the JavaScript code in this file.
@@ -38,8 +39,11 @@ logger.log('info', 'ALOITETAAN HAKU! ');
 
 */
 
-//import {createValueInterface} from './convert/common';
-//const getValue = createValueInterface(record);
+import {createValueInterface} from './convert/common';
+// Export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Product: record}) => {
+// Export default () => ({Product: record}) => {
+
+//const {getValue, getValues} = createValueInterface(record);
 
 const emitter = new class extends EventEmitter {}();
 
@@ -93,28 +97,32 @@ async function start() {
 
       async function convert() {
         try {
-
+          //console.log('   node:', node);
           const obj = await convertToObject(node);
-
           const printRow = toXml(obj);
+          const {getValue, getValues} = createValueInterface(obj);
+          //console.log('   obj: ',obj);
+          const prodForm = getValue('DescriptiveDetail', 'ProductForm');
+          
+          console.log('getValue :', getValue('DescriptiveDetail', 'EditionNumber')); //'DescriptiveDetail', 'ProductForm'
+          console.log('getValues:', getValues('DescriptiveDetail', 'ProductForm')); //'DescriptiveDetail', 'ProductForm'
 
-          const regExp = /ProductForm.AJ|ProductForm.AN|ProductForm.EB|ProductForm.EC|ProductForm.ED/gu; // Only wanted cases
-          // Const regExp = /ProductForm.EC/gu; // Only wanted cases
-
-          /*           
-            const getValue = createValueInterface({Product: printRow});
-          if (['AJ', 'AN', 'EB', 'EC', 'ED'].includes(getValue('DescriptiveDetail', 'ProductForm'))) {
+          if (getValues && prodForm === 'AJ') { // ['AJ', 'AN', 'EB', 'EC', 'ED'].includes(prodForm)
             console.log(printRow); // eslint-disable-line no-console
             return;
           }
-          */
 
-          
-          if (printRow.search(regExp) > 0) { // eslint-disable-line functional/no-conditional-statement
-            console.log(printRow); // eslint-disable-line no-console
-            return;
-          }
-          
+
+          /*
+            // RegExp-way:
+            //const regExp = /ProductForm.AJ|ProductForm.AN|ProductForm.EB|ProductForm.EC|ProductForm.ED/gu; // Only wanted cases
+            // Const regExp = /ProductForm.EC/gu; // Only wanted cases
+
+            If (printRow.search(regExp) > 0) { // eslint-disable-line functional/no-conditional-statement
+              console.log(printRow); // eslint-disable-line no-console
+              return;
+            }
+        */
 
           /* istanbul ignore next: No tests without validators */ // Emitter.emit('record', {record});
         } catch (err) {
@@ -145,3 +153,4 @@ async function start() {
 }
 
 
+// };

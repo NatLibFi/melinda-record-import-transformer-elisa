@@ -38,24 +38,27 @@ export function createValueInterface(record) {
       const [prop] = props;
 
       if (prop) {
-        return recurse(props.slice(1), context?.[prop]?.[0]);
+          return recurse(props.slice(1), context?.[prop]?.[0]);
       }
 
-      return typeof context === 'object' ? context._ : context;
+        return typeof context === 'object' ? context._ : context;
     }
   }
 
   function getValues(...path) {
+    
     return recurse(path);
 
     function recurse(props, context = record) {
+     
       const [prop] = props;
 
       if (prop) { /* istanbul ignore else: Added as a safeguard only */
         if (props.length === 1) {
+          
           return context?.[prop] || /* istanbul ignore next: Added as a safeguard only */ [];
         }
-
+       
         return recurse(props.slice(1), context?.[prop]?.[0] || /* istanbul ignore next: Added as a safeguard only */ {});
       }
 
