@@ -35,15 +35,11 @@ import {Parser} from 'xml2js';
 
 Import {createLogger} from '@natlibfi/melinda-backend-commons';
 const logger = createLogger();
-logger.log('info', 'ALOITETAAN HAKU! ');
+logger.log('info', 'Start! ');
 
 */
 
 import {createValueInterface} from './convert/common';
-// Export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Product: record}) => {
-// Export default () => ({Product: record}) => {
-
-//const {getValue, getValues} = createValueInterface(record);
 
 const emitter = new class extends EventEmitter {}();
 
@@ -79,8 +75,7 @@ async function start() {
         try {
           const obj = await convertToObject(node);
 
-          console.log(`<?xml version="1.0" encoding="UTF-8"?> 
-          <ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">`); // eslint-disable-line no-console
+          console.log(`<?xml version="1.0" encoding="UTF-8"?><ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">`); // eslint-disable-line no-console
           console.log(toXml(obj)); // eslint-disable-line no-console
         } catch (err) {
           /* istanbul ignore next: Generic error */ emitter.emit('error', err);
@@ -96,25 +91,20 @@ async function start() {
       }
 
       async function convert() {
-        try {
-          //console.log('   node:', node);
-          const obj = await convertToObject(node);
-          const printRow = toXml(obj);
-          const {getValue, getValues} = createValueInterface(obj);
-          //console.log('   obj: ',obj);
-          const prodForm = getValue('DescriptiveDetail', 'ProductForm');
-          
-          console.log('getValue :', getValue('DescriptiveDetail', 'EditionNumber')); //'DescriptiveDetail', 'ProductForm'
-          console.log('getValues:', getValues('DescriptiveDetail', 'ProductForm')); //'DescriptiveDetail', 'ProductForm'
 
-          if (getValues && prodForm === 'AJ') { // ['AJ', 'AN', 'EB', 'EC', 'ED'].includes(prodForm)
-            console.log(printRow); // eslint-disable-line no-console
-            return;
-          }
+        const obj = await convertToObject(node);
+        const printRow = toXml(obj);
+        const {getValue, getValues} = createValueInterface(obj.Product);
+        const values = getValues('DescriptiveDetail', 'ProductForm');
+        const prodForm = getValue('DescriptiveDetail', 'ProductForm');
+
+        if (values && prodForm && ['AJ', 'AN', 'EB', 'EC', 'ED'].includes(prodForm)) { // eslint-disable-line functional/no-conditional-statement
+          console.log(printRow); // eslint-disable-line no-console
+        }
 
 
-          /*
-            // RegExp-way:
+        /*
+            // ALTERNATE RegExp-way:
             //const regExp = /ProductForm.AJ|ProductForm.AN|ProductForm.EB|ProductForm.EC|ProductForm.ED/gu; // Only wanted cases
             // Const regExp = /ProductForm.EC/gu; // Only wanted cases
 
@@ -124,13 +114,7 @@ async function start() {
             }
         */
 
-          /* istanbul ignore next: No tests without validators */ // Emitter.emit('record', {record});
-        } catch (err) {
-          throw err;
-        }
-
       }
-
 
     });
 
@@ -153,4 +137,3 @@ async function start() {
 }
 
 
-// };
