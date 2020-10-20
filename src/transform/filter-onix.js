@@ -31,25 +31,17 @@ import {EventEmitter} from 'events';
 import createStreamParser, {toXml, ALWAYS as streamParserAlways} from 'xml-flow';
 import {Parser} from 'xml2js';
 
-/*
-
-Import {createLogger} from '@natlibfi/melinda-backend-commons';
-const logger = createLogger();
-logger.log('info', 'Start! ');
-
-*/
-
 import {createValueInterface} from './convert/common';
 
 const emitter = new class extends EventEmitter {}();
 
 start();
 
-async function start() {
+function start() {
 
   const promises = [];
 
-  createStreamParser(process.stdin, { // Stream !
+  createStreamParser(process.stdin, {
     strict: true,
     trim: false,
     normalize: false,
@@ -101,18 +93,6 @@ async function start() {
         if (values && prodForm && ['AJ', 'AN', 'EB', 'EC', 'ED'].includes(prodForm)) { // eslint-disable-line functional/no-conditional-statement
           console.log(printRow); // eslint-disable-line no-console
         }
-
-
-        /*
-            // ALTERNATE RegExp-way:
-            //const regExp = /ProductForm.AJ|ProductForm.AN|ProductForm.EB|ProductForm.EC|ProductForm.ED/gu; // Only wanted cases
-            // Const regExp = /ProductForm.EC/gu; // Only wanted cases
-
-            If (printRow.search(regExp) > 0) { // eslint-disable-line functional/no-conditional-statement
-              console.log(printRow); // eslint-disable-line no-console
-              return;
-            }
-        */
 
       }
 
