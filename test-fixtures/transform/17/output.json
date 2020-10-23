@@ -103,7 +103,7 @@
         "subfields": [
           {
             "code": "b",
-            "value": "WSOY,"
+            "value": "foobar,"
           },
           {
             "code": "c",
