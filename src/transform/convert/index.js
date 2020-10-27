@@ -999,7 +999,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
             tag: '040',
             subfields: [
               {code: 'a', value: 'FI-KV'},
-              {code: 'b', value: getLanguage()},
+              {code: 'b', value: 'fin'}, // Previously getLanguage() ; this should be 'kuvailun kieli' = fin
               {code: 'e', value: 'rda'},
               {code: 'd', value: 'FI-NL'}
             ]
@@ -1012,7 +1012,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         {
           tag: '040',
           subfields: [
-            {code: 'b', value: getLanguage()},
+            {code: 'b', value: 'fin'}, // Previously getLanguage() ; this should be 'kuvailun kieli' = fin
             {code: 'e', value: 'rda'},
             {code: 'd', value: 'FI-NL'}
           ]
@@ -1065,7 +1065,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           tag: '084',
           subfields: [
             {code: 'a', value: element.SubjectCode[0]},
-            {code: '2', value: 'Ykl'}
+            {code: '2', value: 'ykl'}
           ]
         };
       }
@@ -1090,7 +1090,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           ind1: '9',
           subfields: [
             {code: 'a', value: element.SubjectHeadingText[0]},
-            {code: '2', value: 'Ykl'}
+            {code: '2', value: 'ykl'}
           ]
         };
       }
