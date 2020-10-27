@@ -693,16 +693,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
               {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'},
               {code: '9', value: 'FENNI<KEEP>'}
             ]
-          },
-          {
-            tag: '655',
-            ind2: '7',
-            subfields: [
-              {code: 'a', value: 'e-äänikirjat'},
-              {code: '2', value: 'slm/fin'},
-              {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s1204'},
-              {code: '9', value: 'FENNI<KEEP>'}
-            ]
           }
         ];
 
@@ -817,14 +807,14 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const publisher = getValue('PublishingDetail', 'Publisher', 'PublisherName');
 
       if (publisher) {
-        const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
+        const publishingYear = generatePublishingYear();
 
-        if (publishingDate) {
+        if (publishingYear) {
           return {
             tag: '264', ind2: '1',
             subfields: [
               {code: 'b', value: publisher},
-              {code: 'c', value: publishingDate}
+              {code: 'c', value: publishingYear}
             ]
           };
         }
@@ -836,6 +826,12 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       }
 
       return [];
+
+      function generatePublishingYear() {
+        const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
+        return publishingDate ? publishingDate.slice(0, 4) : '    ';
+      }
+
     }
 
 

@@ -171,7 +171,7 @@
           },
           {
             "code": "c",
-            "value": "20200413."
+            "value": "2020."
           }
         ],
         "ind1": " "
@@ -460,30 +460,7 @@
         ],
         "ind1": " "
       },
-      {
-        "tag": "655",
-        "ind2": "7",
-        "subfields": [
           {
-            "code": "a",
-            "value": "e-äänikirjat"
-          },
-          {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s1204"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " "
-      },
-      {
         "tag": "700",
         "subfields": [
           {
