@@ -1173,12 +1173,11 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         return {isAudio: true};
       }
 
-
-      if (form !== 'AJ' && formDetail !== 'A103') { // Add 31.8.2020
-        return {isAudio: false};
+      if (form === 'AN' && formDetail === 'A103') { // <--- add 22.10.2020 / look email SN
+        return {isAudio: true};
       }
 
-      if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
+      if (['EB', 'EC', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) { // <--- added EC 22.10.2020 / look email SN
         return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
       }
 

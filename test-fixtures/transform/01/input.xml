@@ -2,18 +2,13 @@
 <ONIXMessage xmlns="http://ns.editeur.org/onix/3.0/reference" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" release="3.0" xsi:schemaLocation="http://ns.editeur.org/onix/3.0/reference http://intranet/onix/ONIX_BookProduct_3.0_reference.xsd">
   <Header>
     <Sender>
-      <SenderName>ABCDEF Kirja</SenderName>
-      <Header>
-        <Sender>
-          <SenderName>foobar</SenderName>
-        </Sender>
-        <Addressee>
-          <AddresseeName>barfoo</AddresseeName>
-        </Addressee>
-        <MessageNumber>1</MessageNumber>
-        <SentDateTime>20190402T1042</SentDateTime>
-      </Header>
+      <SenderName>foobar</SenderName>
     </Sender>
+    <Addressee>
+      <AddresseeName>barfoo</AddresseeName>
+    </Addressee>
+    <MessageNumber>1</MessageNumber>
+    <SentDateTime>20190402T1042</SentDateTime>
   </Header>
   <Product>
     <RecordReference>ABCDEF123456</RecordReference>
