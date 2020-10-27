@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
+ <Header>
+  <Sender>
+   <SenderName>Kirjavälitys Oy</SenderName>
+   <ContactName>ContactName</ContactName>
+   <EmailAddress>tuotetiedot@foobar.fi</EmailAddress>
+  </Sender>
+  <Addressee>
+   <AddresseeName>ADRESSEENAMEHERE</AddresseeName>
+  </Addressee>
+  <SentDateTime>20200409</SentDateTime>
+  <MessageNote>foobar tuotesanoma</MessageNote>
+ </Header>
+ <Product>
+  <RecordReference>ABC1234567</RecordReference>
+  <NotificationType>03</NotificationType>
+  <ProductIdentifier>
+   <ProductIDType>03</ProductIDType>
+   <IDValue>9789523511231</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>15</ProductIDType>
+   <IDValue>9789523511231</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>01</ProductIDType>
+   <IDTypeName>foobar tuotenumero</IDTypeName>
+   <IDValue>9789523511231</IDValue>
+  </ProductIdentifier>
+  <DescriptiveDetail>
+   <ProductComposition>00</ProductComposition>
+   <ProductForm>ED</ProductForm>
+   <ProductFormDetail>E101</ProductFormDetail>
+   <ProductFormFeature>
+    <ProductFormFeatureType>15</ProductFormFeatureType>
+    <ProductFormFeatureValue>101A</ProductFormFeatureValue>
+   </ProductFormFeature>
+   <PrimaryContentType>10</PrimaryContentType>
+   <EpubTechnicalProtection>02</EpubTechnicalProtection>
+   <TitleDetail>
+    <TitleType>01</TitleType>
+    <TitleElement>
+     <TitleElementLevel>01</TitleElementLevel>
+     <TitleText>Kun kello lyö viisi</TitleText>
+    </TitleElement>
+   </TitleDetail>
+   <Contributor>
+    <SequenceNumber>1</SequenceNumber>
+    <ContributorRole>A01</ContributorRole>
+    <PersonName>Denise Rudberg</PersonName>
+    <PersonNameInverted>Rudberg, Denise</PersonNameInverted>
+    <NamesBeforeKey>Denise</NamesBeforeKey>
+    <KeyNames>Rudberg</KeyNames>
+   </Contributor>
+   <Contributor>
+    <SequenceNumber>2</SequenceNumber>
+    <ContributorRole>B06</ContributorRole>
+    <PersonName>Anu Koivunen</PersonName>
+    <PersonNameInverted>Koivunen, Anu</PersonNameInverted>
+    <NamesBeforeKey>Anu</NamesBeforeKey>
+    <KeyNames>Koivunen</KeyNames>
+   </Contributor>
+   <Language>
+    <LanguageRole>01</LanguageRole>
+    <LanguageCode>fin</LanguageCode>
+   </Language>
+   <Extent>
+    <ExtentType>10</ExtentType>
+    <ExtentValue>275</ExtentValue>
+    <ExtentUnit>03</ExtentUnit>
+   </Extent>
+   <Subject>
+    <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
+    <SubjectSchemeName>AAA</SubjectSchemeName>
+    <SubjectCode>84.2</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
+    <SubjectSchemeName>foobar tuoteryhmä</SubjectSchemeName>
+    <SubjectCode>01</SubjectCode>
+    <SubjectHeadingText>käännetty kaunokirjallisuus</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>80</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Fiktiivisen aineiston lisäluokitus</SubjectSchemeName>
+    <SubjectHeadingText>jännitys</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <MainSubject/>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>FF</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>FYT</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>dekkarit</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>rikoskirjallisuus</SubjectHeadingText>
+   </Subject>
+  </DescriptiveDetail>
+  <CollateralDetail>
+   <TextContent>
+    <TextType>03</TextType>
+    <ContentAudience>00</ContentAudience>
+    <Text>Here is some text.</Text>
+   </TextContent>
+   <SupportingResource>
+    <ResourceContentType>01</ResourceContentType>
+    <ContentAudience>00</ContentAudience>
+    <ResourceMode>03</ResourceMode>
+    <ResourceVersion>
+     <ResourceForm>02</ResourceForm>
+     <ResourceLink>https://some.media.fi/onix/media/2314938.jpg?size=original&amp;cl=20050&amp;ch=715c83ea2a2d62f65d72e84b6b3990bd</ResourceLink>
+     <ContentDate>
+      <ContentDateRole>17</ContentDateRole>
+      <Date>20190130</Date>
+     </ContentDate>
+    </ResourceVersion>
+   </SupportingResource>
+  </CollateralDetail>
+  <PublishingDetail>
+   <Publisher>
+    <PublishingRole>01</PublishingRole>
+    <PublisherIdentifier>
+     <PublisherIDType>01</PublisherIDType>
+     <IDTypeName>foobar kustantajanumero</IDTypeName>
+     <IDValue>12345</IDValue>
+    </PublisherIdentifier>
+    <PublisherName>foobar Publisher</PublisherName>
+   </Publisher>
+   <CountryOfPublication>FI</CountryOfPublication>
+   <PublishingStatus>07</PublishingStatus>
+   <PublishingStatusNote>Loppuunmyyty</PublishingStatusNote>
+   <PublishingDate>
+    <PublishingDateRole>01</PublishingDateRole>
+    <Date>2019</Date>
+   </PublishingDate>
+   <PublishingDate>
+    <PublishingDateRole>12</PublishingDateRole>
+    <Date>2019</Date>
+   </PublishingDate>
+  </PublishingDetail>
+  <RelatedMaterial>
+   <RelatedWork>
+    <WorkRelationCode>01</WorkRelationCode>
+    <WorkIdentifier>
+     <WorkIDType>01</WorkIDType>
+     <IDTypeName>foobar teostunniste</IDTypeName>
+     <IDValue>AA7654321</IDValue>
+    </WorkIdentifier>
+   </RelatedWork>
+  </RelatedMaterial>
+ </Product>
+ </ONIXMessage>
