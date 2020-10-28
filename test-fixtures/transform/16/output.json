@@ -17,14 +17,14 @@
       },
       {
         "tag": "008",
-        "value": "000101s2020    fi |||||o|||||||||||fin||"
+        "value": "000101s2019    fi |||||o|||||||||||fin||"
       },
       {
         "tag": "020",
         "subfields": [
           {
             "code": "a",
-            "value": "9999999999999"
+            "value": "978-951-0-44161-9"
           },
           {
             "code": "q",
@@ -58,17 +58,6 @@
         "ind2": " "
       },
       {
-        "tag": "041",
-        "subfields": [
-          {
-            "code": "d",
-            "value": "fin"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
         "tag": "042",
         "subfields": [
           {
@@ -84,7 +73,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "30.11"
+            "value": "84.2"
           },
           {
             "code": "2",
@@ -100,7 +89,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Aaltonen, Mika,"
+            "value": "Hiltunen, Pekka,"
           },
           {
             "code": "e",
@@ -116,7 +105,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Huomisen yhteiskunta."
+            "value": "Vilpittömästi sinun."
           }
         ]
       },
@@ -126,11 +115,11 @@
         "subfields": [
           {
             "code": "b",
-            "value": "barfoo,"
+            "value": "foobar,"
           },
           {
             "code": "c",
-            "value": "2020."
+            "value": "2019."
           }
         ],
         "ind1": " "
@@ -140,7 +129,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "1 verkkoaineisto (6 h 11 min 0 s)"
+            "value": "1 verkkoaineisto (12 h 13 min 0 s)"
           }
         ],
         "ind1": " ",
@@ -238,6 +227,17 @@
         "ind2": " "
       },
       {
+        "tag": "490",
+        "ind1": "0",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Studio"
+          }
+        ],
+        "ind2": " "
+      },
+      {
         "tag": "500",
         "subfields": [
           {
@@ -258,7 +258,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Lukija: Aku Laitinen."
+            "value": "Lukija: Satu Paavola."
           },
           {
             "code": "9",
@@ -283,35 +283,12 @@
         "ind2": " "
       },
       {
-        "tag": "655",
-        "ind2": "7",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "äänikirjat"
-          },
-          {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s579"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " "
-      },
-      {
         "tag": "700",
         "ind1": "1",
         "subfields": [
           {
             "code": "a",
-            "value": "Laitinen, Aku,"
+            "value": "Paavola, Satu,"
           },
           {
             "code": "e",
@@ -327,7 +304,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:9999999999999"
+            "value": "http://urn.fi/URN:ISBN:978-951-0-44161-9"
           }
         ]
       },
@@ -363,7 +340,7 @@
           },
           {
             "code": "b",
-            "value": "TT1234567"
+            "value": "TT0017764"
           },
           {
             "code": "5",
@@ -392,7 +369,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 9999999999999 is not valid"
+        "ISBN 9789510441619 is not valid"
       ]
     },
     {
