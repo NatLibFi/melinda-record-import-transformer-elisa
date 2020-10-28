@@ -129,6 +129,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       generate264(),
       generate300(),
       generate336(),
+      generate344(),
       generate347(),
       generate490(),
       generate500(),
@@ -278,6 +279,27 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       return [];
     }
 
+
+    function generate344() { // Add 23.10.2020; moved from generate-static
+
+      const form = getValue('DescriptiveDetail', 'ProductForm');
+
+      if (form === 'AJ' || form === 'AN') {
+        return [
+          {
+            tag: '344',
+            subfields: [
+              {code: 'a', value: 'digitaalinen'},
+              {code: '2', value: 'rda'}
+            ]
+          }
+        ];
+
+      }
+
+      return [];
+    }
+
     function generate347() {
       if (isAudio) {
         return [
@@ -420,7 +442,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     function generate500() {
 
       if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
-        // Console.log('   QQQ   500   Now make for KV');
 
         const notificType = getValue('NotificationType');
 
@@ -428,10 +449,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           return [
             {
               tag: '500',
-              subfields: [
-                {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
-                {code: '9', value: 'FENNI<KEEP>'}
-              ]
+              subfields: [{code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'}]
             }
           ];
 
@@ -441,10 +459,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           return [
             {
               tag: '500',
-              subfields: [
-                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
-                {code: '9', value: 'FENNI<KEEP>'}
-              ]
+              subfields: [{code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'}]
             }
           ];
 
@@ -466,16 +481,12 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       } // Only for KV
 
       // All others --->
-      // Console.log('   QQQ   500   Now make for NON-KV');
       return [
         {
           tag: '500',
           ind1: ' ',
           ind2: ' ',
-          subfields: [
-            {code: 'a', value: 'Koneellisesti tuotettu tietue.'},
-            {code: '9', value: 'FENNI<KEEP>'}
-          ]
+          subfields: [{code: 'a', value: 'Koneellisesti tuotettu tietue.'}]
         }
       ];
       // All others <---
@@ -487,7 +498,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
       if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
       // Field added if NotificationType = 03 with legal deposit
-        // Console.log('   QQQ   506   Now make for KV');
 
         const notificType = getValue('NotificationType');
 

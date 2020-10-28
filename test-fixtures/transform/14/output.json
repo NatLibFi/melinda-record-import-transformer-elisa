@@ -204,21 +204,6 @@
         "ind2": " "
       },
       {
-        "tag": "344",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "digitaalinen"
-          },
-          {
-            "code": "2",
-            "value": "rda"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
         "tag": "347",
         "subfields": [
           {
@@ -258,10 +243,6 @@
           {
             "code": "a",
             "value": "TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS."
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
           }
         ],
         "ind1": " ",
