@@ -129,6 +129,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       generate264(),
       generate300(),
       generate336(),
+      generate344(),
       generate347(),
       generate490(),
       generate500(),
@@ -273,6 +274,27 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
             ]
           }
         ];
+      }
+
+      return [];
+    }
+
+
+    function generate344() { // Add 23.10.2020; moved from generate-static
+
+      const form = getValue('DescriptiveDetail', 'ProductForm');
+
+      if (form === 'AJ' || form === 'AN') {
+        return [
+          {
+            tag: '344',
+            subfields: [
+              {code: 'a', value: 'digitaalinen'},
+              {code: '2', value: 'rda'}
+            ]
+          }
+        ];
+
       }
 
       return [];
