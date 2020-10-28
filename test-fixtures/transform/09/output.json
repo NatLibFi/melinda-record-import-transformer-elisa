@@ -88,7 +88,7 @@
           },
           {
             "code": "2",
-            "value": "Ykl"
+            "value": "ykl"
           }
         ],
         "ind1": " ",
@@ -104,7 +104,7 @@
           },
           {
             "code": "2",
-            "value": "Ykl"
+            "value": "ykl"
           }
         ],
         "ind2": " "
@@ -119,7 +119,7 @@
           },
           {
             "code": "2",
-            "value": "Ykl"
+            "value": "ykl"
           }
         ],
         "ind2": " "
@@ -171,7 +171,7 @@
           },
           {
             "code": "c",
-            "value": "20200413."
+            "value": "2020."
           }
         ],
         "ind1": " "
@@ -461,49 +461,19 @@
         "ind1": " "
       },
       {
-        "tag": "655",
-        "ind2": "7",
+        "tag": "700",
+        "ind1": "1",
+        "ind2": " ",
         "subfields": [
           {
             "code": "a",
-            "value": "e-äänikirjat"
+            "value": "Heikinheimo, Maija ,"
           },
-          {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s1204"
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " "
-      },
-      {
-        "tag": "700",
-        "subfields": [
           {
             "code": "e",
             "value": "kääntäjä."
           }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "700",
-        "subfields": [
-          {
-            "code": "e",
-            "value": "lukija."
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
+        ]
       },
       {
         "tag": "700",

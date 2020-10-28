@@ -1,34 +1,30 @@
 {
   "record": {
     "_validationOptions": {},
-    "leader": "00000nim a22000008i 4500",
+    "leader": "00000nam a22000008i 4500",
     "fields": [
       {
         "tag": "006",
-        "value": "m|||||o||h||||||||"
+        "value": "m|||||o||d||||||||"
       },
       {
         "tag": "007",
-        "value": "sr|uunnnnnuneu"
-      },
-      {
-        "tag": "007",
-        "value": "cr|nnannnuuuuu"
+        "value": "cr||||||||||||"
       },
       {
         "tag": "008",
-        "value": "000101s2020    fi |||||o|||||||||||fin||"
+        "value": "000101s2016    fi |||||o|||||||||||fin||"
       },
       {
         "tag": "020",
         "subfields": [
           {
             "code": "a",
-            "value": "9999999999999"
+            "value": "978-952-279-359-1"
           },
           {
             "code": "q",
-            "value": "MP3"
+            "value": "EPUB"
           }
         ],
         "ind1": " ",
@@ -61,7 +57,7 @@
         "tag": "041",
         "subfields": [
           {
-            "code": "d",
+            "code": "a",
             "value": "fin"
           }
         ],
@@ -84,7 +80,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "30.11"
+            "value": "84.2"
           },
           {
             "code": "2",
@@ -100,7 +96,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Aaltonen, Mika,"
+            "value": "Birchall, Katy,"
           },
           {
             "code": "e",
@@ -116,7 +112,11 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Huomisen yhteiskunta."
+            "value": "It girl :"
+          },
+          {
+            "code": "b",
+            "value": "Suosituksi yhdessä päivässä."
           }
         ]
       },
@@ -126,11 +126,11 @@
         "subfields": [
           {
             "code": "b",
-            "value": "barfoo,"
+            "value": "foobar,"
           },
           {
             "code": "c",
-            "value": "2020."
+            "value": "2016."
           }
         ],
         "ind1": " "
@@ -140,7 +140,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "1 verkkoaineisto (6 h 11 min 0 s)"
+            "value": "1 verkkoaineisto (350 sivua)"
           }
         ],
         "ind1": " ",
@@ -151,11 +151,11 @@
         "subfields": [
           {
             "code": "a",
-            "value": "puhe"
+            "value": "teksti"
           },
           {
             "code": "b",
-            "value": "spw"
+            "value": "txt"
           },
           {
             "code": "2",
@@ -223,11 +223,11 @@
         "subfields": [
           {
             "code": "a",
-            "value": "äänitiedosto"
+            "value": "tekstitiedosto"
           },
           {
             "code": "b",
-            "value": "MP3"
+            "value": "EPUB"
           },
           {
             "code": "2",
@@ -238,87 +238,195 @@
         "ind2": " "
       },
       {
-        "tag": "500",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS."
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "511",
+        "tag": "490",
         "ind1": "0",
         "subfields": [
           {
             "code": "a",
-            "value": "Lukija: Aku Laitinen."
+            "value": "It girl"
           },
           {
-            "code": "9",
-            "value": "FENNI<KEEP>"
+            "code": "v",
+            "value": "1"
           }
         ],
         "ind2": " "
       },
       {
-        "tag": "594",
+        "tag": "500",
         "subfields": [
           {
             "code": "a",
-            "value": "TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS"
+            "value": "Koneellisesti tuotettu tietue."
           },
           {
-            "code": "5",
-            "value": "FENNI"
+            "code": "9",
+            "value": "FENNI<KEEP>"
           }
         ],
         "ind1": " ",
         "ind2": " "
       },
       {
-        "tag": "655",
-        "ind2": "7",
+        "tag": "506",
+        "ind1": "1",
         "subfields": [
           {
             "code": "a",
-            "value": "äänikirjat"
+            "value": "Aineisto on käytettävissä vapaakappalekirjastoissa."
+          },
+          {
+            "code": "f",
+            "value": "Online access with authorization."
           },
           {
             "code": "2",
-            "value": "slm/fin"
+            "value": "star"
           },
           {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s579"
+            "code": "5",
+            "value": "FI-Vapaa"
           },
           {
             "code": "9",
             "value": "FENNI<KEEP>"
           }
         ],
-        "ind1": " "
+        "ind2": " "
+      },
+      {
+        "tag": "540",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;"
+          },
+          {
+            "code": "b",
+            "value": "Kansalliskirjasto;"
+          },
+          {
+            "code": "c",
+            "value": "Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä"
+          },
+          {
+            "code": "u",
+            "value": "http://www.finlex.fi/fi/laki/ajantasa/2007/20071433"
+          },
+          {
+            "code": "5",
+            "value": "FI-Vapaa"
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "isät"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "julkisuuden henkilöt"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "koulunkäynti"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "nörtit"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "suosio"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "tyttäret"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "tytöt"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "äitipuolet"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
       },
       {
         "tag": "700",
         "ind1": "1",
+        "ind2": " ",
         "subfields": [
           {
             "code": "a",
-            "value": "Laitinen, Aku,"
+            "value": "Hirvonen, Eija,"
           },
           {
             "code": "e",
-            "value": "lukija."
+            "value": "kääntäjä."
           }
-        ],
-        "ind2": " "
+        ]
       },
       {
         "tag": "856",
@@ -327,7 +435,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:9999999999999"
+            "value": "http://urn.fi/URN:ISBN:978-952-279-359-1"
           }
         ]
       },
@@ -363,7 +471,7 @@
           },
           {
             "code": "b",
-            "value": "TT1234567"
+            "value": "BB7777777"
           },
           {
             "code": "5",
@@ -392,7 +500,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 9999999999999 is not valid"
+        "ISBN 9789522793591 is not valid"
       ]
     },
     {

@@ -693,16 +693,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
               {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'},
               {code: '9', value: 'FENNI<KEEP>'}
             ]
-          },
-          {
-            tag: '655',
-            ind2: '7',
-            subfields: [
-              {code: 'a', value: 'e-äänikirjat'},
-              {code: '2', value: 'slm/fin'},
-              {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s1204'},
-              {code: '9', value: 'FENNI<KEEP>'}
-            ]
           }
         ];
 
@@ -713,8 +703,10 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate700() {
       const contribrole = getValue('DescriptiveDetail', 'Contributor', 'ContributorRole');
+      const personNameInverted = getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted');
 
-      if (contribrole) {
+
+      if (contribrole && personNameInverted) {
         return getValues('DescriptiveDetail', 'Contributor').filter(filter).map(makeRows);
       }
 
@@ -723,12 +715,17 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       function makeRows(element) {
         return {
           tag: '700',
-          subfields: [{code: 'e', value: changeValues(element.ContributorRole[0])}]
+          ind1: '1',
+          ind2: ' ',
+          subfields: [
+            {code: 'a', value: `${element.PersonNameInverted[0]},`},
+            {code: 'e', value: changeValues(element.ContributorRole[0])}
+          ]
         };
       }
 
       function filter({ContributorRole}) {
-        return ['B06', 'E07', 'A12', 'B01'].includes(ContributorRole?.[0]);
+        return ['B06', 'A12', 'B01'].includes(ContributorRole?.[0]); // Excluded 'E07', generateAuthors makes it already
       }
 
       function changeValues(value) {
@@ -817,14 +814,14 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const publisher = getValue('PublishingDetail', 'Publisher', 'PublisherName');
 
       if (publisher) {
-        const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
+        const publishingYear = generatePublishingYear();
 
-        if (publishingDate) {
+        if (publishingYear) {
           return {
             tag: '264', ind2: '1',
             subfields: [
               {code: 'b', value: publisher},
-              {code: 'c', value: publishingDate}
+              {code: 'c', value: publishingYear}
             ]
           };
         }
@@ -836,6 +833,12 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       }
 
       return [];
+
+      function generatePublishingYear() {
+        const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
+        return publishingDate ? publishingDate.slice(0, 4) : '    ';
+      }
+
     }
 
 
@@ -1003,7 +1006,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
             tag: '040',
             subfields: [
               {code: 'a', value: 'FI-KV'},
-              {code: 'b', value: getLanguage()},
+              {code: 'b', value: 'fin'}, // Previously getLanguage() ; this should be 'kuvailun kieli' = fin
               {code: 'e', value: 'rda'},
               {code: 'd', value: 'FI-NL'}
             ]
@@ -1016,7 +1019,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         {
           tag: '040',
           subfields: [
-            {code: 'b', value: getLanguage()},
+            {code: 'b', value: 'fin'}, // Previously getLanguage() ; this should be 'kuvailun kieli' = fin
             {code: 'e', value: 'rda'},
             {code: 'd', value: 'FI-NL'}
           ]
@@ -1069,7 +1072,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           tag: '084',
           subfields: [
             {code: 'a', value: element.SubjectCode[0]},
-            {code: '2', value: 'Ykl'}
+            {code: '2', value: 'ykl'}
           ]
         };
       }
@@ -1094,7 +1097,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           ind1: '9',
           subfields: [
             {code: 'a', value: element.SubjectHeadingText[0]},
-            {code: '2', value: 'Ykl'}
+            {code: '2', value: 'ykl'}
           ]
         };
       }
@@ -1119,13 +1122,15 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           };
         }
 
+
         return {
           tag: '700', ind1: '1',
           subfields: [
             {code: 'a', value: name},
-            {code: 'e', value: role}
+            {code: 'e', value: `${role}.`}
           ]
         };
+
       });
     }
 
