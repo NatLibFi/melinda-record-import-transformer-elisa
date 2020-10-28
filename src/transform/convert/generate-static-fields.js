@@ -50,6 +50,8 @@ export default () => [
       {code: '2', value: 'rdacarrier'}
     ]
   },
+
+  /*  Moved to transform/convert/index.js
   {
     tag: '344',
     subfields: [
@@ -57,6 +59,7 @@ export default () => [
       {code: '2', value: 'rda'}
     ]
   },
+  */
   {
     tag: '042',
     subfields: [{code: 'a', value: 'finb'}]
