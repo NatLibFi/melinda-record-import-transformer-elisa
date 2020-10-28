@@ -442,7 +442,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     function generate500() {
 
       if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
-        // Console.log('   QQQ   500   Now make for KV');
 
         const notificType = getValue('NotificationType');
 
@@ -450,10 +449,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           return [
             {
               tag: '500',
-              subfields: [
-                {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
-                {code: '9', value: 'FENNI<KEEP>'}
-              ]
+              subfields: [{code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'}]
             }
           ];
 
@@ -463,10 +459,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           return [
             {
               tag: '500',
-              subfields: [
-                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
-                {code: '9', value: 'FENNI<KEEP>'}
-              ]
+              subfields: [{code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'}]
             }
           ];
 
@@ -488,16 +481,12 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       } // Only for KV
 
       // All others --->
-      // Console.log('   QQQ   500   Now make for NON-KV');
       return [
         {
           tag: '500',
           ind1: ' ',
           ind2: ' ',
-          subfields: [
-            {code: 'a', value: 'Koneellisesti tuotettu tietue.'},
-            {code: '9', value: 'FENNI<KEEP>'}
-          ]
+          subfields: [{code: 'a', value: 'Koneellisesti tuotettu tietue.'}]
         }
       ];
       // All others <---
@@ -509,7 +498,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
       if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
       // Field added if NotificationType = 03 with legal deposit
-        // Console.log('   QQQ   506   Now make for KV');
 
         const notificType = getValue('NotificationType');
 
