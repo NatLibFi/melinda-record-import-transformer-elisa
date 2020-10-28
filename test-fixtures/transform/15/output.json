@@ -1,34 +1,30 @@
 {
   "record": {
     "_validationOptions": {},
-    "leader": "00000nim a22000005i 4500",
+    "leader": "00000nam a22000008i 4500",
     "fields": [
       {
         "tag": "006",
-        "value": "m|||||o||h||||||||"
+        "value": "m|||||o||d||||||||"
       },
       {
         "tag": "007",
-        "value": "sr|uunnnnnuneu"
-      },
-      {
-        "tag": "007",
-        "value": "cr|nnannnuuuuu"
+        "value": "cr||||||||||||"
       },
       {
         "tag": "008",
-        "value": "000101s2020    fi |||||o|||||||||||fin||"
+        "value": "000101s2016    fi |||||o|||||||||||fin||"
       },
       {
         "tag": "020",
         "subfields": [
           {
             "code": "a",
-            "value": "1111111111111"
+            "value": "978-952-279-359-1"
           },
           {
             "code": "q",
-            "value": "MP3"
+            "value": "EPUB"
           }
         ],
         "ind1": " ",
@@ -61,7 +57,7 @@
         "tag": "041",
         "subfields": [
           {
-            "code": "d",
+            "code": "a",
             "value": "fin"
           }
         ],
@@ -95,42 +91,12 @@
         "ind2": " "
       },
       {
-        "tag": "084",
-        "ind1": "9",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "eläimet"
-          },
-          {
-            "code": "2",
-            "value": "ykl"
-          }
-        ],
-        "ind2": " "
-      },
-      {
-        "tag": "084",
-        "ind1": "9",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "jännitys"
-          },
-          {
-            "code": "2",
-            "value": "ykl"
-          }
-        ],
-        "ind2": " "
-      },
-      {
         "tag": "100",
         "ind1": "1",
         "subfields": [
           {
             "code": "a",
-            "value": "Massey, Sujata,"
+            "value": "Birchall, Katy,"
           },
           {
             "code": "e",
@@ -146,18 +112,11 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Satapurin jalokivi."
-          }
-        ]
-      },
-      {
-        "tag": "263",
-        "ind1": " ",
-        "ind2": " ",
-        "subfields": [
+            "value": "It girl :"
+          },
           {
-            "code": "a",
-            "value": "20200413"
+            "code": "b",
+            "value": "Suosituksi yhdessä päivässä."
           }
         ]
       },
@@ -167,11 +126,11 @@
         "subfields": [
           {
             "code": "b",
-            "value": "PublisherNamehere,"
+            "value": "foobar,"
           },
           {
             "code": "c",
-            "value": "2020."
+            "value": "2016."
           }
         ],
         "ind1": " "
@@ -181,7 +140,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "1 verkkoaineisto"
+            "value": "1 verkkoaineisto (350 sivua)"
           }
         ],
         "ind1": " ",
@@ -192,11 +151,11 @@
         "subfields": [
           {
             "code": "a",
-            "value": "puhe"
+            "value": "teksti"
           },
           {
             "code": "b",
-            "value": "spw"
+            "value": "txt"
           },
           {
             "code": "2",
@@ -245,30 +204,15 @@
         "ind2": " "
       },
       {
-        "tag": "344",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "digitaalinen"
-          },
-          {
-            "code": "2",
-            "value": "rda"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
         "tag": "347",
         "subfields": [
           {
             "code": "a",
-            "value": "äänitiedosto"
+            "value": "tekstitiedosto"
           },
           {
             "code": "b",
-            "value": "MP3"
+            "value": "EPUB"
           },
           {
             "code": "2",
@@ -284,11 +228,11 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Perveen Mistry"
+            "value": "It girl"
           },
           {
             "code": "v",
-            "value": "2"
+            "value": "1"
           }
         ],
         "ind2": " "
@@ -298,163 +242,161 @@
         "subfields": [
           {
             "code": "a",
-            "value": "ENNAKKOTIETO / KIRJAVÄLITYS."
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "511",
-        "ind1": "0",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Lukija: Erja Manto."
+            "value": "Koneellisesti tuotettu tietue."
           },
           {
             "code": "9",
             "value": "FENNI<KEEP>"
           }
         ],
+        "ind1": " ",
         "ind2": " "
       },
       {
-        "tag": "594",
+        "tag": "506",
+        "ind1": "1",
         "subfields": [
           {
             "code": "a",
-            "value": "ENNAKKOTIETO / KIRJAVÄLITYS"
+            "value": "Aineisto on käytettävissä vapaakappalekirjastoissa."
           },
           {
-            "code": "5",
-            "value": "FENNI"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Eläimet ja luonto"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Romaanit"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Jännitys"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "rikos"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "dekkari"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Perhe"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "parisuhteet"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "ihmissuhteet"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "653",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Maantiede"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "655",
-        "ind2": "7",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "äänikirjat"
+            "code": "f",
+            "value": "Online access with authorization."
           },
           {
             "code": "2",
-            "value": "slm/fin"
+            "value": "star"
           },
           {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s579"
+            "code": "5",
+            "value": "FI-Vapaa"
           },
           {
             "code": "9",
             "value": "FENNI<KEEP>"
           }
         ],
-        "ind1": " "
+        "ind2": " "
+      },
+      {
+        "tag": "540",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;"
+          },
+          {
+            "code": "b",
+            "value": "Kansalliskirjasto;"
+          },
+          {
+            "code": "c",
+            "value": "Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä"
+          },
+          {
+            "code": "u",
+            "value": "http://www.finlex.fi/fi/laki/ajantasa/2007/20071433"
+          },
+          {
+            "code": "5",
+            "value": "FI-Vapaa"
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "isät"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "julkisuuden henkilöt"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "koulunkäynti"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "nörtit"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "suosio"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "tyttäret"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "tytöt"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "653",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "äitipuolet"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
       },
       {
         "tag": "700",
@@ -463,7 +405,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Heikinheimo, Maija ,"
+            "value": "Hirvonen, Eija,"
           },
           {
             "code": "e",
@@ -472,28 +414,13 @@
         ]
       },
       {
-        "tag": "700",
-        "ind1": "1",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Manto, Erja,"
-          },
-          {
-            "code": "e",
-            "value": "lukija."
-          }
-        ],
-        "ind2": " "
-      },
-      {
         "tag": "856",
         "ind1": "4",
         "ind2": "0",
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:1111111111111"
+            "value": "http://urn.fi/URN:ISBN:978-952-279-359-1"
           }
         ]
       },
@@ -529,7 +456,7 @@
           },
           {
             "code": "b",
-            "value": "AA7777777"
+            "value": "BB7777777"
           },
           {
             "code": "5",
@@ -558,7 +485,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 1111111111111 is not valid"
+        "ISBN 9789522793591 is not valid"
       ]
     },
     {

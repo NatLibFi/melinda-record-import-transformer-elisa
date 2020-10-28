@@ -226,23 +226,8 @@
           {
             "code": "a",
             "value": "Koneellisesti tuotettu tietue."
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
           }
         ]
-      },
-      {
-        "tag": "700",
-        "subfields": [
-          {
-            "code": "e",
-            "value": "lukija."
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
       },
       {
         "tag": "700",

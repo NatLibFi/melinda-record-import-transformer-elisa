@@ -1,11 +1,15 @@
 {
   "record": {
     "_validationOptions": {},
-    "leader": "00000n|| a22000008i 4500",
+    "leader": "00000nam a22000008i 4500",
     "fields": [
       {
         "tag": "006",
-        "value": "||||||||||||||||||"
+        "value": "m|||||o||d||||||||"
+      },
+      {
+        "tag": "007",
+        "value": "cr||||||||||||"
       },
       {
         "tag": "008",
@@ -17,6 +21,10 @@
           {
             "code": "a",
             "value": "8"
+          },
+          {
+            "code": "q",
+            "value": "PDF"
           }
         ],
         "ind1": " ",
@@ -120,6 +128,25 @@
         "ind2": " "
       },
       {
+        "tag": "336",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "teksti"
+          },
+          {
+            "code": "b",
+            "value": "txt"
+          },
+          {
+            "code": "2",
+            "value": "rdacontent"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
         "tag": "337",
         "subfields": [
           {
@@ -158,11 +185,15 @@
         "ind2": " "
       },
       {
-        "tag": "344",
+        "tag": "347",
         "subfields": [
           {
             "code": "a",
-            "value": "digitaalinen"
+            "value": "tekstitiedosto"
+          },
+          {
+            "code": "b",
+            "value": "PDF"
           },
           {
             "code": "2",
@@ -180,10 +211,6 @@
           {
             "code": "a",
             "value": "Koneellisesti tuotettu tietue."
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
           }
         ]
       },

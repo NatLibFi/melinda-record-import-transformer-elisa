@@ -129,6 +129,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       generate264(),
       generate300(),
       generate336(),
+      generate344(),
       generate347(),
       generate490(),
       generate500(),
@@ -278,6 +279,27 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       return [];
     }
 
+
+    function generate344() { // Add 23.10.2020; moved from generate-static
+
+      const form = getValue('DescriptiveDetail', 'ProductForm');
+
+      if (form === 'AJ' || form === 'AN') {
+        return [
+          {
+            tag: '344',
+            subfields: [
+              {code: 'a', value: 'digitaalinen'},
+              {code: '2', value: 'rda'}
+            ]
+          }
+        ];
+
+      }
+
+      return [];
+    }
+
     function generate347() {
       if (isAudio) {
         return [
@@ -420,7 +442,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
     function generate500() {
 
       if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
-        // Console.log('   QQQ   500   Now make for KV');
 
         const notificType = getValue('NotificationType');
 
@@ -428,10 +449,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           return [
             {
               tag: '500',
-              subfields: [
-                {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
-                {code: '9', value: 'FENNI<KEEP>'}
-              ]
+              subfields: [{code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'}]
             }
           ];
 
@@ -441,10 +459,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           return [
             {
               tag: '500',
-              subfields: [
-                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
-                {code: '9', value: 'FENNI<KEEP>'}
-              ]
+              subfields: [{code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'}]
             }
           ];
 
@@ -466,16 +481,12 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       } // Only for KV
 
       // All others --->
-      // Console.log('   QQQ   500   Now make for NON-KV');
       return [
         {
           tag: '500',
           ind1: ' ',
           ind2: ' ',
-          subfields: [
-            {code: 'a', value: 'Koneellisesti tuotettu tietue.'},
-            {code: '9', value: 'FENNI<KEEP>'}
-          ]
+          subfields: [{code: 'a', value: 'Koneellisesti tuotettu tietue.'}]
         }
       ];
       // All others <---
@@ -487,7 +498,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
       if (dataSource === 'Kirjavälitys Oy') { // < --- ONLY FOR KV!
       // Field added if NotificationType = 03 with legal deposit
-        // Console.log('   QQQ   506   Now make for KV');
 
         const notificType = getValue('NotificationType');
 
@@ -693,16 +703,6 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
               {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'},
               {code: '9', value: 'FENNI<KEEP>'}
             ]
-          },
-          {
-            tag: '655',
-            ind2: '7',
-            subfields: [
-              {code: 'a', value: 'e-äänikirjat'},
-              {code: '2', value: 'slm/fin'},
-              {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s1204'},
-              {code: '9', value: 'FENNI<KEEP>'}
-            ]
           }
         ];
 
@@ -713,8 +713,10 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate700() {
       const contribrole = getValue('DescriptiveDetail', 'Contributor', 'ContributorRole');
+      const personNameInverted = getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted');
 
-      if (contribrole) {
+
+      if (contribrole && personNameInverted) {
         return getValues('DescriptiveDetail', 'Contributor').filter(filter).map(makeRows);
       }
 
@@ -723,12 +725,17 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       function makeRows(element) {
         return {
           tag: '700',
-          subfields: [{code: 'e', value: changeValues(element.ContributorRole[0])}]
+          ind1: '1',
+          ind2: ' ',
+          subfields: [
+            {code: 'a', value: `${element.PersonNameInverted[0]},`},
+            {code: 'e', value: changeValues(element.ContributorRole[0])}
+          ]
         };
       }
 
       function filter({ContributorRole}) {
-        return ['B06', 'E07', 'A12', 'B01'].includes(ContributorRole?.[0]);
+        return ['B06', 'A12', 'B01'].includes(ContributorRole?.[0]); // Excluded 'E07', generateAuthors makes it already
       }
 
       function changeValues(value) {
@@ -817,14 +824,14 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       const publisher = getValue('PublishingDetail', 'Publisher', 'PublisherName');
 
       if (publisher) {
-        const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
+        const publishingYear = generatePublishingYear();
 
-        if (publishingDate) {
+        if (publishingYear) {
           return {
             tag: '264', ind2: '1',
             subfields: [
               {code: 'b', value: publisher},
-              {code: 'c', value: publishingDate}
+              {code: 'c', value: publishingYear}
             ]
           };
         }
@@ -836,6 +843,12 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       }
 
       return [];
+
+      function generatePublishingYear() {
+        const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
+        return publishingDate ? publishingDate.slice(0, 4) : '    ';
+      }
+
     }
 
 
@@ -1003,7 +1016,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
             tag: '040',
             subfields: [
               {code: 'a', value: 'FI-KV'},
-              {code: 'b', value: getLanguage()},
+              {code: 'b', value: 'fin'}, // Previously getLanguage() ; this should be 'kuvailun kieli' = fin
               {code: 'e', value: 'rda'},
               {code: 'd', value: 'FI-NL'}
             ]
@@ -1016,7 +1029,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         {
           tag: '040',
           subfields: [
-            {code: 'b', value: getLanguage()},
+            {code: 'b', value: 'fin'}, // Previously getLanguage() ; this should be 'kuvailun kieli' = fin
             {code: 'e', value: 'rda'},
             {code: 'd', value: 'FI-NL'}
           ]
@@ -1069,7 +1082,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           tag: '084',
           subfields: [
             {code: 'a', value: element.SubjectCode[0]},
-            {code: '2', value: 'Ykl'}
+            {code: '2', value: 'ykl'}
           ]
         };
       }
@@ -1094,7 +1107,7 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           ind1: '9',
           subfields: [
             {code: 'a', value: element.SubjectHeadingText[0]},
-            {code: '2', value: 'Ykl'}
+            {code: '2', value: 'ykl'}
           ]
         };
       }
@@ -1119,13 +1132,15 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           };
         }
 
+
         return {
           tag: '700', ind1: '1',
           subfields: [
             {code: 'a', value: name},
-            {code: 'e', value: role}
+            {code: 'e', value: `${role}.`}
           ]
         };
+
       });
     }
 
@@ -1173,12 +1188,11 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
         return {isAudio: true};
       }
 
-
-      if (form !== 'AJ' && formDetail !== 'A103') { // Add 31.8.2020
-        return {isAudio: false};
+      if (form === 'AN' && formDetail === 'A103') { // <--- add 22.10.2020 / look email SN
+        return {isAudio: true};
       }
 
-      if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
+      if (['EB', 'EC', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) { // <--- added EC 22.10.2020 / look email SN
         return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
       }
 
