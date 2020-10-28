@@ -703,8 +703,10 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
 
     function generate700() {
       const contribrole = getValue('DescriptiveDetail', 'Contributor', 'ContributorRole');
+      const personNameInverted = getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted');
 
-      if (contribrole) {
+
+      if (contribrole && personNameInverted) {
         return getValues('DescriptiveDetail', 'Contributor').filter(filter).map(makeRows);
       }
 
@@ -713,12 +715,17 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
       function makeRows(element) {
         return {
           tag: '700',
-          subfields: [{code: 'e', value: changeValues(element.ContributorRole[0])}]
+          ind1: '1',
+          ind2: ' ',
+          subfields: [
+            {code: 'a', value: `${element.PersonNameInverted[0]},`},
+            {code: 'e', value: changeValues(element.ContributorRole[0])}
+          ]
         };
       }
 
       function filter({ContributorRole}) {
-        return ['B06', 'E07', 'A12', 'B01'].includes(ContributorRole?.[0]);
+        return ['B06', 'A12', 'B01'].includes(ContributorRole?.[0]); // Excluded 'E07', generateAuthors makes it already
       }
 
       function changeValues(value) {
@@ -1115,13 +1122,15 @@ export default ({isLegalDeposit, sources, sender, moment = momentOrig}) => ({Pro
           };
         }
 
+
         return {
           tag: '700', ind1: '1',
           subfields: [
             {code: 'a', value: name},
-            {code: 'e', value: role}
+            {code: 'e', value: `${role}.`}
           ]
         };
+
       });
     }
 

@@ -460,27 +460,20 @@
         ],
         "ind1": " "
       },
-           {
+      {
         "tag": "700",
+        "ind1": "1",
+        "ind2": " ",
         "subfields": [
+          {
+            "code": "a",
+            "value": "Heikinheimo, Maija ,"
+          },
           {
             "code": "e",
             "value": "kääntäjä."
           }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "700",
-        "subfields": [
-          {
-            "code": "e",
-            "value": "lukija."
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
+        ]
       },
       {
         "tag": "700",
