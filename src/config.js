@@ -32,3 +32,7 @@ import {readEnvironmentVariable} from '@natlibfi/melinda-backend-commons';
 export const sources = readEnvironmentVariable('SOURCES', {format: JSON.parse});
 export const isLegalDeposit = readEnvironmentVariable('IS_LEGAL_DEPOSIT', {defaultValue: false, format: v => parseBoolean(v)});
 
+
+export const useName = readEnvironmentVariable('NAME', {format: JSON.parse}); //  Add 29.10.2020
+
+
