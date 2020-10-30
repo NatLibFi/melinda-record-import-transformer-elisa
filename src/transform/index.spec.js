@@ -49,8 +49,8 @@ function callback({getFixture}) {
   const expectedRecord = getFixture({components: ['output.json'], reader: READERS.JSON});
   const expectedError = getFixture('error.txt');
 
-  const transform = createTransformer({sources: {'Kirjavälitys Oy': 'foobar', foobar: 'foobar'},
-    source4Value: 'foobar',
+  const transform = createTransformer({sources: {foobar: 'foobar', barfoo: 'barfoo'},
+    source4Value: 'barfoo',
     isLegalDeposit: parseBoolean(isLegalDeposit),
     moment: momentMock});
 

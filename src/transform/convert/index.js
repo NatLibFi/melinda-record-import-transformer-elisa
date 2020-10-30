@@ -47,10 +47,11 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     throw new Error('  No data source found.');
   }
 
-  /*
-  Logger.log('debug', `   QQQ   source4Value: ${source4Value} `);
 
-  if (source4Value !== dataSource) { // eslint-disable-line functional/no-conditional-statement
+  /*
+  Logger.log('debug', `      source4Value: ${source4Value} `);
+  logger.log('debug', `      dataSource: ${dataSource} `);
+    If (source4Value !== dataSource) { // eslint-disable-line functional/no-conditional-statement
     logger.log('debug', `      CHECK source/value : This is in use for value now: ${source4Value} `);
   }
 */
