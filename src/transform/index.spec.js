@@ -50,6 +50,7 @@ function callback({getFixture}) {
   const expectedError = getFixture('error.txt');
 
   const transform = createTransformer({sources: {'Kirjavälitys Oy': 'foobar', foobar: 'foobar'},
+    source4Value: 'foobar',
     isLegalDeposit: parseBoolean(isLegalDeposit),
     moment: momentMock});
 

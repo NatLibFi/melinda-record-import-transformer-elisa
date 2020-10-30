@@ -36,7 +36,7 @@ import {createLogger} from '@natlibfi/melinda-backend-commons';
 
 const logger = createLogger();
 
-export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig}) => ({Product: record}) => {
+export default ({source4Value, isLegalDeposit, sources, sender, moment = momentOrig}) => ({Product: record}) => {
 
   const {getValue, getValues} = createValueInterface(record);
 
@@ -47,13 +47,13 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
     throw new Error('  No data source found.');
   }
 
+  /*
+  Logger.log('debug', `   QQQ   source4Value: ${source4Value} `);
 
-  //  Logger.log('debug', `   QQQ   useName: ${useName} `);
-
-  if (useName !== dataSource) { // eslint-disable-line functional/no-conditional-statement
-    logger.log('debug', `   QQQ   CHECK: This is in use: ${useName} `);
+  if (source4Value !== dataSource) { // eslint-disable-line functional/no-conditional-statement
+    logger.log('debug', `      CHECK source/value : This is in use for value now: ${source4Value} `);
   }
-
+*/
 
   checkSupplierData();
 
@@ -161,7 +161,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
       // Generate only if EditionNumber exists!
       const editionNr = getValue('DescriptiveDetail', 'EditionNumber');
 
-      if (editionNr && dataSource === useName) {
+      if (editionNr && dataSource === source4Value) {
         return [
           {
             tag: '250',
@@ -182,7 +182,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
       const PubDatRole = getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole');
       const NotifType = getValue('NotificationType');
 
-      if (PubDatDate && PubDatRole && NotifType && dataSource === useName) {
+      if (PubDatDate && PubDatRole && NotifType && dataSource === source4Value) {
 
         if ((NotifType === '01' || NotifType === '02') && PubDatRole === '01') {
           return [
@@ -447,7 +447,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
 
     function generate500() {
 
-      if (dataSource === useName) { // < --- ONLY FOR KV!
+      if (dataSource === source4Value) { // < --- ONLY FOR KV!
 
         const notificType = getValue('NotificationType');
 
@@ -502,7 +502,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
 
     function generate506() {
 
-      if (dataSource === useName) { // < --- ONLY FOR KV!
+      if (dataSource === source4Value) { // < --- ONLY FOR KV!
       // Field added if NotificationType = 03 with legal deposit
 
         const notificType = getValue('NotificationType');
@@ -561,7 +561,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
 
     function generate540() {
 
-      if (dataSource === useName) { // < --- ONLY FOR KV!
+      if (dataSource === source4Value) { // < --- ONLY FOR KV!
       // Field added if NotificationType = 03 with legal deposit
         // Console.log('   QQQ   540   Now make for KV');
 
@@ -595,7 +595,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
       //  If NotificationType = 01 or 02 : ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
       //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
       // ONLY FOR KV!
-      if (dataSource === useName) { // < --- ONLY FOR KV!
+      if (dataSource === source4Value) { // < --- ONLY FOR KV!
 
         const notificType = getValue('NotificationType');
 
@@ -643,7 +643,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
 
       const getPersonNameInverted = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
 
-      if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0 || dataSource !== useName) {
+      if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0 || dataSource !== source4Value) {
         return [];
       }
 
@@ -668,7 +668,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
       // A| <- SubjectHeadingText
       const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
 
-      if (SubScheIde && dataSource === useName) {
+      if (SubScheIde && dataSource === source4Value) {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(makeRows);
       }
 
@@ -694,7 +694,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
       const form = getValue('DescriptiveDetail', 'ProductForm');
       const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
 
-      if (formDetail === undefined || form === undefined || dataSource !== useName) {
+      if (formDetail === undefined || form === undefined || dataSource !== source4Value) {
         return [];
       }
 
@@ -766,7 +766,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
       // Field added    if NotificationType = 03 with legal deposit
       // WAITS FOR:  URN of legal deposit
 
-      if (getValue('NotificationType') === '03' && isLegalDeposit === true && (dataSource === useName ) ) {
+      if (getValue('NotificationType') === '03' && isLegalDeposit === true && (dataSource === source4Value ) ) {
 
         return [
           {
@@ -877,7 +877,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
       const getIdvalue = getValue('RelatedMaterial', 'RelatedWork', 'WorkIdentifier', 'IDValue');
       const gids = getValues('RelatedMaterial', 'RelatedWork', 'WorkIdentifier');
 
-      if (getIdvalue && gids && dataSource === useName) {
+      if (getIdvalue && gids && dataSource === source4Value) {
         return gids.map(doEdits);
       }
 
@@ -927,7 +927,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
         const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
 
         if (CheckSubjectSchemeName && CheckSubjectCode) {
-          if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03' && dataSource === useName) {
+          if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03' && dataSource === source4Value) {
             return '0';
           }
 
@@ -947,12 +947,12 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
         // Const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');  //alkup
         const CheckSubjectCode = getValue('DescriptiveDetail', 'SubjectCode');
 
-        if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && CheckEditionType && dataSource && dataSource === useName) {
+        if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && CheckEditionType && dataSource && dataSource === source4Value) {
           if (CheckSubjectSchemeIdentifier === '73' && ((CheckSubjectCode === 'L' || CheckSubjectCode === 'N') && CheckEditionType !== 'SMP')) {
             return 'j';
           }
 
-          if (CheckEditionType === 'SMP' && dataSource === useName) {
+          if (CheckEditionType === 'SMP' && dataSource === source4Value) {
             return 'f';
           }
 
@@ -1016,7 +1016,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
 
     function generate040() {
 
-      if (dataSource === useName) { // < --- a ONLY FOR KV!
+      if (dataSource === source4Value) { // < --- a ONLY FOR KV!
         return [
           {
             tag: '040',
@@ -1079,7 +1079,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
     function generate084a() {
 
       // A-case:  SubjectCode Field added if if SubjectSchemeIdentifier = 66
-      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === useName) {
+      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === source4Value) {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
       }
 
@@ -1103,7 +1103,7 @@ export default ({useName, isLegalDeposit, sources, sender, moment = momentOrig})
 
     function generate084b() {
       // B-case:  SubjectHeadingText Field added if SubjectSchemeIdentifier = 80
-      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === useName) {
+      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === source4Value) {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
       }
 
