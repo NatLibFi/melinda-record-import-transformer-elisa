@@ -116,8 +116,12 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Huomisen yhteiskunta."
-          }
+            "value": "Huomisen yhteiskunta :"
+          },
+          {
+            "code": "b",
+            "value": "olosuhteet hyvinvoinnille."
+          }          
         ]
       },
       {
@@ -387,7 +391,7 @@
           },
           {
             "code": "k",
-            "value": "foobar"
+            "value": "barfoo"
           },
           {
             "code": "q",
