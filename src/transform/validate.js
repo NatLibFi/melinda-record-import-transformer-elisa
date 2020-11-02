@@ -31,7 +31,7 @@ import validateFactory from '@natlibfi/marc-record-validate';
 import {
   IsbnIssn as isbnIssn,
   FieldExclusion as fieldExclusion,
-  Urn as urn,
+  // Urn as urn,
   EndingPunctuation as endingPunctuation,
   ItemLanguage as itemLanguage,
   Punctuation as punctuation
@@ -40,7 +40,7 @@ import {
 export default async () => {
   const validate = validateFactory([
     await isbnIssn({hyphenateISBN: true}),
-    await urn(),
+    // Await urn(),
     await itemLanguage(/^520$/u),
     await fieldExclusion([
       {

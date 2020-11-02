@@ -34,6 +34,11 @@ import generateStaticFields from './generate-static-fields';
 import NotSupportedError from './../../error';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 
+
+import fetch from 'node-fetch';
+const URN_GENERATOR_URL = 'http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn';
+
+
 const logger = createLogger();
 
 export default ({source4Value, isLegalDeposit, sources, sender, moment = momentOrig}) => ({Product: record}) => {
@@ -153,7 +158,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       generate653(),
       generate655(),
       generate700(),
-      // Generate856(),  // waits
+      generate856(), // <--
       generate884(),
       generate974(),
       generateStandardIdentifiers(),
@@ -764,12 +769,11 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
     }
 
-    /* WAITS  11.9.2020 ->
     function generate856() {
-      // Field added    if NotificationType = 03 with legal deposit
-      // WAITS FOR:  URN of legal deposit
 
-      if (getValue('NotificationType') === '03' && isLegalDeposit === true && (dataSource === source4Value ) ) {
+      if (getValue('NotificationType') === '03' && isLegalDeposit === true && dataSource === source4Value) {
+
+        const isbn = getIsbn();
 
         return [
           {
@@ -777,7 +781,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             ind1: '4',
             ind2: '0',
             subfields: [
-              {code: 'u', value: 'URN of legal deposit XXXXXXXXXX under construction'},
+              {code: 'u', value: createURN(isbn)},
               {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
               {code: '5', value: 'FI-Vapaa'}
             ]
@@ -785,9 +789,28 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         ];
       }
 
+      function getIsbn() {
+        const isbn13 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
+
+        if (isbn13) {
+          return isbn13.IDValue[0];
+        }
+
+        return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
+      }
+
+      function createURN(isbn = false) {
+        if (isbn) {
+          return `http://urn.fi/URN:ISBN:${isbn}`;
+        }
+
+        const response = fetch(URN_GENERATOR_URL);
+        const body = response.text();
+        return `http://urn.fi/${body}`;
+      }
+
       return [];
     }
-    */ // WAITS  11.9.2020 <-
 
 
     function generate006() {
