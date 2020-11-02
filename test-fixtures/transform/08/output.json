@@ -1,7 +1,7 @@
 {
   "record": {
     "_validationOptions": {},
-    "leader": "00000nim a22000005i 4500",
+    "leader": "00000nim a22000008i 4500",
     "fields": [
       {
         "tag": "006",
@@ -510,7 +510,7 @@
           },
           {
             "code": "k",
-            "value": "foobar"
+            "value": "barfoo"
           },
           {
             "code": "q",

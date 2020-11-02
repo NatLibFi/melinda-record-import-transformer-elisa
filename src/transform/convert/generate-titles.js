@@ -80,6 +80,23 @@ export default (record, authors) => {
     const ind1 = generateInd1();
     const {mainTitle, remainder} = formatTitle();
 
+    // Console.log('   QQQ   authors:', authors);
+
+    // Add 30.10.2020 ->
+    const subTitle = getValue('DescriptiveDetail', 'TitleDetail', 'TitleElement', 'Subtitle');
+
+    if (subTitle) {
+      return {
+        tag: '245', ind1, ind2: '0',
+        subfields: [
+          {code: 'a', value: `${title} :`},
+          {code: 'b', value: subTitle}
+        ]
+      };
+    }
+    // <---
+
+
     if (remainder) {
       return {
         tag: '245', ind1, ind2: '0',
@@ -144,6 +161,7 @@ export default (record, authors) => {
       }
     }
   }
+
 
   function generate246() {
     const {ind1, ind2} = generateIndicators();
