@@ -453,7 +453,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     function generate500() {
 
-      if (dataSource === source4Value) { // < --- ONLY FOR KV!
+      if (dataSource === source4Value) {
 
         const notificType = getValue('NotificationType');
 
@@ -490,7 +490,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         }
 
-      } // Only for KV
+      }
 
       // All others --->
       return [
@@ -508,7 +508,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     function generate506() {
 
-      if (dataSource === source4Value) { // < --- ONLY FOR KV!
+      if (dataSource === source4Value) {
       // Field added if NotificationType = 03 with legal deposit
 
         const notificType = getValue('NotificationType');
@@ -530,7 +530,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         }
 
-      } // < --- ONLY FOR KV!
+      }
 
       return [];
 
@@ -567,9 +567,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     function generate540() {
 
-      if (dataSource === source4Value) { // < --- ONLY FOR KV!
+      if (dataSource === source4Value) {
       // Field added if NotificationType = 03 with legal deposit
-        // Console.log('   QQQ   540   Now make for KV');
 
         const notificType = getValue('NotificationType');
 
@@ -590,7 +589,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         }
 
-      } // < --- ONLY FOR KV!
+      }
 
       return [];
     }
@@ -598,10 +597,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     function generate594() {
       //  Field is left out if NotificationType = 03 with legal deposit
-      //  If NotificationType = 01 or 02 : ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
-      //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
-      // ONLY FOR KV!
-      if (dataSource === source4Value) { // < --- ONLY FOR KV!
+
+      if (dataSource === source4Value) {
 
         const notificType = getValue('NotificationType');
 
@@ -1022,7 +1019,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     function generate040() {
 
-      if (dataSource === source4Value) { // < --- a ONLY FOR KV!
+      if (dataSource === source4Value) {
         return [
           {
             tag: '040',
