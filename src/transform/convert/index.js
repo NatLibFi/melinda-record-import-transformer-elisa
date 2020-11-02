@@ -87,8 +87,11 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     return `00000n${type}${bibliographicLevel} a2200000${encodingLevel}i 4500`;
 
+
     function generateEncodingLevel() {
-      const encodingLevels = {
+
+      /*
+      Const encodingLevels = {
         '01': '3',
         '02': '5',
         '03': '8',
@@ -100,6 +103,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
       const notificationType = getValue('NotificationType');
       return encodingLevels[notificationType] || '|';
+      */
+      return '8'; // 2.11.2020: same value for all Onix
     }
 
     function generateType() {
