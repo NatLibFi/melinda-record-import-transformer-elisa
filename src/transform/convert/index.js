@@ -158,7 +158,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       generate653(),
       generate655(),
       generate700(),
-      generate856(), // <--
+      generate856(),
       generate884(),
       generate974(),
       generateStandardIdentifiers(),
@@ -218,11 +218,15 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       const extValue = getValue('DescriptiveDetail', 'Extent', 'ExtentValue');
       const extUnit = getValue('DescriptiveDetail', 'Extent', 'ExtentUnit');
 
+
       if (extValue && extType && extUnit) {
+
+        const timeHours = getHours();
+        const timeSec = getSeconds();
 
         // I A :  if ExtentType = 09 and ExtentUnit = 15 ( 15 -> HHHMM i.e. 5 digits)
         if (extType === '09' && extUnit === '15') {
-          const outText = `1 verkkoaineisto (${extValue.slice(0, 3).replace(/0/gu, '')}h ${extValue.slice(3, 5)} min)`;
+          const outText = `1 verkkoaineisto ${timeHours}${extValue.slice(3, 5)} min)`;
           return [
             {
               tag: '300',
@@ -233,7 +237,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         // I B :  if ExtentType = 09 and ExtentUnit = 16 ( 16 -> HHHMMSS !!!  i.e. 7 digits)
         if (extType === '09' && extUnit === '16') {
-          const outText = `1 verkkoaineisto (${extValue.slice(0, 3).replace(/0/gu, '')} h ${extValue.slice(3, 5)} min ${extValue.slice(6, 7)} s)`;
+          const outText = `1 verkkoaineisto ${timeHours}${extValue.slice(3, 5)} min${timeSec}`;
           return [
             {
               tag: '300',
@@ -263,6 +267,21 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           subfields: [{code: 'a', value: `1 verkkoaineisto`}]
         }
       ];
+
+      function getHours() {
+        if (extValue.slice(0, 3).replace(/0/gu, '') === '') { // eslint-disable-line functional/no-conditional-statement
+          return '(';
+        }
+        return `(${extValue.slice(0, 3).replace(/0/gu, '')} h `;
+      }
+
+      function getSeconds() {
+        if (extValue.slice(6, 7) === '0') { // eslint-disable-line functional/no-conditional-statement
+          return ')';
+        }
+        return ` ${extValue.slice(6, 7)} s)`;
+      }
+
     }
 
 

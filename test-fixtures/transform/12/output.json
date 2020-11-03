@@ -297,17 +297,6 @@
         ]
       },
       {
-        "tag": "856",
-        "ind1": "4",
-        "ind2": "0",
-        "subfields": [
-          {
-            "code": "u",
-            "value": "http://urn.fi/URN:ISBN:978-952-351-123-1"
-          }
-        ]
-      },
-      {
         "tag": "884",
         "subfields": [
           {
@@ -370,10 +359,6 @@
       "messages": [
         "ISBN 9789523511231 is not valid"
       ]
-    },
-    {
-      "description": "Adds URN for record, to 856-field (if not existing)",
-      "state": "fixed"
     },
     {
       "description": "Handles invalid/missing item language code",
