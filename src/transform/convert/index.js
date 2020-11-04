@@ -79,7 +79,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
   marcRecord.leader = generateLeader(); // eslint-disable-line functional/immutable-data
 
-  generateFields().forEach(f => marcRecord.insertField(f));
+  const generatedFields = await generateFields();
+  generatedFields.forEach(f => marcRecord.insertField(f));
 
 
   return marcRecord;
@@ -129,7 +130,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
   }
 
-   function generateFields() {
+  async function generateFields() {
 
     const authors = getAuthors();
 
@@ -220,7 +221,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
       if (extValue && extType && extUnit) {
-        
+
         const timeHours = getHours();
         const timeSec = getSeconds();
 
@@ -788,11 +789,13 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
     }
 
-    function generate856() {
+    async function generate856() {
 
       if (getValue('NotificationType') === '03' && isLegalDeposit === true && dataSource === source4Value) {
 
         const isbn = getIsbn();
+
+        const subUvalue = await createURN(isbn);
 
         return [
           {
@@ -800,7 +803,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             ind1: '4',
             ind2: '0',
             subfields: [
-              {code: 'u', value: await createURN(isbn)},
+              {code: 'u', value: subUvalue},
               {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
               {code: '5', value: 'FI-Vapaa'}
             ]
@@ -808,7 +811,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         ];
       }
 
-      function getIsbn() {  
+      function getIsbn() {
         const isbn13 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
 
         if (isbn13) {
@@ -818,7 +821,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
       }
 
-      await function createURN(isbn = false) {
+      async function createURN(isbn = false) {
         if (isbn) {
           return `http://urn.fi/URN:ISBN:${isbn}`;
         }

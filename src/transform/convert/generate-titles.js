@@ -112,46 +112,42 @@ export default (record, authors) => {
     };
 
     function generateInd1() {
-          
-          /*
-          console.log('   gi245 /   authors:', authors);
+
+      /*
+          Console.log('   gi245 /   authors:', authors);
           console.log('   gi245 /   authors, filtered:', authors.filter(filter));
           console.log('   gi245 /   authors.length:', authors.length);
           */
 
-          if (authors.length === 1) { // eslint-disable-line functional/no-conditional-statement
-              return '1';
-          }
+      if (authors.length === 1) { // eslint-disable-line functional/no-conditional-statement
+        return '1';
+      }
 
-          if (authors.length === 0) { // eslint-disable-line functional/no-conditional-statement
-              return '0';
-          }
+      if (authors.length === 0) { // eslint-disable-line functional/no-conditional-statement
+        return '0';
+      }
 
-          /*
-          function filter({role}) {
-            return ['kirjoittaja'].includes(role);   
+      /*
+          Function filter({role}) {
+            return ['kirjoittaja'].includes(role);
           }
           */
-          
 
-        /*  
-          function filter({ContributorRole}) {
+
+      /*
+          Function filter({ContributorRole}) {
             return ['A01'].includes(ContributorRole);
           }
         */
-       
-        
-
-          return hasMultipleAuthors() ? '0' : '1';
-
-          function hasMultipleAuthors() {
-            return authors.some(({name}) => (/, Useita/iu).test(name));
-          }
-
-    } 
 
 
+      return hasMultipleAuthors() ? '0' : '1';
 
+      function hasMultipleAuthors() {
+        return authors.some(({name}) => (/, Useita/iu).test(name));
+      }
+
+    }
 
 
     function formatTitle() {
