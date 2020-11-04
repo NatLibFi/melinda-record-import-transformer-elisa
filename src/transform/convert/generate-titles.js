@@ -112,34 +112,47 @@ export default (record, authors) => {
     };
 
     function generateInd1() {
-      //  --->
+          
+          /*
+          console.log('   gi245 /   authors:', authors);
+          console.log('   gi245 /   authors, filtered:', authors.filter(filter));
+          console.log('   gi245 /   authors.length:', authors.length);
+          */
 
-      // Console.log('   QQQ g245 /   authors:', authors);
-      // Console.log('   QQQ g245 /   authors.length:', authors.length);
+          if (authors.length === 1) { // eslint-disable-line functional/no-conditional-statement
+              return '1';
+          }
 
-      if (authors.length === 1) { // eslint-disable-line functional/no-conditional-statement
-        // Console.log('   QQQ g245 / in if-arvo:  ind1: 1');
-        return '1';
-      }
+          if (authors.length === 0) { // eslint-disable-line functional/no-conditional-statement
+              return '0';
+          }
 
-      if (authors.length === 0) { // eslint-disable-line functional/no-conditional-statement
-        // Console.log('   QQQ g245 / in if-arvo: ind1: 0');
-        return '0';
-      }
+          /*
+          function filter({role}) {
+            return ['kirjoittaja'].includes(role);   
+          }
+          */
+          
 
-      /*
-      Function filter({ContributorRole}) {
-        return ['A01'].includes(ContributorRole);
-      }
-*/
+        /*  
+          function filter({ContributorRole}) {
+            return ['A01'].includes(ContributorRole);
+          }
+        */
+       
+        
 
-      return hasMultipleAuthors() ? '0' : '1';
+          return hasMultipleAuthors() ? '0' : '1';
 
-      function hasMultipleAuthors() {
-        return authors.some(({name}) => (/, Useita/iu).test(name));
-      }
+          function hasMultipleAuthors() {
+            return authors.some(({name}) => (/, Useita/iu).test(name));
+          }
 
-    } // <-- generateInd
+    } 
+
+
+
+
 
     function formatTitle() {
       const lengths = calculateLengths();

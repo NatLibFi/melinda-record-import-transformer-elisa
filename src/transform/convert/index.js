@@ -41,7 +41,7 @@ const URN_GENERATOR_URL = 'http://generator.urn.fi/cgi-bin/urn_generator.cgi?typ
 
 const logger = createLogger();
 
-export default ({source4Value, isLegalDeposit, sources, sender, moment = momentOrig}) => ({Product: record}) => {
+export default ({source4Value, isLegalDeposit, sources, sender, moment = momentOrig}) => async ({Product: record}) => {
 
   const {getValue, getValues} = createValueInterface(record);
 
@@ -129,7 +129,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
   }
 
-  function generateFields() {
+   function generateFields() {
 
     const authors = getAuthors();
 
@@ -158,7 +158,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       generate653(),
       generate655(),
       generate700(),
-      generate856(),
+      await generate856(),
       generate884(),
       generate974(),
       generateStandardIdentifiers(),
@@ -220,7 +220,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
       if (extValue && extType && extUnit) {
-
+        
         const timeHours = getHours();
         const timeSec = getSeconds();
 
@@ -800,7 +800,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             ind1: '4',
             ind2: '0',
             subfields: [
-              {code: 'u', value: createURN(isbn)},
+              {code: 'u', value: await createURN(isbn)},
               {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
               {code: '5', value: 'FI-Vapaa'}
             ]
@@ -808,7 +808,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         ];
       }
 
-      function getIsbn() {
+      function getIsbn() {  
         const isbn13 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
 
         if (isbn13) {
@@ -818,13 +818,13 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
       }
 
-      function createURN(isbn = false) {
+      await function createURN(isbn = false) {
         if (isbn) {
           return `http://urn.fi/URN:ISBN:${isbn}`;
         }
 
-        const response = fetch(URN_GENERATOR_URL);
-        const body = response.text();
+        const response = await fetch(URN_GENERATOR_URL);
+        const body = await response.text();
         return `http://urn.fi/${body}`;
       }
 
