@@ -29,8 +29,8 @@
 import {createValueInterface} from './common';
 
 export default (record, authors) => {
-  // Const {getValue} = createValueInterface(record); // ORIG
-  const {getValue} = createValueInterface(record); // GetValues
+
+  const {getValue} = createValueInterface(record);
 
   const titleType = getValue('DescriptiveDetail', 'TitleDetail', 'TitleType');
   const title = getValue('DescriptiveDetail', 'TitleDetail', 'TitleElement', 'TitleText');
@@ -113,12 +113,6 @@ export default (record, authors) => {
 
     function generateInd1() {
 
-      /*
-          Console.log('   gi245 /   authors:', authors);
-          console.log('   gi245 /   authors, filtered:', authors.filter(filter));
-          console.log('   gi245 /   authors.length:', authors.length);
-          */
-
       if (authors.length === 1) { // eslint-disable-line functional/no-conditional-statement
         return '1';
       }
@@ -126,20 +120,6 @@ export default (record, authors) => {
       if (authors.length === 0) { // eslint-disable-line functional/no-conditional-statement
         return '0';
       }
-
-      /*
-          Function filter({role}) {
-            return ['kirjoittaja'].includes(role);
-          }
-          */
-
-
-      /*
-          Function filter({ContributorRole}) {
-            return ['A01'].includes(ContributorRole);
-          }
-        */
-
 
       return hasMultipleAuthors() ? '0' : '1';
 

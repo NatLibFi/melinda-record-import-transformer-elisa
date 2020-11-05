@@ -52,15 +52,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     throw new Error('  No data source found.');
   }
 
-
-  /*
-  Logger.log('debug', `      source4Value: ${source4Value} `);
-  logger.log('debug', `      dataSource: ${dataSource} `);
-    If (source4Value !== dataSource) { // eslint-disable-line functional/no-conditional-statement
-    logger.log('debug', `      CHECK source/value : This is in use for value now: ${source4Value} `);
-  }
-*/
-
   checkSupplierData();
 
   function checkSupplierData() {
@@ -96,7 +87,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     function generateEncodingLevel() {
 
-      /*
+      /* Old code left here just in case ->
       Const encodingLevels = {
         '01': '3',
         '02': '5',
@@ -110,7 +101,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       const notificationType = getValue('NotificationType');
       return encodingLevels[notificationType] || '|';
       */
-      return '8'; // 2.11.2020: same value for all Onix
+      return '8'; // 2.11.2020: wanted same value for all Onix
     }
 
     function generateType() {
@@ -236,7 +227,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           ];
         }
 
-        // I B :  if ExtentType = 09 and ExtentUnit = 16 ( 16 -> HHHMMSS !!!  i.e. 7 digits)
+        // I B :  if ExtentType = 09 and ExtentUnit = 16 ( 16 -> HHHMMSS !  i.e. 7 digits)
         if (extType === '09' && extUnit === '16') {
           const outText = `1 verkkoaineisto ${timeHours}${extValue.slice(3, 5)} min${timeSec}`;
           return [
@@ -648,7 +639,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         }
 
         if (notificType === '03' && isLegalDeposit === false) {
-        //  If NotificationType = 03 without legal deposit: TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS  (|a)
 
           return [
             {
@@ -990,9 +980,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         // Position 22 = target audience on MARC
 
         const CheckEditionType = getValue('DescriptiveDetail', 'EditionType');
-        // Const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier'); // alkup
         const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'SubjectSchemeIdentifier');
-        // Const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');  //alkup
         const CheckSubjectCode = getValue('DescriptiveDetail', 'SubjectCode');
 
         if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && CheckEditionType && dataSource && dataSource === source4Value) {
@@ -1070,7 +1058,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             tag: '040',
             subfields: [
               {code: 'a', value: 'FI-KV'},
-              {code: 'b', value: 'fin'}, // Previously getLanguage() ; this should be 'kuvailun kieli' = fin
+              {code: 'b', value: 'fin'}, // Previously: getLanguage() ; Now this should be 'kuvailun kieli' = fin
               {code: 'e', value: 'rda'},
               {code: 'd', value: 'FI-NL'}
             ]
@@ -1126,7 +1114,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     function generate084a() {
 
-      // A-case:  SubjectCode Field added if if SubjectSchemeIdentifier = 66
+      // A-case:  SubjectCode Field added if  SubjectSchemeIdentifier = 66
       if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === source4Value) {
         return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
       }
