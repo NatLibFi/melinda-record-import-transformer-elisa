@@ -34,6 +34,7 @@ import generateStaticFields from './generate-static-fields';
 import NotSupportedError from './../../error';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 
+// Import {generate006} from './generateControlFields';
 
 import fetch from 'node-fetch';
 const URN_GENERATOR_URL = 'http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn';
@@ -360,7 +361,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
       const gotPartNumber = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'PartNumber');
 
-
       // SKIP if none required fields exist
       if (!gotCollectionType && !gotTitleElementLevel && !gotCollectionIDtype) {
         return [];
@@ -450,7 +450,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             return [];
           }
 
-          if (element.TitleDetail[0].TitleElement[0].PartNumber[0] === undefined) {
+          if (element.TitleDetail[0].TitleElement[0].PartNumber === undefined) { // Prev: PartNumber[0]
             return [];
           }
 
@@ -844,6 +844,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
     }
 
+
     function generate007() {
       if (isAudio) {
         return [
@@ -892,17 +893,44 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate884() {
+
+      const tellSource = sourceNames();
+
       return [
         {
           tag: '884',
           subfields: [
             {code: 'a', value: 'ONIX3 to MARC transformation'},
             {code: 'g', value: moment().format('YYYYMMDD')},
-            {code: 'k', value: sources[dataSource]}, // Was: sources.supplier  //dataSource
+            // {code: 'k', value: sources[dataSource]}, // Was: sources.supplier  //dataSource
+            {code: 'k', value: tellSource}, // 6.11.2020
             {code: 'q', value: 'FI-NL'}
           ]
         }
       ];
+
+      function sourceNames() {
+
+        if (sources[dataSource] === 'Elisa') { // eslint-disable-line functional/no-conditional-statement
+          return 'MELINDA_RECORD_IMPORT_SOURCE1';
+        }
+
+        if (sources[dataSource] === 'Ellibs') { // eslint-disable-line functional/no-conditional-statement
+          return 'MELINDA_RECORD_IMPORT_SOURCE2';
+        }
+
+        if (sources[dataSource] === 'Books On Demand') { // eslint-disable-line functional/no-conditional-statement
+          return 'MELINDA_RECORD_IMPORT_SOURCE3';
+        }
+
+        if (sources[dataSource] === 'Kirjavälitys Oy') { // eslint-disable-line functional/no-conditional-statement
+          return 'MELINDA_RECORD_IMPORT_SOURCE4';
+        }
+
+        return `${sources[dataSource]}`; // Others, tests etc. write as it is
+      }
+
+
     }
 
     function generate974() {
