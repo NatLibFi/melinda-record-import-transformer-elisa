@@ -308,18 +308,14 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
 
 
-    function generate344() { // Add 23.10.2020; moved from generate-static
-
+    function generate344() { // Add/moved 23.10.2020 (from generate-static)
       const form = getValue('DescriptiveDetail', 'ProductForm');
 
       if (form === 'AJ' || form === 'AN') {
         return [
           {
             tag: '344',
-            subfields: [
-              {code: 'a', value: 'digitaalinen'},
-              {code: '2', value: 'rda'}
-            ]
+            subfields: [{code: 'a', value: 'digitaalinen'}]
           }
         ];
 
@@ -334,8 +330,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           {
             tag: '347', subfields: [
               {code: 'a', value: 'äänitiedosto'},
-              {code: 'b', value: 'MP3'},
-              {code: '2', value: 'rda'}
+              {code: 'b', value: 'MP3'}
             ]
           }
         ];
@@ -347,14 +342,14 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             tag: '347',
             subfields: [
               {code: 'a', value: 'tekstitiedosto'},
-              {code: 'b', value: textFormat},
-              {code: '2', value: 'rda'}
+              {code: 'b', value: textFormat}
             ]
           }
         ];
       }
       return [];
     }
+
 
     function generate490() {
 
