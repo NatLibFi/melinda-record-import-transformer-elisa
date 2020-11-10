@@ -34,7 +34,7 @@ import generateStaticFields from './generate-static-fields';
 import NotSupportedError from './../../error';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 
-// Import {generate006} from './generateControlFields';
+import {generate006, generate007, generate008} from './generateControlFields';
 
 import fetch from 'node-fetch';
 const URN_GENERATOR_URL = 'http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn';
@@ -44,9 +44,8 @@ const logger = createLogger();
 
 export default ({source4Value, isLegalDeposit, sources, sender, moment = momentOrig}) => async ({Product: record}) => {
 
+
   const {getValue, getValues} = createValueInterface(record);
-
-
   const dataSource = getSource();
 
   if (dataSource === undefined) { // eslint-disable-line functional/no-conditional-statement
@@ -127,9 +126,9 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     const authors = getAuthors();
 
     return [
-      generate008(),
-      generate006(),
-      generate007(),
+      generate008({record, dataSource, source4Value}),
+      generate006({isAudio, isText}),
+      generate007({isAudio, isText}),
       generate040(),
       generate041(),
       generate084a(),
@@ -330,7 +329,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return [
           {
             tag: '347', subfields: [
-              {code: 'a', value: 'äänitiedosto'},
+              {code: 'a', value: '��nitiedosto'},
               {code: 'b', value: 'MP3'}
             ]
           }
@@ -472,7 +471,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           return [
             {
               tag: '500',
-              subfields: [{code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'}]
+              subfields: [{code: 'a', value: 'ENNAKKOTIETO / KIRJAV�LITYS'}]
             }
           ];
 
@@ -482,7 +481,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           return [
             {
               tag: '500',
-              subfields: [{code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'}]
+              subfields: [{code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAV�LITYS'}]
             }
           ];
 
@@ -530,7 +529,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
               tag: '506',
               ind1: '1',
               subfields: [
-                {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
+                {code: 'a', value: 'Aineisto on k�ytett�viss� vapaakappalekirjastoissa.'},
                 {code: 'f', value: 'Online access with authorization.'}, // Dot added 11.9.2020
                 {code: '2', value: 'star'},
                 {code: '5', value: 'FI-Vapaa'},
@@ -588,9 +587,9 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             {
               tag: '540',
               subfields: [
-                {code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
+                {code: 'a', value: 'Aineisto on k�ytett�viss� tutkimus- ja muihin tarkoituksiin;'},
                 {code: 'b', value: 'Kansalliskirjasto;'},
-                {code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
+                {code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja s�ilytt�misest�'},
                 {code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
                 {code: '5', value: 'FI-Vapaa'},
                 {code: '9', value: 'FENNI<KEEP>'}
@@ -626,7 +625,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             {
               tag: '594',
               subfields: [
-                {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: 'a', value: 'ENNAKKOTIETO / KIRJAV�LITYS'},
                 {code: '5', value: 'FENNI'}
               ]
             }
@@ -639,7 +638,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             {
               tag: '594',
               subfields: [
-                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAV�LITYS'},
                 {code: '5', value: 'FENNI'}
               ]
             }
@@ -717,7 +716,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             tag: '655',
             ind2: '7',
             subfields: [
-              {code: 'a', value: 'äänikirjat'},
+              {code: 'a', value: '��nikirjat'},
               {code: '2', value: 'slm/fin'},
               {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'},
               {code: '9', value: 'FENNI<KEEP>'}
@@ -759,7 +758,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
       function changeValues(value) {
         if (value === 'B06') {
-          return 'kääntäjä.';
+          return 'k��nt�j�.';
         }
         if (value === 'E07') {
           return 'lukija.';
@@ -789,7 +788,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             ind2: '0',
             subfields: [
               {code: 'u', value: subUvalue},
-              {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
+              {code: 'z', value: 'K�ytett�viss� vapaakappalekirjastoissa'},
               {code: '5', value: 'FI-Vapaa'}
             ]
           }
@@ -819,46 +818,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       return [];
     }
 
-
-    function generate006() {
-      const materialForm = isAudio || isText ? 'm' : '|';
-      const itemForm = isAudio || isText ? 'o' : '|';
-      const fileType = generateFileType();
-
-      return [
-        {
-          tag: '006', value: `${materialForm}|||||${itemForm}||${fileType}||||||||`
-        }
-      ];
-
-      function generateFileType() {
-        if (isAudio) {
-          return 'h';
-        }
-
-        if (isText) {
-          return 'd';
-        }
-
-        return '|';
-      }
-    }
-
-
-    function generate007() {
-      if (isAudio) {
-        return [
-          {tag: '007', value: 'sr|uunnnnnuneu'},
-          {tag: '007', value: 'cr|nnannnuuuuu'}
-        ];
-      }
-
-      if (isText) {
-        return [{tag: '007', value: 'cr||||||||||||'}];
-      }
-
-      return [];
-    }
 
     function generate264() {
       const publisher = getValue('PublishingDetail', 'Publisher', 'PublisherName');
@@ -923,7 +882,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           return 'MELINDA_RECORD_IMPORT_SOURCE3';
         }
 
-        if (sources[dataSource] === 'Kirjavälitys Oy') { // eslint-disable-line functional/no-conditional-statement
+        if (sources[dataSource] === 'Kirjav�litys Oy') { // eslint-disable-line functional/no-conditional-statement
           return 'MELINDA_RECORD_IMPORT_SOURCE4';
         }
 
@@ -953,75 +912,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         };
       }
       return [];
-    }
-
-
-    function generate008() {
-
-      const date = moment().format('YYMMDD');
-      const language = generateLanguage();
-      const publicationCountry = generatePublicationCountry();
-      const publishingYear = generatePublishingYear();
-      const subjectSchemeName = generateSubjectSchemeName();
-      const targetAudience = generateTargetAudience();
-      const value = `${date}s${publishingYear}    ${publicationCountry} ||||${targetAudience}o|||||||||${subjectSchemeName}|${language}||`;
-
-      return [{tag: '008', value}];
-
-      function generateLanguage() {
-        return getLanguageRole() === '01' ? getLanguage() : '|||';
-      }
-
-      function generatePublicationCountry() {
-        const publicationCountry = getValue('PublishingDetail', 'CountryOfPublication');
-        return publicationCountry ? publicationCountry.slice(0, 2).toLowerCase() : 'xx';
-      }
-
-      function generatePublishingYear() {
-        const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
-        return publishingDate ? publishingDate.slice(0, 4) : '    ';
-      }
-
-      function generateSubjectSchemeName() { // Ns. 008/A
-
-        const CheckSubjectSchemeName = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeName');
-        const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
-
-        if (CheckSubjectSchemeName && CheckSubjectCode) {
-          if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03' && dataSource === source4Value) {
-            return '0';
-          }
-
-          return '|';
-        }
-
-        return '|'; // Basic value
-      }
-
-
-      function generateTargetAudience() { // Ns. 008/B & C
-        // Position 22 = target audience on MARC
-
-        const CheckEditionType = getValue('DescriptiveDetail', 'EditionType');
-        const CheckSubjectSchemeIdentifier = getValue('DescriptiveDetail', 'SubjectSchemeIdentifier');
-        const CheckSubjectCode = getValue('DescriptiveDetail', 'SubjectCode');
-
-        if (CheckSubjectSchemeIdentifier && CheckSubjectCode && CheckEditionType && CheckEditionType && dataSource && dataSource === source4Value) {
-          if (CheckSubjectSchemeIdentifier === '73' && ((CheckSubjectCode === 'L' || CheckSubjectCode === 'N') && CheckEditionType !== 'SMP')) {
-            return 'j';
-          }
-
-          if (CheckEditionType === 'SMP' && dataSource === source4Value) {
-            return 'f';
-          }
-
-          return '|';
-        }
-
-
-        return '|'; // Basic value
-      }
-
     }
 
 
@@ -1272,25 +1162,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
   }
 
-
-  function getLanguageRole() {
-    return getValue('DescriptiveDetail', 'Language', 'LanguageRole');
-  }
-
-  function getSummary() {
-    const value = getValue('CollateralDetail', 'TextContent', 'Text');
-    return typeof value === 'object' ? value._ : value;
-  }
-
-  function getLanguage() {
-    const summary = getSummary();
-
-    if (summary && (/Huom\. kirja on englanninkielinen/u).test(summary)) {
-      return 'eng';
-    }
-
-    return getValue('DescriptiveDetail', 'Language', 'LanguageCode');
-  }
 
   function isNotSupported() {
     return getValues('ProductIdentifier').some(({ProductIDType: [type], IDValue: [value]}) => type === '02' && (/^(?<def>951|952)/u).test(value) === false);
