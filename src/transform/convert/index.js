@@ -126,7 +126,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     const authors = getAuthors();
 
     return [
-      generate008({record, dataSource, source4Value}),
+      generate008({moment, record, dataSource, source4Value}),
       generate006({isAudio, isText}),
       generate007({isAudio, isText}),
       generate040(),
@@ -329,7 +329,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return [
           {
             tag: '347', subfields: [
-              {code: 'a', value: '��nitiedosto'},
+              {code: 'a', value: 'äänitiedosto'},
               {code: 'b', value: 'MP3'}
             ]
           }
@@ -471,7 +471,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           return [
             {
               tag: '500',
-              subfields: [{code: 'a', value: 'ENNAKKOTIETO / KIRJAV�LITYS'}]
+              subfields: [{code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'}]
             }
           ];
 
@@ -481,7 +481,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           return [
             {
               tag: '500',
-              subfields: [{code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAV�LITYS'}]
+              subfields: [{code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'}]
             }
           ];
 
@@ -529,7 +529,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
               tag: '506',
               ind1: '1',
               subfields: [
-                {code: 'a', value: 'Aineisto on k�ytett�viss� vapaakappalekirjastoissa.'},
+                {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
                 {code: 'f', value: 'Online access with authorization.'}, // Dot added 11.9.2020
                 {code: '2', value: 'star'},
                 {code: '5', value: 'FI-Vapaa'},
@@ -587,9 +587,9 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             {
               tag: '540',
               subfields: [
-                {code: 'a', value: 'Aineisto on k�ytett�viss� tutkimus- ja muihin tarkoituksiin;'},
+                {code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
                 {code: 'b', value: 'Kansalliskirjasto;'},
-                {code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja s�ilytt�misest�'},
+                {code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
                 {code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
                 {code: '5', value: 'FI-Vapaa'},
                 {code: '9', value: 'FENNI<KEEP>'}
@@ -625,7 +625,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             {
               tag: '594',
               subfields: [
-                {code: 'a', value: 'ENNAKKOTIETO / KIRJAV�LITYS'},
+                {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
                 {code: '5', value: 'FENNI'}
               ]
             }
@@ -638,7 +638,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             {
               tag: '594',
               subfields: [
-                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAV�LITYS'},
+                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
                 {code: '5', value: 'FENNI'}
               ]
             }
@@ -716,7 +716,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             tag: '655',
             ind2: '7',
             subfields: [
-              {code: 'a', value: '��nikirjat'},
+              {code: 'a', value: 'äänikirjat'},
               {code: '2', value: 'slm/fin'},
               {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'},
               {code: '9', value: 'FENNI<KEEP>'}
@@ -758,7 +758,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
       function changeValues(value) {
         if (value === 'B06') {
-          return 'k��nt�j�.';
+          return 'kääntäjä.';
         }
         if (value === 'E07') {
           return 'lukija.';
@@ -788,7 +788,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             ind2: '0',
             subfields: [
               {code: 'u', value: subUvalue},
-              {code: 'z', value: 'K�ytett�viss� vapaakappalekirjastoissa'},
+              {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
               {code: '5', value: 'FI-Vapaa'}
             ]
           }
@@ -882,7 +882,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           return 'MELINDA_RECORD_IMPORT_SOURCE3';
         }
 
-        if (sources[dataSource] === 'Kirjav�litys Oy') { // eslint-disable-line functional/no-conditional-statement
+        if (sources[dataSource] === 'Kirjavälitys Oy') { // eslint-disable-line functional/no-conditional-statement
           return 'MELINDA_RECORD_IMPORT_SOURCE4';
         }
 

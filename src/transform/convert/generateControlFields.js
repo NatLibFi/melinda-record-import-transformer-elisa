@@ -2,10 +2,6 @@
 import {createValueInterface} from './common';
 
 
-// Const {getValue, getValues} = createValueInterface(record);
-const {getValue} = createValueInterface(record);
-
-
 export function generate006({isAudio, isText}) {
   const materialForm = isAudio || isText ? 'm' : '|';
   const itemForm = isAudio || isText ? 'o' : '|';
@@ -47,8 +43,9 @@ export function generate007({isAudio, isText}) {
 }
 
 
-export function generate008({record, moment, dataSource, source4Value}) {
+export function generate008({moment, record, dataSource, source4Value}) {
 
+  const {getValue} = createValueInterface(record);
 
   const date = moment().format('YYMMDD');
   const language = generateLanguage();
@@ -61,7 +58,7 @@ export function generate008({record, moment, dataSource, source4Value}) {
   return [{tag: '008', value}];
 
   function generateLanguage() {
-    return getLanguageRole() === '01' ? getLanguage() : '|||';
+    return getLanguageRole(record) === '01' ? getLanguage(record) : '|||';
   }
 
   function generatePublicationCountry() {
@@ -116,23 +113,26 @@ export function generate008({record, moment, dataSource, source4Value}) {
 
 }
 
-function getLanguageRole() { // For generate008
+function getLanguageRole(record) { // For generate008
+  const {getValue} = createValueInterface(record);
   return getValue('DescriptiveDetail', 'Language', 'LanguageRole');
 }
 
 
-function getLanguage() {
-  const summary = getSummary();
+function getLanguage(record) {
+  const summary = getSummary(record);
 
   if (summary && (/Huom\. kirja on englanninkielinen/u).test(summary)) {
     return 'eng';
   }
 
+  const {getValue} = createValueInterface(record);
   return getValue('DescriptiveDetail', 'Language', 'LanguageCode');
 }
 
 
-function getSummary() {
+function getSummary(record) {
+  const {getValue} = createValueInterface(record);
   const value = getValue('CollateralDetail', 'TextContent', 'Text');
   return typeof value === 'object' ? value._ : value;
 }
