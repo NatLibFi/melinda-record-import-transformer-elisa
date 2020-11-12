@@ -35,6 +35,7 @@ import NotSupportedError from './../../error';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 
 import {generate006, generate007, generate008} from './generateControlFields';
+import {generate040, generate041, generate084a, generate084b} from './generate0XXFields.js';
 
 import fetch from 'node-fetch';
 const URN_GENERATOR_URL = 'http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn';
@@ -129,10 +130,10 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       generate008({moment, record, dataSource, source4Value}),
       generate006({isAudio, isText}),
       generate007({isAudio, isText}),
-      generate040(),
-      generate041(),
-      generate084a(),
-      generate084b(),
+      generate040(dataSource, source4Value),
+      generate041(record),
+      generate084a(record, dataSource, source4Value),
+      generate084b(record, dataSource, source4Value),
       generate250(),
       generate263(),
       generate264(),
@@ -805,7 +806,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
       }
 
-      async function createURN(isbn = false) {
+      async function createURN(isbn = true) { // ALKUP: false
         if (isbn) {
           return `http://urn.fi/URN:ISBN:${isbn}`;
         }
@@ -961,117 +962,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
       }
-    }
-
-    function generate040() {
-
-      if (dataSource === source4Value) {
-        return [
-          {
-            tag: '040',
-            subfields: [
-              {code: 'a', value: 'FI-KV'},
-              {code: 'b', value: 'fin'}, // Previously: getLanguage() ; Now this should be 'kuvailun kieli' = fin
-              {code: 'e', value: 'rda'},
-              {code: 'd', value: 'FI-NL'}
-            ]
-          }
-        ];
-
-      }
-
-      return [
-        {
-          tag: '040',
-          subfields: [
-            {code: 'b', value: 'fin'}, // Previously getLanguage() ; this should be 'kuvailun kieli' = fin
-            {code: 'e', value: 'rda'},
-            {code: 'd', value: 'FI-NL'}
-          ]
-        }
-      ];
-    }
-
-    function generate041() {
-
-      const form = getValue('DescriptiveDetail', 'ProductForm');
-      const langCode = getValue('DescriptiveDetail', 'Language', 'LanguageCode');
-
-      if (form !== undefined && langCode !== undefined) {
-
-        if (['EB', 'EC', 'ED'].includes(form)) {
-          return [
-            {
-              tag: '041',
-              subfields: [{code: 'a', value: langCode}]
-            }
-          ];
-        }
-
-
-        if (form === 'AJ') {
-          return [
-            {
-              tag: '041',
-              subfields: [{code: 'd', value: langCode}]
-            }
-          ];
-        }
-
-        return [];
-      }
-
-      return [];
-    }
-
-
-    function generate084a() {
-
-      // A-case:  SubjectCode Field added if  SubjectSchemeIdentifier = 66
-      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === source4Value) {
-        return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
-      }
-
-      function getSSI(element) {
-        return {
-          tag: '084',
-          subfields: [
-            {code: 'a', value: element.SubjectCode[0]},
-            {code: '2', value: 'ykl'}
-          ]
-        };
-      }
-
-      function filter({SubjectSchemeIdentifier}) {
-        return ['66'].includes(SubjectSchemeIdentifier?.[0]);
-      }
-
-      return [];
-    }
-
-
-    function generate084b() {
-      // B-case:  SubjectHeadingText Field added if SubjectSchemeIdentifier = 80
-      if (getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier') && dataSource === source4Value) {
-        return getValues('DescriptiveDetail', 'Subject').filter(filter).map(getSSI);
-      }
-
-      function getSSI(element) {
-        return {
-          tag: '084',
-          ind1: '9',
-          subfields: [
-            {code: 'a', value: element.SubjectHeadingText[0]},
-            {code: '2', value: 'ykl'}
-          ]
-        };
-      }
-
-      function filter({SubjectSchemeIdentifier}) {
-        return ['80'].includes(SubjectSchemeIdentifier?.[0]);
-      }
-
-      return [];
     }
 
 
