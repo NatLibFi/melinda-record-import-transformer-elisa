@@ -37,8 +37,10 @@ import {createLogger} from '@natlibfi/melinda-backend-commons';
 import {generate006, generate007, generate008} from './generateControlFields';
 import {generate040, generate041, generate084a, generate084b} from './generate0XXFields.js';
 
-import fetch from 'node-fetch';
-const URN_GENERATOR_URL = 'http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn';
+import {hyphenate} from 'beautify-isbn';
+
+//import fetch from 'node-fetch'; // rem 12.11.2020 (field 856)
+//const URN_GENERATOR_URL = 'http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn';   // rem 12.11.2020 (field 856)
 
 
 const logger = createLogger();
@@ -774,13 +776,12 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
     }
 
-    async function generate856() {
+    function generate856() { // PREV: async  rem 12.11.2020
 
       if (getValue('NotificationType') === '03' && isLegalDeposit === true && dataSource === source4Value) {
 
         const isbn = getIsbn();
-
-        const subUvalue = await createURN(isbn);
+        const hyphenatedisbn = hyphenate(isbn);
 
         return [
           {
@@ -788,13 +789,14 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             ind1: '4',
             ind2: '0',
             subfields: [
-              {code: 'u', value: subUvalue},
+              {code: 'u', value: `http://urn.fi/URN:ISBN:${hyphenatedisbn}`}, // PREV: subUvalue / isbn
               {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
               {code: '5', value: 'FI-Vapaa'}
             ]
           }
         ];
       }
+
 
       function getIsbn() {
         const isbn13 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
@@ -806,6 +808,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
       }
 
+
+      /*   // rem 12.11.2020 ->
       async function createURN(isbn = true) { // ALKUP: false
         if (isbn) {
           return `http://urn.fi/URN:ISBN:${isbn}`;
@@ -815,6 +819,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         const body = await response.text();
         return `http://urn.fi/${body}`;
       }
+      */
+
 
       return [];
     }
