@@ -218,10 +218,12 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         const timeHours = getHours();
         const timeSec = getSeconds();
+        const timeMins = getMinutes(); // 13.11.2020
 
         // I A :  if ExtentType = 09 and ExtentUnit = 15 ( 15 -> HHHMM i.e. 5 digits)
         if (extType === '09' && extUnit === '15') {
-          const outText = `1 verkkoaineisto ${timeHours}${extValue.slice(3, 5)} min)`;
+          // const outText = `1 verkkoaineisto ${timeHours}${extValue.slice(3, 5)} min)`;  // ALKUP
+          const outText = `1 verkkoaineisto ${timeHours}${timeMins}`;
           return [
             {
               tag: '300',
@@ -232,7 +234,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         // I B :  if ExtentType = 09 and ExtentUnit = 16 ( 16 -> HHHMMSS !  i.e. 7 digits)
         if (extType === '09' && extUnit === '16') {
-          const outText = `1 verkkoaineisto ${timeHours}${extValue.slice(3, 5)} min${timeSec}`;
+          // const outText = `1 verkkoaineisto ${timeHours}${extValue.slice(3, 5)} min${timeSec}`;   // ALKUP
+          const outText = `1 verkkoaineisto ${timeHours}${timeMins}${timeSec}`;
           return [
             {
               tag: '300',
@@ -267,7 +270,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         if (extValue.slice(0, 3).replace(/0/gu, '') === '') { // eslint-disable-line functional/no-conditional-statement
           return '(';
         }
-        return `(${extValue.slice(0, 3).replace(/0/gu, '')} h `;
+        return `(${extValue.slice(0, 3).replace(/0/gu, '')} h`;
       }
 
       function getSeconds() {
@@ -276,6 +279,16 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         }
         return ` ${extValue.slice(6, 7)} s)`;
       }
+
+      //--->   13.11.2020
+      function getMinutes() {
+
+        if (extValue.slice(3, 5).replace(/0/gu, '') === '') { // eslint-disable-line functional/no-conditional-statement
+          return '';
+        }
+        return ` ${extValue.slice(3, 5).replace(/0/gu, '')} min`;
+      }
+      // <---
 
     }
 
@@ -419,7 +432,18 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             return [];
           }
 
-          return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}];
+          // ---> 13.11.2020
+          // Välilyöntiä ja puolipistettä ei tarvita [ a:lle] silloin,
+          // kun tietueella ei ole lainakaan osakenttää ‡v    ->
+          const checkfieldV = buildFieldV(); // check if there is v
+          // console.log('   490:   fieldV / status:', checkfieldV , ' / ', checkfieldV.length);
+          if (checkfieldV.length === 0) { // eslint-disable-line functional/no-conditional-statement
+            return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}]; // plain
+          }
+          // <---
+
+
+          return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]} ;`}];
         }
 
         function buildFieldX() { // Requires IDValue
@@ -533,7 +557,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
               ind1: '1',
               subfields: [
                 {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
-                {code: 'f', value: 'Online access with authorization.'}, // Dot added 11.9.2020
+                {code: 'f', value: 'Online access with authorization'}, // now without dot: 12.11.2020
                 {code: '2', value: 'star'},
                 {code: '5', value: 'FI-Vapaa'},
                 {code: '9', value: 'FENNI<KEEP>'}
