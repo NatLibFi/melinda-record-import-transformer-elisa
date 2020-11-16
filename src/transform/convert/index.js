@@ -270,7 +270,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         if (extValue.slice(0, 3).replace(/0/gu, '') === '') { // eslint-disable-line functional/no-conditional-statement
           return '(';
         }
-        return `(${extValue.slice(0, 3).replace(/0/gu, '')} h`;
+        return `(${extValue.slice(0, 3).replace(/0/gu, '')} h `;
       }
 
       function getSeconds() {
@@ -286,7 +286,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         if (extValue.slice(3, 5).replace(/0/gu, '') === '') { // eslint-disable-line functional/no-conditional-statement
           return '';
         }
-        return ` ${extValue.slice(3, 5).replace(/0/gu, '')} min`;
+        return `${extValue.slice(3, 5).replace(/0/gu, '')} min`;
       }
       // <---
 
