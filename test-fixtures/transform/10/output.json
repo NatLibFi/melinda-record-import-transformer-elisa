@@ -95,21 +95,6 @@
         "ind2": " "
       },
       {
-        "tag": "100",
-        "ind1": "1",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Scarlett, Savanna,"
-          },
-          {
-            "code": "e",
-            "value": "lukija."
-          }
-        ],
-        "ind2": " "
-      },
-      {
         "tag": "245",
         "ind1": "1",
         "ind2": "0",
@@ -314,6 +299,21 @@
           }
         ],
         "ind1": " "
+      },
+      {
+        "tag": "700",
+        "ind1": "1",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Scarlett, Savanna,"
+          },
+          {
+            "code": "e",
+            "value": "lukija."
+          }
+        ],
+        "ind2": " "
       },
       {
         "tag": "884",

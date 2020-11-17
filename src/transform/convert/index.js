@@ -996,8 +996,11 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generateAuthors() {
+
       return authors.map(({name, role}, index) => {
-        if (index === 0) {
+
+        if (index === 0 && role === 'kirjoittaja') {
+
           return {
             tag: '100', ind1: '1',
             subfields: [
