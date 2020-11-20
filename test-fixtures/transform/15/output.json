@@ -239,10 +239,6 @@
           {
             "code": "a",
             "value": "Koneellisesti tuotettu tietue."
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
           }
         ],
         "ind1": " ",
@@ -301,6 +297,21 @@
           {
             "code": "9",
             "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "594",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Koneellisesti tuotettu tietue"
+          },
+          {
+            "code": "5",
+            "value": "FENNI"
           }
         ],
         "ind1": " ",

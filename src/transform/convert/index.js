@@ -519,8 +519,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             {
               tag: '500',
               subfields: [
-                {code: 'a', value: 'Koneellisesti tuotettu tietue.'},
-                {code: '9', value: 'FENNI<KEEP>'}
+                {code: 'a', value: 'Koneellisesti tuotettu tietue.'}
+                //{code: '9', value: 'FENNI<KEEP>'} // 18.11.2020
               ]
             }
           ];
@@ -633,7 +633,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate594() {
-      //  Field is left out if NotificationType = 03 with legal deposit
 
       if (dataSource === source4Value) {
 
@@ -644,7 +643,19 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         }
 
         if (notificType === '03' && isLegalDeposit === true) {
-          return []; //  Field is left out if NotificationType = 03 with legal deposit
+          // return []; //  Field is left out if NotificationType = 03 with legal deposit
+          //<- left out was before 18.11.2020 !
+          return [
+            {
+              tag: '594',
+              subfields: [
+                {code: 'a', value: 'Koneellisesti tuotettu tietue'},
+                {code: '5', value: 'FENNI'}
+              ]
+            }
+          ];
+
+
         }
 
         if (notificType === '01' || notificType === '02') {
