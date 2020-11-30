@@ -36,6 +36,9 @@ import {createLogger} from '@natlibfi/melinda-backend-commons';
 
 import {generate006, generate007, generate008} from './generateControlFields';
 import {generate040, generate041, generate084a, generate084b} from './generate0XXFields.js';
+import {generate250, generate263, generate264} from './generate2XXFields.js';
+import {generate300, generate336, generate344, generate347} from './generate3XXFields.js';
+
 
 import {hyphenate} from 'beautify-isbn';
 
@@ -136,13 +139,13 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       generate041(record),
       generate084a(record, dataSource, source4Value),
       generate084b(record, dataSource, source4Value),
-      generate250(),
-      generate263(),
-      generate264(),
-      generate300(),
-      generate336(),
-      generate344(),
-      generate347(),
+      generate250(record, dataSource, source4Value),
+      generate263(record, dataSource, source4Value),
+      generate264(record),
+      generate300(record),
+      generate336(isAudio, isText),
+      generate344(record),
+      generate347(isAudio, isText, textFormat),
       generate490(),
       generate500(),
       generate506(),
@@ -161,210 +164,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       generateAuthors(),
       generateStaticFields()
     ].flat();
-
-
-    function generate250() {
-      // Generate only if EditionNumber exists!
-      const editionNr = getValue('DescriptiveDetail', 'EditionNumber');
-
-      if (editionNr && dataSource === source4Value) {
-        return [
-          {
-            tag: '250',
-            ind1: ' ',
-            ind2: ' ',
-            subfields: [{code: 'a', value: `${editionNr}. painos`}]
-          }
-        ];
-      }
-
-      return [];
-    }
-
-
-    function generate263() {
-      // Generate only if: NotificationType = 01 or 02  AND PublishingDateRole = 01
-      const PubDatDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
-      const PubDatRole = getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole');
-      const NotifType = getValue('NotificationType');
-
-      if (PubDatDate && PubDatRole && NotifType && dataSource === source4Value) {
-
-        if ((NotifType === '01' || NotifType === '02') && PubDatRole === '01') {
-          return [
-            {
-              tag: '263',
-              ind1: ' ',
-              ind2: ' ',
-              subfields: [{code: 'a', value: PubDatDate}]
-            }
-          ];
-        }
-        return [];
-      }
-
-      return [];
-    }
-
-
-    function generate300() {
-
-      const extType = getValue('DescriptiveDetail', 'Extent', 'ExtentType');
-      const extValue = getValue('DescriptiveDetail', 'Extent', 'ExtentValue');
-      const extUnit = getValue('DescriptiveDetail', 'Extent', 'ExtentUnit');
-
-
-      if (extValue && extType && extUnit) {
-
-        const timeHours = getHours();
-        const timeSec = getSeconds();
-        const timeMins = getMinutes(); // 13.11.2020
-
-        // I A :  if ExtentType = 09 and ExtentUnit = 15 ( 15 -> HHHMM i.e. 5 digits)
-        if (extType === '09' && extUnit === '15') {
-          // const outText = `1 verkkoaineisto ${timeHours}${extValue.slice(3, 5)} min)`;  // ALKUP
-          const outText = `1 verkkoaineisto ${timeHours}${timeMins}`;
-          return [
-            {
-              tag: '300',
-              subfields: [{code: 'a', value: outText}]
-            }
-          ];
-        }
-
-        // I B :  if ExtentType = 09 and ExtentUnit = 16 ( 16 -> HHHMMSS !  i.e. 7 digits)
-        if (extType === '09' && extUnit === '16') {
-          // const outText = `1 verkkoaineisto ${timeHours}${extValue.slice(3, 5)} min${timeSec}`;   // ALKUP
-          const outText = `1 verkkoaineisto ${timeHours}${timeMins}${timeSec}`;
-          return [
-            {
-              tag: '300',
-              subfields: [{code: 'a', value: outText}]
-            }
-          ];
-        }
-
-        // II: extType 00 or 10      AND extUnit = 03      AND  ProductRorm = EB, EC, ED
-        if ((extType === '00' || extType === '10') && extUnit === '03' && ['EB', 'EC', 'ED'].includes(getValue('DescriptiveDetail', 'ProductForm'))) {
-          const outText = `1 verkkoaineisto (${extValue} sivua)`;
-          return [
-            {
-              tag: '300',
-              subfields: [{code: 'a', value: outText}]
-            }
-          ];
-        }
-
-
-      }
-
-
-      return [
-        {
-          tag: '300',
-          subfields: [{code: 'a', value: `1 verkkoaineisto`}]
-        }
-      ];
-
-      function getHours() {
-        if (extValue.slice(0, 3).replace(/0/gu, '') === '') { // eslint-disable-line functional/no-conditional-statement
-          return '(';
-        }
-        return `(${extValue.slice(0, 3).replace(/0/gu, '')} h `;
-      }
-
-      function getSeconds() {
-        if (extValue.slice(6, 7) === '0') { // eslint-disable-line functional/no-conditional-statement
-          return ')';
-        }
-        return ` ${extValue.slice(6, 7)} s)`;
-      }
-
-      //--->   13.11.2020
-      function getMinutes() {
-
-        if (extValue.slice(3, 5).replace(/0/gu, '') === '') { // eslint-disable-line functional/no-conditional-statement
-          return '';
-        }
-        return `${extValue.slice(3, 5).replace(/0/gu, '')} min`;
-      }
-      // <---
-
-    }
-
-
-    function generate336() {
-      if (isAudio) {
-        return [
-          {
-            tag: '336',
-            subfields: [
-              {code: 'a', value: 'puhe'},
-              {code: 'b', value: 'spw'},
-              {code: '2', value: 'rdacontent'}
-            ]
-          }
-        ];
-      }
-
-      if (isText) {
-        return [
-          {
-            tag: '336',
-            subfields: [
-              {code: 'a', value: 'teksti'},
-              {code: 'b', value: 'txt'},
-              {code: '2', value: 'rdacontent'}
-            ]
-          }
-        ];
-      }
-
-      return [];
-    }
-
-
-    function generate344() { // Add/moved 23.10.2020 (from generate-static)
-      const form = getValue('DescriptiveDetail', 'ProductForm');
-
-      if (form === 'AJ' || form === 'AN') {
-        return [
-          {
-            tag: '344',
-            subfields: [{code: 'a', value: 'digitaalinen'}]
-          }
-        ];
-
-      }
-
-      return [];
-    }
-
-    function generate347() {
-      if (isAudio) {
-        return [
-          {
-            tag: '347', subfields: [
-              {code: 'a', value: 'äänitiedosto'},
-              {code: 'b', value: 'MP3'}
-            ]
-          }
-        ];
-      }
-
-      if (isText) {
-        return [
-          {
-            tag: '347',
-            subfields: [
-              {code: 'a', value: 'tekstitiedosto'},
-              {code: 'b', value: textFormat}
-            ]
-          }
-        ];
-      }
-      return [];
-    }
 
 
     function generate490() {
@@ -436,7 +235,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           // Välilyöntiä ja puolipistettä ei tarvita [ a:lle] silloin,
           // kun tietueella ei ole lainakaan osakenttää ‡v    ->
           const checkfieldV = buildFieldV(); // check if there is v
-          // console.log('   490:   fieldV / status:', checkfieldV , ' / ', checkfieldV.length);
+
           if (checkfieldV.length === 0) { // eslint-disable-line functional/no-conditional-statement
             return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}]; // plain
           }
@@ -567,9 +366,27 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         }
 
+        return [];
+
       }
 
-      return [];
+
+      //--->  for alternate way
+      return [
+        {
+          tag: '506',
+          ind1: '1',
+          subfields: [
+            {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
+            {code: 'f', value: 'Online access with authorization'}, // now without dot: 12.11.2020
+            {code: '2', value: 'star'},
+            {code: '5', value: 'FI-Vapaa'},
+            {code: '9', value: 'FENNI<KEEP>'}
+          ]
+        }
+      ];
+      //<---  for alternate way
+
 
     }
 
@@ -626,9 +443,26 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         }
 
+
+        return [];
       }
 
-      return [];
+
+      //--->  for alternate way
+      return [
+        {
+          tag: '540',
+          subfields: [
+            {code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
+            {code: 'b', value: 'Kansalliskirjasto;'},
+            {code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
+            {code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
+            {code: '5', value: 'FI-Vapaa'},
+            {code: '9', value: 'FENNI<KEEP>'}
+          ]
+        }
+      ];
+      //<---  for alternate way
     }
 
 
@@ -654,7 +488,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
               ]
             }
           ];
-
 
         }
 
@@ -685,7 +518,18 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
       } // If dataSource match
 
-      return [];
+      //return [];
+      //--->  for alternate way
+      return [
+        {
+          tag: '594',
+          subfields: [
+            {code: 'a', value: 'Koneellisesti tuotettu tietue'},
+            {code: '5', value: 'FENNI'}
+          ]
+        }
+      ];
+      //<---  for alternate way
     }
 
 
@@ -813,23 +657,29 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     function generate856() { // PREV: async  rem 12.11.2020
 
-      if (getValue('NotificationType') === '03' && isLegalDeposit === true && dataSource === source4Value) {
+      const isbn = getIsbn();
+      const hyphenatedisbn = hyphenate(isbn);
 
-        const isbn = getIsbn();
-        const hyphenatedisbn = hyphenate(isbn);
+      if (dataSource === source4Value) {
 
-        return [
-          {
-            tag: '856',
-            ind1: '4',
-            ind2: '0',
-            subfields: [
-              {code: 'u', value: `http://urn.fi/URN:ISBN:${hyphenatedisbn}`}, // PREV: subUvalue / isbn
-              {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
-              {code: '5', value: 'FI-Vapaa'}
-            ]
-          }
-        ];
+        if (getValue('NotificationType') === '03' && isLegalDeposit === true) {
+
+          return [
+            {
+              tag: '856',
+              ind1: '4',
+              ind2: '0',
+              subfields: [
+                {code: 'u', value: `http://urn.fi/URN:ISBN:${hyphenatedisbn}`}, // PREV: subUvalue / isbn
+                {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
+                {code: '5', value: 'FI-Vapaa'}
+              ]
+            }
+          ];
+
+        }
+
+        return [];
       }
 
 
@@ -857,39 +707,20 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       */
 
 
-      return [];
-    }
-
-
-    function generate264() {
-      const publisher = getValue('PublishingDetail', 'Publisher', 'PublisherName');
-
-      if (publisher) {
-        const publishingYear = generatePublishingYear();
-
-        if (publishingYear) {
-          return {
-            tag: '264', ind2: '1',
-            subfields: [
-              {code: 'b', value: publisher},
-              {code: 'c', value: publishingYear}
-            ]
-          };
+      //--->  for alternate way
+      return [
+        {
+          tag: '856',
+          ind1: '4',
+          ind2: '0',
+          subfields: [
+            {code: 'u', value: `http://urn.fi/URN:ISBN:${hyphenatedisbn}`}, // PREV: subUvalue / isbn
+            {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
+            {code: '5', value: 'FI-Vapaa'}
+          ]
         }
-
-        return {
-          tag: '264', ind2: '1',
-          subfields: [{code: 'b', value: publisher}]
-        };
-      }
-
-      return [];
-
-      function generatePublishingYear() {
-        const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
-        return publishingDate ? publishingDate.slice(0, 4) : '    ';
-      }
-
+      ];
+      //<---  for alternate way
     }
 
 

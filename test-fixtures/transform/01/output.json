@@ -207,6 +207,79 @@
         "ind2": " "
       },
       {
+        "tag": "506",
+        "ind1": "1",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Aineisto on käytettävissä vapaakappalekirjastoissa."
+          },
+          {
+            "code": "f",
+            "value": "Online access with authorization"
+          },
+          {
+            "code": "2",
+            "value": "star"
+          },
+          {
+            "code": "5",
+            "value": "FI-Vapaa"
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind2": " "
+      },
+      {
+        "tag": "540",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;"
+          },
+          {
+            "code": "b",
+            "value": "Kansalliskirjasto;"
+          },
+          {
+            "code": "c",
+            "value": "Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä"
+          },
+          {
+            "code": "u",
+            "value": "http://www.finlex.fi/fi/laki/ajantasa/2007/20071433"
+          },
+          {
+            "code": "5",
+            "value": "FI-Vapaa"
+          },
+          {
+            "code": "9",
+            "value": "FENNI<KEEP>"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "594",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Koneellisesti tuotettu tietue"
+          },
+          {
+            "code": "5",
+            "value": "FENNI"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
         "tag": "700",
         "ind1": "1",
         "subfields": [
@@ -220,6 +293,25 @@
           }
         ],
         "ind2": " "
+      },
+      {
+        "tag": "856",
+        "ind1": "4",
+        "ind2": "0",
+        "subfields": [
+          {
+            "code": "u",
+            "value": "http://urn.fi/URN:ISBN:1212121212121"
+          },
+          {
+            "code": "z",
+            "value": "Käytettävissä vapaakappalekirjastoissa"
+          },
+          {
+            "code": "5",
+            "value": "FI-Vapaa"
+          }
+        ]
       },
       {
         "tag": "884",
