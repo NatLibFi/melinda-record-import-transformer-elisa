@@ -42,10 +42,6 @@ import {generate300, generate336, generate344, generate347} from './generate3XXF
 
 import {hyphenate} from 'beautify-isbn';
 
-//import fetch from 'node-fetch'; // rem 12.11.2020 (field 856)
-//const URN_GENERATOR_URL = 'http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn';   // rem 12.11.2020 (field 856)
-
-
 const logger = createLogger();
 
 export default ({source4Value, isLegalDeposit, sources, sender, moment = momentOrig}) => async ({Product: record}) => {
@@ -67,7 +63,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
   }
 
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
-    // Throw new Error('Unsupported product identifier type & value');
     throw new NotSupportedError('Unsupported product identifier type & value');
   }
 
@@ -478,7 +473,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         if (notificType === '03' && isLegalDeposit === true) {
           // return []; //  Field is left out if NotificationType = 03 with legal deposit
-          //<- left out was before 18.11.2020 !
+          //<- left out; was before 18.11.2020 !
           return [
             {
               tag: '594',
@@ -516,7 +511,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           ];
         }
 
-      } // If dataSource match
+      }
 
       //return [];
       //--->  for alternate way
