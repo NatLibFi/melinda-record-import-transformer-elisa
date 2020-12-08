@@ -33,19 +33,15 @@ import generateTitles from './generate-titles';
 import generateStaticFields from './generate-static-fields';
 import NotSupportedError from './../../error';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
-
 import {generate006, generate007, generate008} from './generateControlFields';
 import {generate040, generate041, generate084a, generate084b} from './generate0XXFields.js';
 import {generate250, generate263, generate264} from './generate2XXFields.js';
 import {generate300, generate336, generate344, generate347} from './generate3XXFields.js';
-
-
 import {hyphenate} from 'beautify-isbn';
 
 const logger = createLogger();
 
 export default ({source4Value, isLegalDeposit, sources, sender, moment = momentOrig}) => async ({Product: record}) => {
-
 
   const {getValue, getValues} = createValueInterface(record);
   const dataSource = getSource();
@@ -74,9 +70,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
   const generatedFields = await generateFields();
   generatedFields.forEach(f => marcRecord.insertField(f));
 
-
   return marcRecord;
-
 
   function generateLeader() {
     const type = generateType();
@@ -84,7 +78,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     const encodingLevel = generateEncodingLevel();
 
     return `00000n${type}${bibliographicLevel} a2200000${encodingLevel}i 4500`;
-
 
     function generateEncodingLevel() {
 
@@ -333,7 +326,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         }
       ];
       // All others <---
-
     }
 
 
@@ -358,11 +350,9 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
               ]
             }
           ];
-
         }
 
         return [];
-
       }
 
 
@@ -381,8 +371,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         }
       ];
       //<---  for alternate way
-
-
     }
 
 
@@ -438,10 +426,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         }
 
-
         return [];
       }
-
 
       //--->  for alternate way
       return [
@@ -483,7 +469,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
               ]
             }
           ];
-
         }
 
         if (notificType === '01' || notificType === '02') {
@@ -510,7 +495,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             }
           ];
         }
-
       }
 
       //return [];
@@ -549,7 +533,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           ]
         };
       }
-
     }
 
     function generate653() {
@@ -671,7 +654,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
               ]
             }
           ];
-
         }
 
         return [];
@@ -756,8 +738,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         return `${sources[dataSource]}`; // Others, tests etc. write as it is
       }
-
-
     }
 
     function generate974() {
@@ -847,7 +827,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           };
         }
 
-
         return {
           tag: '700', ind1: '1',
           subfields: [
@@ -910,9 +889,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       if (['EB', 'EC', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) { // <--- added EC 22.10.2020 / look email SN
         return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
       }
-
     }
-
 
     try {
       throw new Error('Unidentified: not audio, not text');
@@ -945,8 +922,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     return sender.name;
   }
-
-
 };
 
 

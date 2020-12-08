@@ -1,7 +1,6 @@
 
 import {createValueInterface} from './common';
 
-
 export function generate040(dataSource, source4Value) {
 
   if (dataSource === source4Value) {
@@ -16,7 +15,6 @@ export function generate040(dataSource, source4Value) {
         ]
       }
     ];
-
   }
 
   return [
@@ -35,7 +33,6 @@ export function generate040(dataSource, source4Value) {
 export function generate041(record) {
 
   const {getValue} = createValueInterface(record);
-
   const form = getValue('DescriptiveDetail', 'ProductForm');
   const langCode = getValue('DescriptiveDetail', 'Language', 'LanguageCode');
 

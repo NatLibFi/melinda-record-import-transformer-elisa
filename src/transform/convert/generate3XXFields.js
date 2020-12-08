@@ -1,24 +1,21 @@
 import {createValueInterface} from './common';
 
-
 export function generate300(record) {
 
   const {getValue} = createValueInterface(record);
-
   const extType = getValue('DescriptiveDetail', 'Extent', 'ExtentType');
   const extValue = getValue('DescriptiveDetail', 'Extent', 'ExtentValue');
   const extUnit = getValue('DescriptiveDetail', 'Extent', 'ExtentUnit');
-
 
   if (extValue && extType && extUnit) {
 
     const timeHours = getHours();
     const timeSec = getSeconds();
-    const timeMins = getMinutes(); // 13.11.2020
+    const timeMins = getMinutes();
 
     // I A :  if ExtentType = 09 and ExtentUnit = 15 ( 15 -> HHHMM i.e. 5 digits)
     if (extType === '09' && extUnit === '15') {
-      // const outText = `1 verkkoaineisto ${timeHours}${extValue.slice(3, 5)} min)`;  // ALKUP
+
       const outText = `1 verkkoaineisto ${timeHours}${timeMins}`;
       return [
         {
@@ -50,10 +47,7 @@ export function generate300(record) {
         }
       ];
     }
-
-
   }
-
 
   return [
     {
@@ -76,7 +70,6 @@ export function generate300(record) {
     return ` ${extValue.slice(6, 7)} s)`;
   }
 
-
   function getMinutes() {
 
     if (extValue.slice(3, 5).replace(/0/gu, '') === '') { // eslint-disable-line functional/no-conditional-statement
@@ -84,10 +77,7 @@ export function generate300(record) {
     }
     return `${extValue.slice(3, 5).replace(/0/gu, '')} min`;
   }
-
-
 }
-
 
 export function generate336(isAudio, isText) {
 
@@ -133,7 +123,6 @@ export function generate344(record) { // Add/moved 23.10.2020 (from generate-sta
         subfields: [{code: 'a', value: 'digitaalinen'}]
       }
     ];
-
   }
 
   return [];

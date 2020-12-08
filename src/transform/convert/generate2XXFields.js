@@ -1,6 +1,5 @@
 import {createValueInterface} from './common';
 
-
 export function generate250(record, dataSource, source4Value) {
   // Generate only if EditionNumber exists!
 
@@ -27,7 +26,6 @@ export function generate263(record, dataSource, source4Value) {
   // Generate only if: NotificationType = 01 or 02  AND PublishingDateRole = 01
 
   const {getValue} = createValueInterface(record);
-
   const PubDatDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
   const PubDatRole = getValue('PublishingDetail', 'PublishingDate', 'PublishingDateRole');
   const NotifType = getValue('NotificationType');
@@ -54,7 +52,6 @@ export function generate263(record, dataSource, source4Value) {
 export function generate264(record) {
 
   const {getValue} = createValueInterface(record);
-
   const publisher = getValue('PublishingDetail', 'Publisher', 'PublisherName');
 
   if (publisher) {
@@ -82,6 +79,5 @@ export function generate264(record) {
     const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
     return publishingDate ? publishingDate.slice(0, 4) : '    ';
   }
-
 }
 
