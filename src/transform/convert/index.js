@@ -207,7 +207,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             return [];
           }
 
-          if (element.CollectionType[0] === undefined && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+          if (element.CollectionType[0] === undefined || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
             return [];
           }
 
@@ -255,7 +255,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             return [];
           }
 
-          if (element.CollectionType[0] === undefined && element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+          if (element.CollectionType[0] === undefined || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
             return [];
           }
 
