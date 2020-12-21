@@ -29,6 +29,7 @@
 import {createValueInterface} from './common';
 
 export default (record, authors) => {
+
   const {getValue} = createValueInterface(record);
 
   const titleType = getValue('DescriptiveDetail', 'TitleDetail', 'TitleType');
@@ -80,9 +81,7 @@ export default (record, authors) => {
     const ind1 = generateInd1();
     const {mainTitle, remainder} = formatTitle();
 
-    // Console.log('   QQQ   authors:', authors);
-
-    // Add 30.10.2020 ->
+    // Add 30.10.2020 ( subtitle check )->
     const subTitle = getValue('DescriptiveDetail', 'TitleDetail', 'TitleElement', 'Subtitle');
 
     if (subTitle) {
@@ -113,12 +112,23 @@ export default (record, authors) => {
     };
 
     function generateInd1() {
+
+      if (authors.length === 1) { // eslint-disable-line functional/no-conditional-statement
+        return '1';
+      }
+
+      if (authors.length === 0) { // eslint-disable-line functional/no-conditional-statement
+        return '0';
+      }
+
       return hasMultipleAuthors() ? '0' : '1';
 
       function hasMultipleAuthors() {
         return authors.some(({name}) => (/, Useita/iu).test(name));
       }
+
     }
+
 
     function formatTitle() {
       const lengths = calculateLengths();

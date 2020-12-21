@@ -32,7 +32,7 @@ import createStreamParser, {toXml, ALWAYS as streamParserAlways} from 'xml-flow'
 import {Parser} from 'xml2js';
 import createConverter from './convert';
 import createValidator from './validate';
-import NotSupportedError from './../error'; // Added 23.6.2020
+import NotSupportedError from './../error';
 export default options => (stream, {validate = true, fix = true} = {}) => {
   MarcRecord.setValidationOptions({subfieldValues: false});
 
@@ -100,8 +100,8 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
             const convertRecord = await converterPromise;
             const record = await convertRecord(obj);
 
-            // Console.log('   QQQ   record:\n ', JSON.stringify(record,null,1) ); // ***
-            // Console.log('   QQQ   record:\n ', record); // ***
+            // Console.log('   record:\n ', JSON.stringify(record,null,1) );
+            // Console.log('   record:\n ', record);
 
             if (validate === true || fix === true) {
               const result = await validateRecord(record, fix);
