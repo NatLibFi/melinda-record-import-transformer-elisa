@@ -18,7 +18,7 @@
 	"main": "./dist/index.js",
 	"bin": "./dist/cli.js",
 	"engines": {
-		"node": ">=10"
+		"node": ">=12"
 	},
 	"scripts": {
 		"start": "node dist/index.js",
@@ -35,12 +35,12 @@
 	"dependencies": {
 		"@babel/node": "^7.12.1",
 		"@natlibfi/marc-record": "^6.1.1",
-		"@natlibfi/marc-record-serializers": "^7.1.6",
+		"@natlibfi/marc-record-serializers": "^7.2.1",
 		"@natlibfi/marc-record-validate": "^6.0.1",
-		"@natlibfi/marc-record-validators-melinda": "^8.2.5",
+		"@natlibfi/marc-record-validators-melinda": "^8.2.7",
 		"@natlibfi/melinda-backend-commons": "^2.0.2",
 		"@natlibfi/melinda-commons": "^11.1.1",
-		"@natlibfi/melinda-record-import-commons": "^9.0.1",
+		"@natlibfi/melinda-record-import-commons": "^9.1.0",
 		"moment": "^2.29.1",
 		"xml-flow": "^1.0.4",
 		"xml2js": "^0.4.23"
