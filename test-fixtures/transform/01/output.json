@@ -20,7 +20,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "1212121212121"
+            "value": "978-9916-605-32-5"
           },
           {
             "code": "q",
@@ -301,7 +301,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:1212121212121"
+            "value": "http://urn.fi/URN:ISBN:978-9916-605-32-5"
           },
           {
             "code": "z",
@@ -355,7 +355,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 1212121212121 is not valid"
+        "ISBN (9789916605325) is not valid"
       ]
     },
     {

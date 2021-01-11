@@ -24,7 +24,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "9999999999999"
+            "value": "978-9916-605-32-5"
           },
           {
             "code": "q",
@@ -377,7 +377,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:9999999999999"
+            "value": "http://urn.fi/URN:ISBN:978-9916-605-32-5"
           },
           {
             "code": "z",
@@ -448,10 +448,7 @@
   "messages": [
     {
       "description": "Validates ISBN and ISSN values",
-      "state": "fixed",
-      "messages": [
-        "ISBN 9999999999999 is not valid"
-      ]
+      "state": "valid"
     },
     {
       "description": "Handles invalid/missing item language code",

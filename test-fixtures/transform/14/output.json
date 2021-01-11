@@ -423,7 +423,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 9789522793591 is not valid"
+        "ISBN (9789522793591) is not valid"
       ]
     },
     {

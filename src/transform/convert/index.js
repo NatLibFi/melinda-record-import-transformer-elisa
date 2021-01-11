@@ -37,7 +37,7 @@ import {generate006, generate007, generate008} from './generateControlFields';
 import {generate040, generate041, generate084a, generate084b} from './generate0XXFields.js';
 import {generate250, generate263, generate264} from './generate2XXFields.js';
 import {generate300, generate336, generate344, generate347} from './generate3XXFields.js';
-import {hyphenate} from 'beautify-isbn';
+import ISBN from 'isbn3';
 
 const logger = createLogger();
 
@@ -634,21 +634,18 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
 
     function generate856() { // PREV: async  rem 12.11.2020
-
       const isbn = getIsbn();
-      const hyphenatedisbn = hyphenate(isbn);
+      const parsedIsbn = ISBN.parse(isbn);
 
       if (dataSource === source4Value) {
-
         if (getValue('NotificationType') === '03' && isLegalDeposit === true) {
-
           return [
             {
               tag: '856',
               ind1: '4',
               ind2: '0',
               subfields: [
-                {code: 'u', value: `http://urn.fi/URN:ISBN:${hyphenatedisbn}`}, // PREV: subUvalue / isbn
+                {code: 'u', value: `http://urn.fi/URN:ISBN:${parsedIsbn.isbn13h}`}, // PREV: subUvalue / isbn
                 {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
                 {code: '5', value: 'FI-Vapaa'}
               ]
@@ -670,7 +667,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
       }
 
-
       /*   // rem 12.11.2020 ->
       async function createURN(isbn = true) { // ALKUP: false
         if (isbn) {
@@ -683,7 +679,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
       */
 
-
       //--->  for alternate way
       return [
         {
@@ -691,7 +686,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           ind1: '4',
           ind2: '0',
           subfields: [
-            {code: 'u', value: `http://urn.fi/URN:ISBN:${hyphenatedisbn}`}, // PREV: subUvalue / isbn
+            {code: 'u', value: `http://urn.fi/URN:ISBN:${parsedIsbn.isbn13h}`}, // PREV: subUvalue / isbn
             {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
             {code: '5', value: 'FI-Vapaa'}
           ]
@@ -719,7 +714,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       ];
 
       function sourceNames() {
-
         if (sources[dataSource] === 'Elisa') { // eslint-disable-line functional/no-conditional-statement
           return 'MELINDA_RECORD_IMPORT_SOURCE1';
         }
@@ -907,7 +901,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
   function getSource() {
     // Check first suppliername then sender name
-
     // SupplierName
     if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName')) {
       const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');

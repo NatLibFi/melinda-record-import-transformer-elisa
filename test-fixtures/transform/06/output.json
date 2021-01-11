@@ -373,7 +373,7 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 9999999999999 is not valid"
+        "ISBN (9999999999999) is not valid"
       ]
     },
     {
