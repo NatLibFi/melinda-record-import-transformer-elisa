@@ -27,10 +27,13 @@
 */
 
 export default () => [
+
+  /*  Blocked, see email by SN 21.8.2020
   {
     tag: '300',
     subfields: [{code: 'a', value: '1 verkkoaineisto'}]
   },
+  */
   {
     tag: '337',
     subfields: [
@@ -47,6 +50,8 @@ export default () => [
       {code: '2', value: 'rdacarrier'}
     ]
   },
+
+  /*  Moved to transform/convert/index.js
   {
     tag: '344',
     subfields: [
@@ -54,6 +59,7 @@ export default () => [
       {code: '2', value: 'rda'}
     ]
   },
+  */
   {
     tag: '042',
     subfields: [{code: 'a', value: 'finb'}]
@@ -61,7 +67,11 @@ export default () => [
   {
     tag: 'LOW',
     subfields: [{code: 'a', value: 'FIKKA'}]
-  },
+  }
+
+  /*
+  ,
+
   {
     tag: '500',
     ind1: ' ',
@@ -71,4 +81,6 @@ export default () => [
       {code: '9', value: 'FENNI<KEEP>'}
     ]
   }
+*/
+
 ];

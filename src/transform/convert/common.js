@@ -27,9 +27,11 @@
 */
 
 export function createValueInterface(record) {
+
   return {getValue, getValues};
 
   function getValue(...path) {
+
     return recurse(path);
 
     function recurse(props, context = record) {

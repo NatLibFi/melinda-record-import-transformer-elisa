@@ -31,20 +31,44 @@ import momentOrig from 'moment';
 import {createValueInterface} from './common';
 import generateTitles from './generate-titles';
 import generateStaticFields from './generate-static-fields';
+import NotSupportedError from './../../error';
+import {createLogger} from '@natlibfi/melinda-backend-commons';
+import {generate006, generate007, generate008} from './generateControlFields';
+import {generate040, generate041, generate084a, generate084b} from './generate0XXFields.js';
+import {generate250, generate263, generate264} from './generate2XXFields.js';
+import {generate300, generate336, generate344, generate347} from './generate3XXFields.js';
+import ISBN from 'isbn3';
 
-export default ({sources, moment = momentOrig}) => ({Product: record}) => {
+const logger = createLogger();
+
+export default ({source4Value, isLegalDeposit, sources, sender, moment = momentOrig}) => async ({Product: record}) => {
+
   const {getValue, getValues} = createValueInterface(record);
+  const dataSource = getSource();
+
+  if (dataSource === undefined) { // eslint-disable-line functional/no-conditional-statement
+    throw new Error('  No data source found.');
+  }
+
+  checkSupplierData();
+
+  function checkSupplierData() {
+    if ([dataSource] in sources === false) { // eslint-disable-line functional/no-conditional-statement
+      throw new Error('Exception: please check data source.');
+    }
+  }
 
   if (isNotSupported()) { // eslint-disable-line functional/no-conditional-statement
-    throw new Error('Unsupported product identifier type & value');
+    throw new NotSupportedError('Unsupported product identifier type & value');
   }
 
   const marcRecord = new MarcRecord();
-
   const {isAudio, isText, textFormat} = getTypeInformation();
 
   marcRecord.leader = generateLeader(); // eslint-disable-line functional/immutable-data
-  generateFields().forEach(f => marcRecord.insertField(f));
+
+  const generatedFields = await generateFields();
+  generatedFields.forEach(f => marcRecord.insertField(f));
 
   return marcRecord;
 
@@ -56,7 +80,9 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
     return `00000n${type}${bibliographicLevel} a2200000${encodingLevel}i 4500`;
 
     function generateEncodingLevel() {
-      const encodingLevels = {
+
+      /* Old code left here just in case ->
+      Const encodingLevels = {
         '01': '3',
         '02': '5',
         '03': '8',
@@ -68,6 +94,8 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
 
       const notificationType = getValue('NotificationType');
       return encodingLevels[notificationType] || '|';
+      */
+      return '8'; // 2.11.2020: wanted same value for all Onix
     }
 
     function generateType() {
@@ -87,176 +115,590 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
     }
   }
 
-  function generateFields() {
+  async function generateFields() {
+
     const authors = getAuthors();
 
     return [
-      generate008(),
-      generate006(),
-      generate007(),
-      generate520(),
-      generate040(),
-      generate041(),
-      generate884(),
-      generate264(),
-      generate336(),
-      generate347(),
+      generate008({moment, record, dataSource, source4Value}),
+      generate006({isAudio, isText}),
+      generate007({isAudio, isText}),
+      generate040(dataSource, source4Value),
+      generate041(record),
+      generate084a(record, dataSource, source4Value),
+      generate084b(record, dataSource, source4Value),
+      generate250(record, dataSource, source4Value),
+      generate263(record, dataSource, source4Value),
+      generate264(record),
+      generate300(record),
+      generate336(isAudio, isText),
+      generate344(record),
+      generate347(isAudio, isText, textFormat),
+      generate490(),
       generate500(),
+      generate506(),
+      generate511(),
+      generate540(),
+      generate594(),
+      generate600(),
+      generate653(),
       generate655(),
+      generate700(),
+      await generate856(),
+      generate884(),
+      generate974(),
       generateStandardIdentifiers(),
       generateTitles(record, authors),
       generateAuthors(),
       generateStaticFields()
     ].flat();
 
-    function generate336() {
-      if (isAudio) {
-        return [
-          {
-            tag: '336',
-            subfields: [
-              {code: 'a', value: 'puhe'},
-              {code: 'b', value: 'spw'},
-              {code: '2', value: 'rdacontent'}
-            ]
-          }
-        ];
+
+    function generate490() {
+
+      const gotTitleElementLevel = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleElementLevel');
+      const gotCollectionType = getValue('DescriptiveDetail', 'Collection', 'CollectionType');
+      const gotCollectionIDtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
+      const gotTitleText = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleText');
+      const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
+      const gotPartNumber = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'PartNumber');
+
+      // SKIP if none required fields exist
+      if (!gotCollectionType && !gotTitleElementLevel && !gotCollectionIDtype) {
+        return [];
       }
 
-      if (isText) {
-        return [
-          {
-            tag: '336',
-            subfields: [
-              {code: 'a', value: 'teksti'},
-              {code: 'b', value: 'txt'},
-              {code: '2', value: 'rdacontent'}
-            ]
-          }
-        ];
+      if (!gotTitleText && !gotPartNumber && !gotIDValue) {
+        return [];
       }
 
-      return [];
+      const theResult = getValues('DescriptiveDetail', 'Collection').map(makeFields);
+
+      if (theResult === undefined || theResult.length === 0) {
+        return [];
+      }
+
+      const filtered = theResult.filter((v) => v !== undefined);
+
+      return filtered;
+
+
+      function makeFields(element) {
+
+        const subfields = generateSubfields();
+
+        function generateSubfields () {
+          const fieldA = buildFieldA();
+          const fieldX = buildFieldX();
+          const fieldV = buildFieldV();
+          const aplusx = fieldA.concat(fieldX);
+
+          return aplusx.concat(fieldV);
+        }
+
+
+        if (subfields.length > 0 && subfields !== undefined) {
+          return {tag: '490', ind1: '0', subfields};
+        }
+
+
+        function buildFieldA() { // Requires TitleText
+          if (gotTitleElementLevel === undefined || gotCollectionType === undefined || gotTitleText === undefined) {
+            return [];
+          }
+
+          if (element.CollectionType[0] === undefined || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+            return [];
+          }
+
+          if (element.CollectionType[0] !== '10' || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02') {
+            return [];
+          }
+
+          if (element.TitleDetail[0].TitleElement[0].TitleText[0] === undefined) {
+            return [];
+          }
+
+          // ---> 13.11.2020
+          // Välilyöntiä ja puolipistettä ei tarvita [ a:lle] silloin,
+          // kun tietueella ei ole lainakaan osakenttää ‡v    ->
+          const checkfieldV = buildFieldV(); // check if there is v
+
+          if (checkfieldV.length === 0) { // eslint-disable-line functional/no-conditional-statement
+            return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}]; // plain
+          }
+          // <---
+
+
+          return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]} ;`}];
+        }
+
+        function buildFieldX() { // Requires IDValue
+          if (gotCollectionIDtype === undefined || gotIDValue === undefined) {
+            return [];
+          }
+
+          if (element.CollectionIdentifier[0].CollectionIdtype[0] === undefined || element.CollectionIdentifier[0].IDValue[0] === undefined) {
+            return [];
+          }
+
+          if (element.CollectionIdentifier[0].CollectionIdtype[0] !== '02') {
+            return [];
+          }
+
+          return [{code: 'x', value: `${element.CollectionIdentifier[0].IDValue[0]}`}];
+        }
+
+
+        function buildFieldV() { // Requires PartNumber
+          if (gotTitleElementLevel === undefined || gotCollectionType === undefined || gotPartNumber === undefined) {
+            return [];
+          }
+
+          if (element.CollectionType[0] === undefined || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] === undefined) {
+            return [];
+          }
+
+          if (element.CollectionType[0] !== '10' || element.TitleDetail[0].TitleElement[0].TitleElementLevel[0] !== '02') {
+            return [];
+          }
+
+          if (element.TitleDetail[0].TitleElement[0].PartNumber === undefined) { // Prev: PartNumber[0]
+            return [];
+          }
+
+          return [{code: 'v', value: `${element.TitleDetail[0].TitleElement[0].PartNumber[0]}`}];
+        }
+
+      }
+
     }
 
-    function generate347() {
-      if (isAudio) {
-        return [
-          {
-            tag: '347', subfields: [
-              {code: 'a', value: 'äänitiedosto'},
-              {code: 'b', value: 'MP3'},
-              {code: '2', value: 'rda'}
-            ]
-          }
-        ];
-      }
-
-      if (isText) {
-        return [
-          {
-            tag: '347',
-            subfields: [
-              {code: 'a', value: 'tekstitiedosto'},
-              {code: 'b', value: textFormat},
-              {code: '2', value: 'rda'}
-            ]
-          }
-        ];
-      }
-    }
 
     function generate500() {
-      return isAudio ? [
+
+      if (dataSource === source4Value) {
+
+        const notificType = getValue('NotificationType');
+
+        if (notificType && (notificType === '01' || notificType === '02')) {
+          return [
+            {
+              tag: '500',
+              subfields: [{code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'}]
+            }
+          ];
+
+        }
+
+        if (notificType && notificType === '03' && isLegalDeposit === false) {
+          return [
+            {
+              tag: '500',
+              subfields: [{code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'}]
+            }
+          ];
+
+        }
+
+        if (notificType && notificType === '03' && isLegalDeposit === true) {
+          return [
+            {
+              tag: '500',
+              subfields: [
+                {code: 'a', value: 'Koneellisesti tuotettu tietue.'}
+                //{code: '9', value: 'FENNI<KEEP>'} // 18.11.2020
+              ]
+            }
+          ];
+
+        }
+
+      }
+
+      // All others --->
+      return [
         {
-          tag: '500', subfields: [
-            {code: 'a', value: 'Äänikirja.'},
+          tag: '500',
+          ind1: ' ',
+          ind2: ' ',
+          subfields: [{code: 'a', value: 'Koneellisesti tuotettu tietue.'}]
+        }
+      ];
+      // All others <---
+    }
+
+
+    function generate506() {
+
+      if (dataSource === source4Value) {
+      // Field added if NotificationType = 03 with legal deposit
+
+        const notificType = getValue('NotificationType');
+
+        if (notificType && notificType === '03' && isLegalDeposit === true) {
+          return [
+            {
+              tag: '506',
+              ind1: '1',
+              subfields: [
+                {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
+                {code: 'f', value: 'Online access with authorization'}, // now without dot: 12.11.2020
+                {code: '2', value: 'star'},
+                {code: '5', value: 'FI-Vapaa'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
+        }
+
+        return [];
+      }
+
+
+      //--->  for alternate way
+      return [
+        {
+          tag: '506',
+          ind1: '1',
+          subfields: [
+            {code: 'a', value: 'Aineisto on käytettävissä vapaakappalekirjastoissa.'},
+            {code: 'f', value: 'Online access with authorization'}, // now without dot: 12.11.2020
+            {code: '2', value: 'star'},
+            {code: '5', value: 'FI-Vapaa'},
             {code: '9', value: 'FENNI<KEEP>'}
           ]
         }
-      ] : [];
-    }
-
-    function generate655() {
-      return isAudio ? [
-        {
-          tag: '655',
-          ind2: '7',
-          subfields: [
-            {code: 'a', value: 'äänikirjat'},
-            {code: '2', value: 'slm/fin'},
-            {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'}
-          ]
-        }
-      ] : [];
-    }
-
-    function generate006() {
-      const materialForm = isAudio || isText ? 'm' : '|';
-      const itemForm = isAudio || isText ? 'o' : '|';
-      const fileType = generateFileType();
-
-      return [
-        {
-          tag: '006', value: `${materialForm}|||||${itemForm}||${fileType}||||||||`
-        }
       ];
-
-      function generateFileType() {
-        if (isAudio) {
-          return 'h';
-        }
-
-        if (isText) {
-          return 'd';
-        }
-
-        return '|';
-      }
+      //<---  for alternate way
     }
 
-    function generate007() {
-      if (isAudio) {
-        return [
-          {tag: '007', value: 'sr|uunnnnnuneu'},
-          {tag: '007', value: 'cr|nnannnuuuuu'}
-        ];
+
+    function generate511() {
+
+      if (getValue('DescriptiveDetail', 'Contributor', 'PersonName')) {
+        const theData = getValues('DescriptiveDetail', 'Contributor').filter(filter);
+        const dataMapped = theData.map(makeFields);
+
+        return dataMapped;
       }
 
-      if (isText) {
-        return [{tag: '007', value: 'cr||||||||||||'}];
+      function filter({ContributorRole}) {
+        return ['E07'].includes(ContributorRole?.[0]);
       }
 
-      return [];
-    }
-
-    function generate264() {
-      const publisher = getValue('PublishingDetail', 'Publisher', 'PublisherName');
-
-      if (publisher) {
-        const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
-
-        if (publishingDate) {
-          return {
-            tag: '264', ind2: '1',
-            subfields: [
-              {code: 'b', value: publisher},
-              {code: 'c', value: publishingDate}
-            ]
-          };
-        }
-
+      function makeFields(element) {
         return {
-          tag: '264', ind2: '1',
-          subfields: [{code: 'b', value: publisher}]
+          tag: '511',
+          ind1: '0',
+          subfields: [
+            {code: 'a', value: `Lukija: ${element.PersonName[0]}.`},
+            {code: '9', value: 'FENNI<KEEP>'}
+          ]
         };
       }
 
       return [];
     }
 
+
+    function generate540() {
+
+      if (dataSource === source4Value) {
+      // Field added if NotificationType = 03 with legal deposit
+
+        const notificType = getValue('NotificationType');
+
+        if (notificType !== undefined && notificType === '03' && isLegalDeposit === true) {
+          return [
+            {
+              tag: '540',
+              subfields: [
+                {code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
+                {code: 'b', value: 'Kansalliskirjasto;'},
+                {code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
+                {code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
+                {code: '5', value: 'FI-Vapaa'},
+                {code: '9', value: 'FENNI<KEEP>'}
+              ]
+            }
+          ];
+
+        }
+
+        return [];
+      }
+
+      //--->  for alternate way
+      return [
+        {
+          tag: '540',
+          subfields: [
+            {code: 'a', value: 'Aineisto on käytettävissä tutkimus- ja muihin tarkoituksiin;'},
+            {code: 'b', value: 'Kansalliskirjasto;'},
+            {code: 'c', value: 'Laki kulttuuriaineistojen tallettamisesta ja säilyttämisestä'},
+            {code: 'u', value: 'http://www.finlex.fi/fi/laki/ajantasa/2007/20071433'},
+            {code: '5', value: 'FI-Vapaa'},
+            {code: '9', value: 'FENNI<KEEP>'}
+          ]
+        }
+      ];
+      //<---  for alternate way
+    }
+
+
+    function generate594() {
+
+      if (dataSource === source4Value) {
+
+        const notificType = getValue('NotificationType');
+
+        if (notificType === undefined || isLegalDeposit === undefined) {
+          return []; //  Skip
+        }
+
+        if (notificType === '03' && isLegalDeposit === true) {
+          // return []; //  Field is left out if NotificationType = 03 with legal deposit
+          //<- left out; was before 18.11.2020 !
+          return [
+            {
+              tag: '594',
+              subfields: [
+                {code: 'a', value: 'Koneellisesti tuotettu tietue'},
+                {code: '5', value: 'FENNI'}
+              ]
+            }
+          ];
+        }
+
+        if (notificType === '01' || notificType === '02') {
+          return [
+            {
+              tag: '594',
+              subfields: [
+                {code: 'a', value: 'ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: '5', value: 'FENNI'}
+              ]
+            }
+          ];
+        }
+
+        if (notificType === '03' && isLegalDeposit === false) {
+
+          return [
+            {
+              tag: '594',
+              subfields: [
+                {code: 'a', value: 'TARKISTETTU ENNAKKOTIETO / KIRJAVÄLITYS'},
+                {code: '5', value: 'FENNI'}
+              ]
+            }
+          ];
+        }
+      }
+
+      //return [];
+      //--->  for alternate way
+      return [
+        {
+          tag: '594',
+          subfields: [
+            {code: 'a', value: 'Koneellisesti tuotettu tietue'},
+            {code: '5', value: 'FENNI'}
+          ]
+        }
+      ];
+      //<---  for alternate way
+    }
+
+
+    function generate600() {
+
+      const getPersonNameInverted = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
+
+      if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0 || dataSource !== source4Value) {
+        return [];
+      }
+
+      return getPersonNameInverted.map(getNames);
+
+      function getNames(element) {
+        return {
+          tag: '600',
+          ind1: '1',
+          ind2: '4',
+          subfields: [
+            {code: 'a', value: element},
+            {code: '9', value: 'FENNI<KEEP>'}
+          ]
+        };
+      }
+    }
+
+    function generate653() {
+      // Added only if SubjectSchemeIdentifier = 20, 64, 71 or 72
+      // A| <- SubjectHeadingText
+      const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
+
+      if (SubScheIde && dataSource === source4Value) {
+        return getValues('DescriptiveDetail', 'Subject').filter(filter).map(makeRows);
+      }
+
+
+      function makeRows(element) {
+
+        return {
+          tag: '653',
+          subfields: [{code: 'a', value: element.SubjectHeadingText[0]}]
+        };
+      }
+
+      function filter({SubjectSchemeIdentifier}) {
+        return ['20', '64', '71', '72'].includes(SubjectSchemeIdentifier?.[0]);
+      }
+
+      return [];
+    }
+
+
+    function generate655() {
+      // Make always when there is form = AJ & formDetail = A103
+      const form = getValue('DescriptiveDetail', 'ProductForm');
+      const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
+
+      if (formDetail === undefined || form === undefined || dataSource !== source4Value) {
+        return [];
+      }
+
+      if (form === 'AJ' && formDetail === 'A103') {
+        return [
+          {
+            tag: '655',
+            ind2: '7',
+            subfields: [
+              {code: 'a', value: 'äänikirjat'},
+              {code: '2', value: 'slm/fin'},
+              {code: '0', value: 'http://urn.fi/URN:NBN:fi:au:slm:s579'},
+              {code: '9', value: 'FENNI<KEEP>'}
+            ]
+          }
+        ];
+
+      }
+      return [];
+    }
+
+
+    function generate700() {
+      const contribrole = getValue('DescriptiveDetail', 'Contributor', 'ContributorRole');
+      const personNameInverted = getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted');
+
+
+      if (contribrole && personNameInverted) {
+        return getValues('DescriptiveDetail', 'Contributor').filter(filter).map(makeRows);
+      }
+
+      return [];
+
+      function makeRows(element) {
+        return {
+          tag: '700',
+          ind1: '1',
+          ind2: ' ',
+          subfields: [
+            {code: 'a', value: `${element.PersonNameInverted[0]},`},
+            {code: 'e', value: changeValues(element.ContributorRole[0])}
+          ]
+        };
+      }
+
+      function filter({ContributorRole}) {
+        return ['B06', 'A12', 'B01'].includes(ContributorRole?.[0]); // Excluded 'E07', generateAuthors makes it already
+      }
+
+      function changeValues(value) {
+        if (value === 'B06') {
+          return 'kääntäjä.';
+        }
+        if (value === 'E07') {
+          return 'lukija.';
+        }
+        if (value === 'A12') {
+          return 'kuvittaja.';
+        }
+        if (value === 'B01') {
+          return 'toimittaja.';
+        }
+        return value;
+      }
+    }
+
+    function generate856() { // PREV: async  rem 12.11.2020
+      const isbn = getIsbn();
+      const parsedIsbn = ISBN.parse(isbn);
+
+      if (dataSource === source4Value) {
+        if (getValue('NotificationType') === '03' && isLegalDeposit === true) {
+          return [
+            {
+              tag: '856',
+              ind1: '4',
+              ind2: '0',
+              subfields: [
+                {code: 'u', value: `http://urn.fi/URN:ISBN:${parsedIsbn.isbn13h}`}, // PREV: subUvalue / isbn
+                {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
+                {code: '5', value: 'FI-Vapaa'}
+              ]
+            }
+          ];
+        }
+
+        return [];
+      }
+
+
+      function getIsbn() {
+        const isbn13 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
+
+        if (isbn13) {
+          return isbn13.IDValue[0];
+        }
+
+        return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
+      }
+
+      /*   // rem 12.11.2020 ->
+      async function createURN(isbn = true) { // ALKUP: false
+        if (isbn) {
+          return `http://urn.fi/URN:ISBN:${isbn}`;
+        }
+
+        const response = await fetch(URN_GENERATOR_URL);
+        const body = await response.text();
+        return `http://urn.fi/${body}`;
+      }
+      */
+
+      //--->  for alternate way
+      return [
+        {
+          tag: '856',
+          ind1: '4',
+          ind2: '0',
+          subfields: [
+            {code: 'u', value: `http://urn.fi/URN:ISBN:${parsedIsbn.isbn13h}`}, // PREV: subUvalue / isbn
+            {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
+            {code: '5', value: 'FI-Vapaa'}
+          ]
+        }
+      ];
+      //<---  for alternate way
+    }
+
+
     function generate884() {
-      const supplier = getValue('ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
+
+      const tellSource = sourceNames();
 
       return [
         {
@@ -264,47 +706,56 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
           subfields: [
             {code: 'a', value: 'ONIX3 to MARC transformation'},
             {code: 'g', value: moment().format('YYYYMMDD')},
-            {code: 'k', value: sources[supplier]},
+            // {code: 'k', value: sources[dataSource]}, // Was: sources.supplier  //dataSource
+            {code: 'k', value: tellSource}, // 6.11.2020
             {code: 'q', value: 'FI-NL'}
           ]
         }
       ];
-    }
 
-    function generate008() {
-      const date = moment().format('YYMMDD');
-      const language = generateLanguage();
-      const publicationCountry = generatePublicationCountry();
-      const publishingYear = generatePublishingYear();
-      const value = `${date}s${publishingYear}    ${publicationCountry} |||||o|||||||||||${language}||`;
-
-      return [{tag: '008', value}];
-
-      function generateLanguage() {
-        return getLanguageRole() === '01' ? getLanguage() : '|||';
-      }
-
-      function generatePublicationCountry() {
-        const publicationCountry = getValue('PublishingDetail', 'CountryOfPublication');
-        return publicationCountry ? publicationCountry.slice(0, 2).toLowerCase() : 'xx';
-      }
-
-      function generatePublishingYear() {
-        const publishingDate = getValue('PublishingDetail', 'PublishingDate', 'Date');
-        return publishingDate ? publishingDate.slice(0, 4) : '    ';
-      }
-    }
-
-    function generate520() {
-      const summary = getSummary();
-      const textType = getValue('CollateralDetail', 'TextContent', 'TextType');
-
-      return summary && textType === '03' ? [
-        {
-          tag: '520', subfields: [{code: 'a', value: summary}]
+      function sourceNames() {
+        if (sources[dataSource] === 'Elisa') { // eslint-disable-line functional/no-conditional-statement
+          return 'MELINDA_RECORD_IMPORT_SOURCE1';
         }
-      ] : [];
+
+        if (sources[dataSource] === 'Ellibs') { // eslint-disable-line functional/no-conditional-statement
+          return 'MELINDA_RECORD_IMPORT_SOURCE2';
+        }
+
+        if (sources[dataSource] === 'Books On Demand') { // eslint-disable-line functional/no-conditional-statement
+          return 'MELINDA_RECORD_IMPORT_SOURCE3';
+        }
+
+        if (sources[dataSource] === 'Kirjavälitys Oy') { // eslint-disable-line functional/no-conditional-statement
+          return 'MELINDA_RECORD_IMPORT_SOURCE4';
+        }
+
+        return `${sources[dataSource]}`; // Others, tests etc. write as it is
+      }
     }
+
+    function generate974() {
+      // Get IDValue from      Product/RelatedMaterial/RelatedWork/WorkIdentifier/IDValue
+      const getIdvalue = getValue('RelatedMaterial', 'RelatedWork', 'WorkIdentifier', 'IDValue');
+      const gids = getValues('RelatedMaterial', 'RelatedWork', 'WorkIdentifier');
+
+      if (getIdvalue && gids && dataSource === source4Value) {
+        return gids.map(doEdits);
+      }
+
+      function doEdits(element) {
+        return {
+          tag: '974',
+          subfields: [
+            {code: 'a', value: 'KV'},
+            {code: 'b', value: element.IDValue[0]},
+            {code: '5', value: 'FENNI'}
+          ]
+        };
+      }
+      return [];
+    }
+
 
     function generateStandardIdentifiers() {
       const isbn = getIsbn();
@@ -354,30 +805,13 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
       }
     }
 
-    function generate040() {
-      return [
-        {
-          tag: '040',
-          subfields: [
-            {code: 'b', value: getLanguage()},
-            {code: 'e', value: 'rda'},
-            {code: 'd', value: 'FI-NL'}
-          ]
-        }
-      ];
-    }
-
-    function generate041() {
-      return getLanguageRole() === '01' ? [
-        {
-          tag: '041', subfields: [{code: 'a', value: getLanguage()}]
-        }
-      ] : [];
-    }
 
     function generateAuthors() {
+
       return authors.map(({name, role}, index) => {
-        if (index === 0) {
+
+        if (index === 0 && role === 'kirjoittaja') {
+
           return {
             tag: '100', ind1: '1',
             subfields: [
@@ -391,13 +825,15 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
           tag: '700', ind1: '1',
           subfields: [
             {code: 'a', value: name},
-            {code: 'e', value: role}
+            {code: 'e', value: `${role}.`}
           ]
         };
+
       });
     }
 
     function getAuthors() {
+
       return getValues('DescriptiveDetail', 'Contributor')
         .filter(filter)
         .map(normalize)
@@ -430,38 +866,55 @@ export default ({sources, moment = momentOrig}) => ({Product: record}) => {
   }
 
   function getTypeInformation() {
-    const form = getValue('DescriptiveDetail', 'ProductForm');
-    const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
 
-    if (form === 'AJ' && formDetail === 'A103') {
-      return {isAudio: true};
+    if (getValue('DescriptiveDetail', 'ProductFormDetail') && getValue('DescriptiveDetail', 'ProductForm')) {
+
+      const form = getValue('DescriptiveDetail', 'ProductForm');
+      const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
+
+      if (form === 'AJ' && formDetail === 'A103') {
+        return {isAudio: true};
+      }
+
+      if (form === 'AN' && formDetail === 'A103') { // <--- add 22.10.2020 / look email SN
+        return {isAudio: true};
+      }
+
+      if (['EB', 'EC', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) { // <--- added EC 22.10.2020 / look email SN
+        return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
+      }
     }
 
-    if (['EB', 'ED'].includes(form) && ['E101', 'E107'].includes(formDetail)) {
-      return {isText: true, textFormat: formDetail === 'E101' ? 'EPUB' : 'PDF'};
-    }
-  }
-
-  function getLanguageRole() {
-    return getValue('DescriptiveDetail', 'Language', 'LanguageRole');
-  }
-
-  function getSummary() {
-    const value = getValue('CollateralDetail', 'TextContent', 'Text');
-    return typeof value === 'object' ? value._ : value;
-  }
-
-  function getLanguage() {
-    const summary = getSummary();
-
-    if (summary && (/Huom\. kirja on englanninkielinen/u).test(summary)) {
-      return 'eng';
+    try {
+      throw new Error('Unidentified: not audio, not text');
+    } catch (e) {
+      logger.log('debug', 'Exception!');
     }
 
-    return getValue('DescriptiveDetail', 'Language', 'LanguageCode');
   }
+
 
   function isNotSupported() {
     return getValues('ProductIdentifier').some(({ProductIDType: [type], IDValue: [value]}) => type === '02' && (/^(?<def>951|952)/u).test(value) === false);
   }
+
+
+  function getSource() {
+    // Check first suppliername then sender name
+    // SupplierName
+    if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName')) {
+      const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SupplierName');
+      return gvalue;
+    }
+
+    // SenderName
+    if (getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName')) {
+      const gvalue = getValue('Product', 'ProductSupply', 'SupplyDetail', 'Supplier', 'SenderName');
+      return gvalue;
+    }
+
+    return sender.name;
+  }
 };
+
+

@@ -30,7 +30,9 @@ import {READERS} from '@natlibfi/fixura';
 import moment from 'moment';
 import {expect} from 'chai';
 import generateTests from '@natlibfi/fixugen';
+import {parseBoolean} from '@natlibfi/melinda-commons';
 import createTransformer from '.';
+
 
 generateTests({callback,
   path: [__dirname, '..', '..', 'test-fixtures', 'transform'],
@@ -41,11 +43,16 @@ generateTests({callback,
 
 function callback({getFixture}) {
   const momentMock = () => moment('2000-01-01T00:00:00');
-  const transform = createTransformer({sources: {foobar: 'foobar'}, moment: momentMock});
 
+  const isLegalDeposit = getFixture('isLegalDeposit.txt');
   const inputData = getFixture({components: ['input.xml'], reader: READERS.STREAM});
   const expectedRecord = getFixture({components: ['output.json'], reader: READERS.JSON});
   const expectedError = getFixture('error.txt');
+
+  const transform = createTransformer({sources: {foobar: 'foobar', barfoo: 'barfoo'},
+    source4Value: 'barfoo',
+    isLegalDeposit: parseBoolean(isLegalDeposit),
+    moment: momentMock});
 
   return new Promise((resolve, reject) => {
     const results = [];

@@ -31,9 +31,8 @@ import validateFactory from '@natlibfi/marc-record-validate';
 import {
   IsbnIssn as isbnIssn,
   FieldExclusion as fieldExclusion,
-  Urn as urn,
+  // Urn as urn,
   EndingPunctuation as endingPunctuation,
-  AccessRights as accessRights,
   ItemLanguage as itemLanguage,
   Punctuation as punctuation
 } from '@natlibfi/marc-record-validators-melinda';
@@ -41,14 +40,14 @@ import {
 export default async () => {
   const validate = validateFactory([
     await isbnIssn({hyphenateISBN: true}),
-    await urn(),
+    // Await urn(),
     await itemLanguage(/^520$/u),
     await fieldExclusion([
       {
         tag: /^520$/u
       }
     ]),
-    await accessRights(),
+    // Await accessRights(),
     await endingPunctuation(),
     await punctuation()
   ]);
@@ -56,6 +55,7 @@ export default async () => {
   return async (record, fix, validateFixes) => {
     const opts = fix ? {fix, validateFixes} : /* istanbul ignore next: The actual functionality is tested with the first condition */ {fix};
     const result = await validate(record, opts);
+
     return {
       record: result.record,
       failed: result.valid === false,

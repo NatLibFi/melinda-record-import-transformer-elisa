@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
+ <Header>
+  <Sender>
+   <SenderName>barfoo</SenderName>
+   <ContactName>ContactName</ContactName>
+   <EmailAddress>tuotetiedot@foobar.fi</EmailAddress>
+  </Sender>
+  <Addressee>
+   <AddresseeName>ADRESSEENAMEHERE</AddresseeName>
+  </Addressee>
+  <SentDateTime>20200409</SentDateTime>
+  <MessageNote>foobar tuotesanoma</MessageNote>
+ </Header>
+<Product>
+  <RecordReference>LMN123456789000</RecordReference>
+  <NotificationType>03</NotificationType>
+  <ProductIdentifier>
+   <ProductIDType>03</ProductIDType>
+   <IDValue>9789522793591</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>15</ProductIDType>
+   <IDValue>9789522793591</IDValue>
+  </ProductIdentifier>
+  <ProductIdentifier>
+   <ProductIDType>01</ProductIDType>
+   <IDTypeName>foobar tuotenumero</IDTypeName>
+   <IDValue>9789522793591</IDValue>
+  </ProductIdentifier>
+  <DescriptiveDetail>
+   <ProductComposition>00</ProductComposition>
+   <ProductForm>ED</ProductForm>
+   <ProductFormDetail>E101</ProductFormDetail>
+   <ProductFormFeature>
+    <ProductFormFeatureType>15</ProductFormFeatureType>
+    <ProductFormFeatureValue>101A</ProductFormFeatureValue>
+   </ProductFormFeature>
+   <PrimaryContentType>10</PrimaryContentType>
+   <EpubTechnicalProtection>02</EpubTechnicalProtection>
+   <Collection>
+    <CollectionType>10</CollectionType>
+    <TitleDetail>
+     <TitleType>01</TitleType>
+     <TitleElement>
+      <TitleElementLevel>02</TitleElementLevel>
+      <PartNumber>1</PartNumber>
+      <TitleText>It girl</TitleText>
+     </TitleElement>
+    </TitleDetail>
+   </Collection>
+   <TitleDetail>
+    <TitleType>01</TitleType>
+    <TitleElement>
+     <TitleElementLevel>01</TitleElementLevel>
+     <TitleText>It girl - Suosituksi yhdessä päivässä</TitleText>
+    </TitleElement>
+   </TitleDetail>
+   <TitleDetail>
+    <TitleType>03</TitleType>
+    <TitleElement>
+     <TitleElementLevel>01</TitleElementLevel>
+     <TitleText>The IT Girl</TitleText>
+    </TitleElement>
+   </TitleDetail>
+   <Contributor>
+    <SequenceNumber>1</SequenceNumber>
+    <ContributorRole>A01</ContributorRole>
+    <PersonName>Katy Birchall</PersonName>
+    <PersonNameInverted>Birchall, Katy</PersonNameInverted>
+    <NamesBeforeKey>Katy</NamesBeforeKey>
+    <KeyNames>Birchall</KeyNames>
+   </Contributor>
+   <Contributor>
+    <SequenceNumber>2</SequenceNumber>
+    <ContributorRole>B06</ContributorRole>
+    <PersonName>Eija Hirvonen</PersonName>
+    <PersonNameInverted>Hirvonen, Eija</PersonNameInverted>
+    <NamesBeforeKey>Eija</NamesBeforeKey>
+    <KeyNames>Hirvonen</KeyNames>
+   </Contributor>
+   <Language>
+    <LanguageRole>01</LanguageRole>
+    <LanguageCode>fin</LanguageCode>
+   </Language>
+   <Extent>
+    <ExtentType>10</ExtentType>
+    <ExtentValue>350</ExtentValue>
+    <ExtentUnit>03</ExtentUnit>
+   </Extent>
+   <Subject>
+    <SubjectSchemeIdentifier>73</SubjectSchemeIdentifier>
+    <SubjectSchemeName>Suomalainen Kirja-alan luokitus</SubjectSchemeName>
+    <SubjectCode>N</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
+    <SubjectSchemeName>YKL</SubjectSchemeName>
+    <SubjectCode>84.2</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
+    <SubjectSchemeName>foobar tuoteryhmä</SubjectSchemeName>
+    <SubjectCode>04</SubjectCode>
+    <SubjectHeadingText>lasten ja nuorten kirjat</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>isät</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>julkisuuden henkilöt</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>koulunkäynti</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>nörtit</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>suosio</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>tyttäret</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>tytöt</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>20</SubjectSchemeIdentifier>
+    <SubjectHeadingText>äitipuolet</SubjectHeadingText>
+   </Subject>
+   <Subject>
+    <MainSubject/>
+    <SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+    <SubjectCode>YFB</SubjectCode>
+   </Subject>
+   <Subject>
+    <SubjectSchemeIdentifier>98</SubjectSchemeIdentifier>
+    <SubjectCode>5AL</SubjectCode>
+   </Subject>
+  </DescriptiveDetail>
+  <CollateralDetail>
+   <TextContent>
+    <TextType>03</TextType>
+    <ContentAudience>00</ContentAudience>
+    <Text>Jotakin tekstiä tänne.</Text>
+   </TextContent>
+   <SupportingResource>
+    <ResourceContentType>01</ResourceContentType>
+    <ContentAudience>00</ContentAudience>
+    <ResourceMode>03</ResourceMode>
+    <ResourceVersion>
+     <ResourceForm>02</ResourceForm>
+     <ResourceLink>https://abc.foobar.fi/onix/media/2642194.jpg?size=original&amp;cl=20050&amp;ch=e817ef71170a540221d6b15546701501</ResourceLink>
+     <ContentDate>
+      <ContentDateRole>17</ContentDateRole>
+      <Date>20200408</Date>
+     </ContentDate>
+    </ResourceVersion>
+   </SupportingResource>
+  </CollateralDetail>
+  <PublishingDetail>
+   <Publisher>
+    <PublishingRole>01</PublishingRole>
+    <PublisherIdentifier>
+     <PublisherIDType>01</PublisherIDType>
+     <IDTypeName>foobar kustantajanumero</IDTypeName>
+     <IDValue>55555</IDValue>
+    </PublisherIdentifier>
+    <PublisherName>foobar</PublisherName>
+   </Publisher>
+   <CountryOfPublication>FI</CountryOfPublication>
+   <PublishingStatus>04</PublishingStatus>
+   <PublishingStatusNote>Saatavana/Tilattavissa</PublishingStatusNote>
+   <PublishingDate>
+    <PublishingDateRole>01</PublishingDateRole>
+    <Date>2016</Date>
+   </PublishingDate>
+   <PublishingDate>
+    <PublishingDateRole>12</PublishingDateRole>
+    <Date>2016</Date>
+   </PublishingDate>
+  </PublishingDetail>
+  <RelatedMaterial>
+   <RelatedWork>
+    <WorkRelationCode>01</WorkRelationCode>
+    <WorkIdentifier>
+     <WorkIDType>01</WorkIDType>
+     <IDTypeName>foobar teostunniste</IDTypeName>
+     <IDValue>BB7777777</IDValue>
+    </WorkIdentifier>
+   </RelatedWork>
+  </RelatedMaterial>
+ </Product>
+ </ONIXMessage>

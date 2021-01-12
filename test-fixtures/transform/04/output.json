@@ -20,7 +20,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "978-952-7196-25-0"
+            "value": "978-9916-605-32-5"
           },
           {
             "code": "q",
@@ -107,7 +107,7 @@
         "subfields": [
           {
             "code": "b",
-            "value": "Fitra,"
+            "value": "PublisherHere,"
           },
           {
             "code": "c",
@@ -185,21 +185,6 @@
         "ind2": " "
       },
       {
-        "tag": "344",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "digitaalinen"
-          },
-          {
-            "code": "2",
-            "value": "rda"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
         "tag": "347",
         "subfields": [
           {
@@ -209,10 +194,6 @@
           {
             "code": "b",
             "value": "PDF"
-          },
-          {
-            "code": "2",
-            "value": "rda"
           }
         ],
         "ind1": " ",
@@ -220,18 +201,14 @@
       },
       {
         "tag": "500",
-        "ind1": " ",
-        "ind2": " ",
         "subfields": [
           {
             "code": "a",
             "value": "Koneellisesti tuotettu tietue."
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
           }
-        ]
+        ],
+        "ind1": " ",
+        "ind2": " "
       },
       {
         "tag": "506",
@@ -243,7 +220,7 @@
           },
           {
             "code": "f",
-            "value": "Online access with authorization."
+            "value": "Online access with authorization"
           },
           {
             "code": "2",
@@ -292,13 +269,28 @@
         "ind2": " "
       },
       {
+        "tag": "594",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Koneellisesti tuotettu tietue"
+          },
+          {
+            "code": "5",
+            "value": "FENNI"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
         "tag": "856",
         "ind1": "4",
         "ind2": "0",
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:978-952-7196-25-0"
+            "value": "http://urn.fi/URN:ISBN:978-9916-605-32-5"
           },
           {
             "code": "z",
@@ -352,27 +344,19 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 9789527196250 is not valid"
+        "ISBN (9789916605325) is not valid"
       ]
     },
     {
-      "description": "Adds URN for record, to 856-field (if not existing)",
-      "state": "fixed"
-    },
-    {
       "description": "Handles invalid/missing item language code",
+      "state": "valid",
       "messages": [
         "Language detection failed"
-      ],
-      "state": "valid"
+      ]
     },
     {
       "description": "Checks that the record does not contain the configured fields",
-      "state": "fixed"
-    },
-    {
-      "description": "Adds access rights fields for a record (if not existing)",
-      "state": "fixed"
+      "state": "valid"
     },
     {
       "description": "Handles invalid ending punctuation",

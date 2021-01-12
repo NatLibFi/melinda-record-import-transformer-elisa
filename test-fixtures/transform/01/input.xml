@@ -2,34 +2,29 @@
 <ONIXMessage xmlns="http://ns.editeur.org/onix/3.0/reference" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" release="3.0" xsi:schemaLocation="http://ns.editeur.org/onix/3.0/reference http://intranet/onix/ONIX_BookProduct_3.0_reference.xsd">
   <Header>
     <Sender>
-      <SenderName>Elisa Kirja</SenderName>
-      <Header>
-        <Sender>
-          <SenderName>foobar</SenderName>
-        </Sender>
-        <Addressee>
-          <AddresseeName>barfoo</AddresseeName>
-        </Addressee>
-        <MessageNumber>1</MessageNumber>
-        <SentDateTime>20190402T1042</SentDateTime>
-      </Header>
+      <SenderName>foobar</SenderName>
     </Sender>
+    <Addressee>
+      <AddresseeName>barfoo</AddresseeName>
+    </Addressee>
+    <MessageNumber>1</MessageNumber>
+    <SentDateTime>20190402T1042</SentDateTime>
   </Header>
   <Product>
-    <RecordReference>ElisaKirja115288</RecordReference>
+    <RecordReference>ABCDEF123456</RecordReference>
     <NotificationType>03</NotificationType>
     <ProductIdentifier>
       <ProductIDType>01</ProductIDType>
-      <IDTypeName>NID</IDTypeName>
-      <IDValue>115288</IDValue>
+      <IDTypeName>AAA</IDTypeName>
+      <IDValue>654321</IDValue>
     </ProductIdentifier>
     <ProductIdentifier>
       <ProductIDType>03</ProductIDType>
-      <IDValue>9789520402631</IDValue>
+      <IDValue>1212121212121</IDValue>
     </ProductIdentifier>
     <ProductIdentifier>
       <ProductIDType>15</ProductIDType>
-      <IDValue>9789520402631</IDValue>
+      <IDValue>9789916605325</IDValue>
     </ProductIdentifier>
     <DescriptiveDetail>
       <ProductComposition>00</ProductComposition>
@@ -67,7 +62,7 @@
     <PublishingDetail>
       <Publisher>
         <PublishingRole>01</PublishingRole>
-        <PublisherName>Tammi</PublisherName>
+        <PublisherName>PublisherCompany</PublisherName>
       </Publisher>
       <CountryOfPublication>FI</CountryOfPublication>
       <PublishingStatus>04</PublishingStatus>

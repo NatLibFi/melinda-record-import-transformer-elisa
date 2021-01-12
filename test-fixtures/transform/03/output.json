@@ -24,7 +24,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "978-87-11-86207-0"
+            "value": "978-9916-605-32-5"
           },
           {
             "code": "q",
@@ -57,7 +57,7 @@
         "tag": "041",
         "subfields": [
           {
-            "code": "a",
+            "code": "d",
             "value": "fin"
           }
         ],
@@ -107,7 +107,7 @@
         "subfields": [
           {
             "code": "b",
-            "value": "Saga Egmont,"
+            "value": "PublisherCompany,"
           },
           {
             "code": "c",
@@ -190,10 +190,6 @@
           {
             "code": "a",
             "value": "digitaalinen"
-          },
-          {
-            "code": "2",
-            "value": "rda"
           }
         ],
         "ind1": " ",
@@ -209,10 +205,6 @@
           {
             "code": "b",
             "value": "MP3"
-          },
-          {
-            "code": "2",
-            "value": "rda"
           }
         ],
         "ind1": " ",
@@ -220,33 +212,14 @@
       },
       {
         "tag": "500",
-        "subfields": [
-          {
-            "code": "a",
-            "value": "Äänikirja."
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
-          }
-        ],
-        "ind1": " ",
-        "ind2": " "
-      },
-      {
-        "tag": "500",
-        "ind1": " ",
-        "ind2": " ",
         "subfields": [
           {
             "code": "a",
             "value": "Koneellisesti tuotettu tietue."
-          },
-          {
-            "code": "9",
-            "value": "FENNI<KEEP>"
           }
-        ]
+        ],
+        "ind1": " ",
+        "ind2": " "
       },
       {
         "tag": "506",
@@ -258,7 +231,7 @@
           },
           {
             "code": "f",
-            "value": "Online access with authorization."
+            "value": "Online access with authorization"
           },
           {
             "code": "2",
@@ -307,23 +280,19 @@
         "ind2": " "
       },
       {
-        "tag": "655",
-        "ind2": "7",
+        "tag": "594",
         "subfields": [
           {
             "code": "a",
-            "value": "äänikirjat"
+            "value": "Koneellisesti tuotettu tietue"
           },
           {
-            "code": "2",
-            "value": "slm/fin"
-          },
-          {
-            "code": "0",
-            "value": "http://urn.fi/URN:NBN:fi:au:slm:s579"
+            "code": "5",
+            "value": "FENNI"
           }
         ],
-        "ind1": " "
+        "ind1": " ",
+        "ind2": " "
       },
       {
         "tag": "700",
@@ -347,7 +316,7 @@
         "subfields": [
           {
             "code": "u",
-            "value": "http://urn.fi/URN:ISBN:978-87-11-86207-0"
+            "value": "http://urn.fi/URN:ISBN:978-9916-605-32-5"
           },
           {
             "code": "z",
@@ -401,27 +370,19 @@
       "description": "Validates ISBN and ISSN values",
       "state": "fixed",
       "messages": [
-        "ISBN 9788711862070 is not valid"
+        "ISBN (9789916605325) is not valid"
       ]
     },
     {
-      "description": "Adds URN for record, to 856-field (if not existing)",
-      "state": "fixed"
-    },
-    {
       "description": "Handles invalid/missing item language code",
+      "state": "valid",
       "messages": [
         "Language detection failed"
-      ],
-      "state": "valid"
+      ]
     },
     {
       "description": "Checks that the record does not contain the configured fields",
-      "state": "fixed"
-    },
-    {
-      "description": "Adds access rights fields for a record (if not existing)",
-      "state": "fixed"
+      "state": "valid"
     },
     {
       "description": "Handles invalid ending punctuation",

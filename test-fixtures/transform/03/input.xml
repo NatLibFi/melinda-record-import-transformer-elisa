@@ -15,16 +15,16 @@
     <NotificationType>03</NotificationType>
     <ProductIdentifier>
       <ProductIDType>01</ProductIDType>
-      <IDTypeName>NID</IDTypeName>
+      <IDTypeName>HIJ</IDTypeName>
       <IDValue>foobar</IDValue>
     </ProductIdentifier>
     <ProductIdentifier>
       <ProductIDType>03</ProductIDType>
-      <IDValue>9788711862070</IDValue>
+      <IDValue>555555555555</IDValue>
     </ProductIdentifier>
     <ProductIdentifier>
       <ProductIDType>15</ProductIDType>
-      <IDValue>9788711862070</IDValue>
+      <IDValue>9789916605325</IDValue>
     </ProductIdentifier>
     <DescriptiveDetail>
       <ProductComposition>00</ProductComposition>
@@ -60,7 +60,7 @@
     <PublishingDetail>
       <Publisher>
         <PublishingRole>01</PublishingRole>
-        <PublisherName>Saga Egmont</PublisherName>
+        <PublisherName>PublisherCompany</PublisherName>
       </Publisher>
       <CountryOfPublication>FI</CountryOfPublication>
       <PublishingStatus>04</PublishingStatus>
