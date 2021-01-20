@@ -497,7 +497,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         }
       }
 
-      //return [];
       //--->  for alternate way
       return [
         {
@@ -641,18 +640,21 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
     }
 
-    function generate856() { // PREV: async  rem 12.11.2020
+    function generate856() {
       const isbn = getIsbn();
+
+      if (!isbn) {
+        logger.log('debug', 'Exception: 856, getIsbn; isbn');
+        return [];
+      }
+
       const parsedIsbn = ISBN.parse(isbn);
 
 
-      // ---> 18.1.2021
       if (parsedIsbn === undefined) {
         logger.log('debug', 'Exception: parsedIsbn');
         return [];
       }
-      // <--- 18.1.2021
-
 
       if (dataSource === source4Value) {
         if (getValue('NotificationType') === '03' && isLegalDeposit === true) {
@@ -662,7 +664,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
               ind1: '4',
               ind2: '0',
               subfields: [
-                {code: 'u', value: `http://urn.fi/URN:ISBN:${parsedIsbn.isbn13h}`}, // PREV: subUvalue / isbn
+                {code: 'u', value: `http://urn.fi/URN:ISBN:${parsedIsbn.isbn13h}`},
                 {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
                 {code: '5', value: 'FI-Vapaa'}
               ]
@@ -681,29 +683,13 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           return isbn13.IDValue[0];
         }
 
-        // ---> 18.1.2021
         if (getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0]) {
           return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
         }
 
-        logger.log('debug', 'Exception: 856, getIsbn');
-        return '1111111111111';
-        // <--- 18.1.2021
-
-        // ORIG // return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
+        return false;
       }
 
-      /*   // rem 12.11.2020 ->
-      async function createURN(isbn = true) { // ALKUP: false
-        if (isbn) {
-          return `http://urn.fi/URN:ISBN:${isbn}`;
-        }
-
-        const response = await fetch(URN_GENERATOR_URL);
-        const body = await response.text();
-        return `http://urn.fi/${body}`;
-      }
-      */
 
       //--->  for alternate way
       return [
@@ -917,13 +903,11 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       logger.log('debug', 'Exception: TypeInfo');
     }
 
-    // ---> 15.1.2021
     if (getValue('DescriptiveDetail', 'ProductFormDetail') && getValue('DescriptiveDetail', 'ProductForm')) {
       return {isAudio: false, isText: false}; // just in case, get something
     }
 
     return {isAudio: false, isText: false};
-    // <--- 15.1.2021
 
 
   }
