@@ -649,23 +649,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return [];
       }
 
-      // ---> 20.1.2021
-      const isbnAudit = ISBN.audit(isbn);
-      if (!isbnAudit.validIsbn) {
-        logger.log('debug', 'Exception: 856, Not valid Isbn');
-        return [];
-      }
-      // ---> 20.1.2021
-
-
-      const parsedIsbn = ISBN.parse(isbn);
-
-
-      if (parsedIsbn === undefined) {
-        logger.log('debug', 'Exception: parsedIsbn');
-        return [];
-      }
-
       if (dataSource === source4Value) {
         if (getValue('NotificationType') === '03' && isLegalDeposit === true) {
           return [
@@ -674,7 +657,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
               ind1: '4',
               ind2: '0',
               subfields: [
-                {code: 'u', value: `http://urn.fi/URN:ISBN:${parsedIsbn.isbn13h}`},
+                {code: 'u', value: `http://urn.fi/URN:ISBN:${isbn.isbn13h}`},
                 {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
                 {code: '5', value: 'FI-Vapaa'}
               ]
@@ -693,7 +676,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           ind1: '4',
           ind2: '0',
           subfields: [
-            {code: 'u', value: `http://urn.fi/URN:ISBN:${parsedIsbn.isbn13h}`}, // PREV: subUvalue / isbn
+            {code: 'u', value: `http://urn.fi/URN:ISBN:${isbn.isbn13h}`},
             {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
             {code: '5', value: 'FI-Vapaa'}
           ]
@@ -772,22 +755,13 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return [];
       }
 
-      // ---> 20.1.2021
-      const isbnAudit = ISBN.audit(isbn);
-      if (!isbnAudit.validIsbn) {
-        logger.log('debug', 'Exception: generateStandardIdentifiers, Not valid Isbn');
-        return [];
-      }
-      // ---> 20.1.2021
-
-
       if (isbn) {
         if (isAudio || isText) {
           return [
             {
               tag: '020',
               subfields: [
-                {code: 'a', value: isbn},
+                {code: 'a', value: isbn.isbn13h},
                 {code: 'q', value: isAudio ? 'MP3' : textFormat}
               ]
             }
@@ -797,7 +771,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return [
           {
             tag: '020',
-            subfields: [{code: 'a', value: isbn}]
+            subfields: [{code: 'a', value: isbn.isbn13h}]
           }
         ];
       }
@@ -916,11 +890,19 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     return getValues('ProductIdentifier').some(({ProductIDType: [type], IDValue: [value]}) => type === '02' && (/^(?<def>951|952)/u).test(value) === false);
   }
 
-  function getIsbn() {
-    const isbn13 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
 
-    if (isbn13) {
-      return isbn13.IDValue[0];
+  function getIsbn() {
+    const isbn15 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
+
+    if (isbn15) {
+      const isbnAudit = ISBN.audit(isbn15.IDValue[0]);
+      if (!isbnAudit.validIsbn) {
+        logger.log('debug', 'Exception: getIsbn, Audit');
+        return false;
+      }
+
+      const {isbn10, isbn10h, isbn13, isbn13h} = ISBN.parse(isbn15.IDValue[0]);
+      return {isbn10, isbn10h, isbn13, isbn13h};
     }
 
     if (getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0]) {

@@ -17,11 +17,11 @@
   <NotificationType>02</NotificationType>
   <ProductIdentifier>
    <ProductIDType>03</ProductIDType>
-   <IDValue>8888888888888</IDValue>
+   <IDValue>978-9916-605-32-5</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>15</ProductIDType>
-   <IDValue>8888888888888</IDValue>
+   <IDValue>978-9916-605-32-5</IDValue>
   </ProductIdentifier>
   <ProductIdentifier>
    <ProductIDType>01</ProductIDType>
@@ -146,4 +146,4 @@
    </PublishingDate>
   </PublishingDetail>
  </Product>
-</ONIXMessage> 
+</ONIXMessage>
