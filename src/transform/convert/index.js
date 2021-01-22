@@ -497,7 +497,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         }
       }
 
-      //return [];
       //--->  for alternate way
       return [
         {
@@ -593,7 +592,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       const contribrole = getValue('DescriptiveDetail', 'Contributor', 'ContributorRole');
       const personNameInverted = getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted');
 
-
       if (contribrole && personNameInverted) {
         return getValues('DescriptiveDetail', 'Contributor').filter(filter).map(makeRows);
       }
@@ -606,11 +604,20 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           ind1: '1',
           ind2: ' ',
           subfields: [
-            {code: 'a', value: `${element.PersonNameInverted[0]},`},
+            {code: 'a', value: getName(element)},
             {code: 'e', value: changeValues(element.ContributorRole[0])}
           ]
         };
+
+        function getName() {
+          if (personNameInverted !== undefined && element.PersonNameInverted !== undefined) {
+            return element.PersonNameInverted[0];
+          }
+          return 'Unnamed person';
+        }
+
       }
+
 
       function filter({ContributorRole}) {
         return ['B06', 'A12', 'B01'].includes(ContributorRole?.[0]); // Excluded 'E07', generateAuthors makes it already
@@ -633,9 +640,14 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
     }
 
-    function generate856() { // PREV: async  rem 12.11.2020
+
+    function generate856() {
       const isbn = getIsbn();
-      const parsedIsbn = ISBN.parse(isbn);
+
+      if (!isbn) {
+        logger.log('debug', 'Exception: 856, getIsbn; isbn');
+        return [];
+      }
 
       if (dataSource === source4Value) {
         if (getValue('NotificationType') === '03' && isLegalDeposit === true) {
@@ -645,7 +657,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
               ind1: '4',
               ind2: '0',
               subfields: [
-                {code: 'u', value: `http://urn.fi/URN:ISBN:${parsedIsbn.isbn13h}`}, // PREV: subUvalue / isbn
+                {code: 'u', value: `http://urn.fi/URN:ISBN:${isbn.isbn13h}`},
                 {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
                 {code: '5', value: 'FI-Vapaa'}
               ]
@@ -657,28 +669,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
 
 
-      function getIsbn() {
-        const isbn13 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
-
-        if (isbn13) {
-          return isbn13.IDValue[0];
-        }
-
-        return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
-      }
-
-      /*   // rem 12.11.2020 ->
-      async function createURN(isbn = true) { // ALKUP: false
-        if (isbn) {
-          return `http://urn.fi/URN:ISBN:${isbn}`;
-        }
-
-        const response = await fetch(URN_GENERATOR_URL);
-        const body = await response.text();
-        return `http://urn.fi/${body}`;
-      }
-      */
-
       //--->  for alternate way
       return [
         {
@@ -686,7 +676,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           ind1: '4',
           ind2: '0',
           subfields: [
-            {code: 'u', value: `http://urn.fi/URN:ISBN:${parsedIsbn.isbn13h}`}, // PREV: subUvalue / isbn
+            {code: 'u', value: `http://urn.fi/URN:ISBN:${isbn.isbn13h}`},
             {code: 'z', value: 'Käytettävissä vapaakappalekirjastoissa'},
             {code: '5', value: 'FI-Vapaa'}
           ]
@@ -760,13 +750,18 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     function generateStandardIdentifiers() {
       const isbn = getIsbn();
 
+      if (!isbn) {
+        logger.log('debug', 'Exception: generateStandardIdentifiers, getIsbn; isbn');
+        return [];
+      }
+
       if (isbn) {
         if (isAudio || isText) {
           return [
             {
               tag: '020',
               subfields: [
-                {code: 'a', value: isbn},
+                {code: 'a', value: isbn.isbn13h},
                 {code: 'q', value: isAudio ? 'MP3' : textFormat}
               ]
             }
@@ -776,7 +771,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return [
           {
             tag: '020',
-            subfields: [{code: 'a', value: isbn}]
+            subfields: [{code: 'a', value: isbn.isbn13h}]
           }
         ];
       }
@@ -793,16 +788,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
 
       return [];
-
-      function getIsbn() {
-        const isbn13 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
-
-        if (isbn13) {
-          return isbn13.IDValue[0];
-        }
-
-        return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
-      }
     }
 
 
@@ -888,8 +873,15 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     try {
       throw new Error('Unidentified: not audio, not text');
     } catch (e) {
-      logger.log('debug', 'Exception!');
+      logger.log('debug', 'Exception: TypeInfo');
     }
+
+    if (getValue('DescriptiveDetail', 'ProductFormDetail') && getValue('DescriptiveDetail', 'ProductForm')) {
+      return {isAudio: false, isText: false}; // just in case, get something
+    }
+
+    return {isAudio: false, isText: false};
+
 
   }
 
@@ -898,6 +890,27 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     return getValues('ProductIdentifier').some(({ProductIDType: [type], IDValue: [value]}) => type === '02' && (/^(?<def>951|952)/u).test(value) === false);
   }
 
+
+  function getIsbn() {
+    const isbn15 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
+
+    if (isbn15) {
+      const isbnAudit = ISBN.audit(isbn15.IDValue[0]);
+      if (!isbnAudit.validIsbn) {
+        logger.log('debug', 'Exception: getIsbn, Audit');
+        return false;
+      }
+
+      const {isbn10, isbn10h, isbn13, isbn13h} = ISBN.parse(isbn15.IDValue[0]);
+      return {isbn10, isbn10h, isbn13, isbn13h};
+    }
+
+    if (getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0]) {
+      return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
+    }
+
+    return false;
+  }
 
   function getSource() {
     // Check first suppliername then sender name
