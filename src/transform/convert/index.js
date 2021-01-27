@@ -377,6 +377,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     function generate511() {
 
       if (getValue('DescriptiveDetail', 'Contributor', 'PersonName')) {
+
         const theData = getValues('DescriptiveDetail', 'Contributor').filter(filter);
         const dataMapped = theData.map(makeFields);
 
@@ -387,7 +388,17 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return ['E07'].includes(ContributorRole?.[0]);
       }
 
+
       function makeFields(element) {
+
+        if (!element.PersonName) {
+          return {
+            tag: '511',
+            ind1: '0',
+            subfields: [{code: '9', value: 'FENNI<KEEP>'}]
+          };
+        }
+
         return {
           tag: '511',
           ind1: '0',
@@ -696,7 +707,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           subfields: [
             {code: 'a', value: 'ONIX3 to MARC transformation'},
             {code: 'g', value: moment().format('YYYYMMDD')},
-            // {code: 'k', value: sources[dataSource]}, // Was: sources.supplier  //dataSource
+            // {code: 'k', value: sources[dataSource]},
             {code: 'k', value: tellSource}, // 6.11.2020
             {code: 'q', value: 'FI-NL'}
           ]
@@ -896,6 +907,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     if (isbn15) {
       const isbnAudit = ISBN.audit(isbn15.IDValue[0]);
+
       if (!isbnAudit.validIsbn) {
         logger.log('debug', 'Exception: getIsbn, Audit');
         return false;
@@ -905,8 +917,21 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       return {isbn10, isbn10h, isbn13, isbn13h};
     }
 
-    if (getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0]) {
-      return getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
+    const fromType02 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
+    if (fromType02) {
+
+      if (fromType02.length < 13) {
+        return false;
+      }
+
+      const isbnAudit = ISBN.audit(fromType02.IDValue[0]);
+      if (!isbnAudit.validIsbn) {
+        logger.log('debug', 'Exception: getIsbnFrom2, Audit');
+        return false;
+      }
+
+      const {isbn10, isbn10h, isbn13, isbn13h} = ISBN.parse(fromType02.IDValue[0]);
+      return {isbn10, isbn10h, isbn13, isbn13h};
     }
 
     return false;
