@@ -906,6 +906,12 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     const isbn15 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
 
     if (isbn15) {
+
+      if (isbn15.length < 13) {
+        logger.log('debug', 'isbn15 length - Check: ', isbn15);
+        return false;
+      }
+
       const isbnAudit = ISBN.audit(isbn15.IDValue[0]);
 
       if (!isbnAudit.validIsbn) {
@@ -917,10 +923,12 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       return {isbn10, isbn10h, isbn13, isbn13h};
     }
 
+
     const fromType02 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
     if (fromType02) {
 
       if (fromType02.length < 13) {
+        logger.log('debug', 'isbn Type02 length - Check: ', fromType02);
         return false;
       }
 
