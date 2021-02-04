@@ -905,12 +905,12 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
   function getIsbn() {
     const isbn15 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
 
-    if (isbn15) {
+    if (isbn15 === undefined) {
+      logger.log('debug', 'isbn15 undefined. ');
+      return false;
+    }
 
-      if (isbn15.length < 13) {
-        logger.log('debug', 'isbn15 length - Check: ', isbn15);
-        return false;
-      }
+    if (isbn15) {
 
       const isbnAudit = ISBN.audit(isbn15.IDValue[0]);
 
@@ -925,12 +925,13 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     const fromType02 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
-    if (fromType02) {
 
-      if (fromType02.length < 13) {
-        logger.log('debug', 'isbn Type02 length - Check: ', fromType02);
-        return false;
-      }
+    if (fromType02 === undefined) {
+      logger.log('debug', 'isbn Type02 undefined. ');
+      return false;
+    }
+
+    if (fromType02) {
 
       const isbnAudit = ISBN.audit(fromType02.IDValue[0]);
       if (!isbnAudit.validIsbn) {
