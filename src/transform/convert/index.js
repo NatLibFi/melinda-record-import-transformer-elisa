@@ -892,15 +892,11 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
 
     return {isAudio: false, isText: false};
-
-
   }
-
 
   function isNotSupported() {
     return getValues('ProductIdentifier').some(({ProductIDType: [type], IDValue: [value]}) => type === '02' && (/^(?<def>951|952)/u).test(value) === false);
   }
-
 
   function getIsbn() {
     const isbn15 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '15');
@@ -911,7 +907,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
 
     if (isbn15) {
-
       const isbnAudit = ISBN.audit(isbn15.IDValue[0]);
 
       if (!isbnAudit.validIsbn) {
@@ -923,7 +918,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       return {isbn10, isbn10h, isbn13, isbn13h};
     }
 
-
     const fromType02 = getValues('ProductIdentifier').find(({ProductIDType: [type]}) => type === '02')?.IDValue?.[0];
 
     if (fromType02 === undefined) {
@@ -932,8 +926,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
 
     if (fromType02) {
-
       const isbnAudit = ISBN.audit(fromType02.IDValue[0]);
+
       if (!isbnAudit.validIsbn) {
         logger.log('debug', 'Exception: getIsbnFrom2, Audit');
         return false;
