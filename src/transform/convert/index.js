@@ -35,7 +35,7 @@ import NotSupportedError from './../../error';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 import {generate006, generate007, generate008} from './generateControlFields';
 import {generate040, generate041, generate084a, generate084b} from './generate0XXFields.js';
-import {generate250, generate263, generate264} from './generate2XXFields.js';
+import {generate240, generate250, generate263, generate264} from './generate2XXFields.js';
 import {generate300, generate336, generate344, generate347} from './generate3XXFields.js';
 import ISBN from 'isbn3';
 
@@ -63,16 +63,20 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
   }
 
   const marcRecord = new MarcRecord();
-  const {isAudio, isText, textFormat} = getTypeInformation();
 
-  marcRecord.leader = generateLeader(); // eslint-disable-line functional/immutable-data
-
-  const generatedFields = await generateFields();
-  generatedFields.forEach(f => marcRecord.insertField(f));
+  try {
+    const {isAudio, isText, textFormat} = getTypeInformation();
+    marcRecord.leader = generateLeader(isAudio, isText, textFormat); // eslint-disable-line functional/immutable-data
+    const generatedFields = await generateFields(isAudio, isText, textFormat);
+    generatedFields.forEach(f => marcRecord.insertField(f));
+  } catch (error) {
+    logger.log('error', 'Record typing failed. Skipping record');
+    return false;
+  }
 
   return marcRecord;
 
-  function generateLeader() {
+  function generateLeader(isAudio, isText) {
     const type = generateType();
     const bibliographicLevel = generateBibliographicLevel();
     const encodingLevel = generateEncodingLevel();
@@ -82,18 +86,18 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     function generateEncodingLevel() {
 
       /* Old code left here just in case ->
-      Const encodingLevels = {
-        '01': '3',
-        '02': '5',
-        '03': '8',
-        '04': '8',
-        '05': 'J',
-        '08': '8',
-        '09': '8'
-      };
+          Const encodingLevels = {
+            '01': '3',
+            '02': '5',
+            '03': '8',
+            '04': '8',
+            '05': 'J',
+            '08': '8',
+            '09': '8'
+          };
 
-      const notificationType = getValue('NotificationType');
-      return encodingLevels[notificationType] || '|';
+          const notificationType = getValue('NotificationType');
+          return encodingLevels[notificationType] || '|';
       */
       return '8'; // 2.11.2020: wanted same value for all Onix
     }
@@ -115,7 +119,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
   }
 
-  async function generateFields() {
+  async function generateFields(isAudio, isText, textFormat) {
 
     const authors = getAuthors();
 
@@ -127,6 +131,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       generate041(record),
       generate084a(record, dataSource, source4Value),
       generate084b(record, dataSource, source4Value),
+      generate240(record),
       generate250(record, dataSource, source4Value),
       generate263(record, dataSource, source4Value),
       generate264(record),
@@ -150,6 +155,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       generateStandardIdentifiers(),
       generateTitles(record, authors),
       generateAuthors(),
+      generateSID(),
       generateStaticFields()
     ].flat();
 
@@ -545,29 +551,44 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
     }
 
+
     function generate653() {
-      // Added only if SubjectSchemeIdentifier = 20, 64, 71 or 72
-      // A| <- SubjectHeadingText
+
       const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
 
       if (SubScheIde && dataSource === source4Value) {
-        return getValues('DescriptiveDetail', 'Subject').filter(filter).map(makeRows);
+        const values = getValues('DescriptiveDetail', 'Subject').filter(filter).map(makeRows);
+        return values.filter(value => value !== false);
       }
 
+      return [];
 
       function makeRows(element) {
 
+        const value = getData(element);
+
+        if (!value) {
+          return false;
+        }
+
         return {
           tag: '653',
-          subfields: [{code: 'a', value: element.SubjectHeadingText[0]}]
+          subfields: [{code: 'a', value}]
         };
+
+        function getData() {
+          if (element.SubjectHeadingText === undefined) {
+            logger.log('debug', 'Exception: 653 - element.SubjectHeadingText');
+            return false;
+          }
+
+          return element.SubjectHeadingText[0];
+        }
       }
 
       function filter({SubjectSchemeIdentifier}) {
         return ['20', '64', '71', '72'].includes(SubjectSchemeIdentifier?.[0]);
       }
-
-      return [];
     }
 
 
@@ -656,7 +677,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       const isbn = getIsbn();
 
       if (!isbn) {
-        logger.log('debug', 'Exception: 856, getIsbn; isbn');
+        //logger.log('debug', 'Exception: 856, getIsbn; isbn');
         return [];
       }
 
@@ -762,7 +783,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       const isbn = getIsbn();
 
       if (!isbn) {
-        logger.log('debug', 'Exception: generateStandardIdentifiers, getIsbn; isbn');
+        //logger.log('debug', 'Exception: generateStandardIdentifiers, getIsbn; isbn');
         return [];
       }
 
@@ -861,7 +882,32 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
   }
 
+
   function getTypeInformation() {
+
+    const pfd = getValue('DescriptiveDetail', 'ProductFormDetail');
+    const pfds = getValues('DescriptiveDetail', 'ProductFormDetail'); // may have many values
+
+    if (dataSource === source4Value) {
+
+      const recRef = getValue('Product', 'RecordReference');
+
+      if (!recRef) { // eslint-disable-line functional/no-conditional-statement
+        logger.log(`No RecordReferenceID found - SKIP`);
+        throw new Error('Unidentified: not audio, not text');
+      }
+
+      if (!pfd) { // eslint-disable-line functional/no-conditional-statement
+        logger.log(`NOT ANY ProductFormDetail found - SKIP  ${recRef}`);
+        throw new Error('Unidentified: not audio, not text');
+      }
+
+      if (pfds && pfds.length > 1) { // eslint-disable-line functional/no-conditional-statement
+        logger.log(`Many ProductFormDetails -SKIP  ${recRef}`);
+        throw new Error('Unidentified: not audio, not text');
+      }
+
+    }
 
     if (getValue('DescriptiveDetail', 'ProductFormDetail') && getValue('DescriptiveDetail', 'ProductForm')) {
 
@@ -884,15 +930,11 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     try {
       throw new Error('Unidentified: not audio, not text');
     } catch (e) {
-      logger.log('debug', 'Exception: TypeInfo');
+      logger.log('debug', `Exception: TypeInfo.`);
     }
 
-    if (getValue('DescriptiveDetail', 'ProductFormDetail') && getValue('DescriptiveDetail', 'ProductForm')) {
-      return {isAudio: false, isText: false}; // just in case, get something
-    }
-
-    return {isAudio: false, isText: false};
   }
+
 
   function isNotSupported() {
     return getValues('ProductIdentifier').some(({ProductIDType: [type], IDValue: [value]}) => type === '02' && (/^(?<def>951|952)/u).test(value) === false);
@@ -956,6 +998,34 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     return sender.name;
   }
+
+
+  function generateSID() {
+
+    if (dataSource === source4Value) {
+
+      const recRef = getValue('Product', 'RecordReference');
+
+      if (recRef === undefined) {
+        logger.log('debug', 'Exception: no RecordReference/SID');
+        return [];
+      }
+
+      return [
+        {
+          tag: 'SID',
+          subfields: [
+            {code: 'c', value: `${recRef}`},
+            {code: 'b', value: 'FI-KV'}
+          ]
+        }
+      ];
+    }
+
+    return [];
+  }
+
+
 };
 
 

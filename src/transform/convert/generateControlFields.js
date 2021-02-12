@@ -77,7 +77,7 @@ export function generate008({moment, record, dataSource, source4Value}) {
     const CheckSubjectCode = getValue('DescriptiveDetail', 'Subject', 'SubjectCode');
 
     if (CheckSubjectSchemeName && CheckSubjectCode) {
-      if (CheckSubjectSchemeName === 'Kirjav�lityksen tuoteryhm�' && CheckSubjectCode === '03' && dataSource === source4Value) {
+      if (CheckSubjectSchemeName === 'Kirjavälityksen tuoteryhmä' && CheckSubjectCode === '03' && dataSource === source4Value) {
         return '0';
       }
 
