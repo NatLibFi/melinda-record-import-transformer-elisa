@@ -1,10 +1,46 @@
 import {createValueInterface} from './common';
 
+export function generate240(record) {
+
+  const {getValue, getValues} = createValueInterface(record);
+
+  const titleText = getValue('Product', 'DescriptiveDetail', 'TitleDetail', 'TitleElement', 'TitleText');
+
+  if (titleText) {
+    const theData = getValues('DescriptiveDetail', 'TitleDetail').filter(filter);
+
+    if (theData.length > 0) {
+      const dataMapped = theData.map(makeFields);
+      return dataMapped.filter(value => value !== false);
+    }
+
+  }
+
+  return [];
+
+  function filter({TitleType}) {
+    return ['03'].includes(TitleType?.[0]);
+  }
+
+  function makeFields(element) {
+
+    if (!element.TitleType || !element.TitleElement[0].TitleText[0]) {
+      return false;
+    }
+
+    return {
+      tag: '240',
+      subfields: [{code: 'a', value: `${element.TitleElement[0].TitleText[0]}`}]
+    };
+  }
+
+}
+
+
 export function generate250(record, dataSource, source4Value) {
   // Generate only if EditionNumber exists!
 
   const {getValue} = createValueInterface(record);
-
   const editionNr = getValue('DescriptiveDetail', 'EditionNumber');
 
   if (editionNr && dataSource === source4Value) {

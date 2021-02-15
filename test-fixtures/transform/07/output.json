@@ -116,7 +116,7 @@
         "subfields": [
           {
             "code": "a",
-            "value": "Huomisen yhteiskunta :"
+            "value": "Huomisen yhteiskunta:"
           },
           {
             "code": "b",
@@ -437,6 +437,21 @@
           {
             "code": "a",
             "value": "FIKKA"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "SID",
+        "subfields": [
+          {
+            "code": "c",
+            "value": "ABC7777777"
+          },
+          {
+            "code": "b",
+            "value": "FI-KV"
           }
         ],
         "ind1": " ",

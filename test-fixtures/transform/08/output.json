@@ -140,6 +140,17 @@
         "ind2": " "
       },
       {
+        "tag": "240",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "The Satapur Moonstone"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
         "tag": "245",
         "ind1": "1",
         "ind2": "0",
@@ -526,6 +537,21 @@
           {
             "code": "a",
             "value": "FIKKA"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "SID",
+        "subfields": [
+          {
+            "code": "c",
+            "value": "AAA1234567"
+          },
+          {
+            "code": "b",
+            "value": "FI-KV"
           }
         ],
         "ind1": " ",

@@ -344,6 +344,21 @@
         ],
         "ind1": " ",
         "ind2": " "
+      },
+      {
+        "tag": "SID",
+        "subfields": [
+          {
+            "code": "c",
+            "value": "ABC1234567"
+          },
+          {
+            "code": "b",
+            "value": "FI-KV"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
       }
     ]
   },

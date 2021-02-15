@@ -106,13 +106,24 @@
         "ind2": " "
       },
       {
+        "tag": "240",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "The IT Girl"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
         "tag": "245",
         "ind1": "1",
         "ind2": "0",
         "subfields": [
           {
             "code": "a",
-            "value": "It girl :"
+            "value": "It girl:"
           },
           {
             "code": "b",
@@ -487,6 +498,21 @@
           {
             "code": "a",
             "value": "FIKKA"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      },
+      {
+        "tag": "SID",
+        "subfields": [
+          {
+            "code": "c",
+            "value": "LMN123456789000"
+          },
+          {
+            "code": "b",
+            "value": "FI-KV"
           }
         ],
         "ind1": " ",
