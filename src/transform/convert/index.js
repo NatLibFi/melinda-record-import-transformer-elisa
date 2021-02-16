@@ -64,18 +64,16 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
   const marcRecord = new MarcRecord();
 
-  try {
-    const {isAudio, isText, textFormat} = getTypeInformation();
-    marcRecord.leader = generateLeader(isAudio, isText, textFormat); // eslint-disable-line functional/immutable-data
-    const generatedFields = await generateFields(isAudio, isText, textFormat);
-    generatedFields.forEach(f => marcRecord.insertField(f));
-  } catch (error) {
-    throw new NotSupportedError('Record typing failed. Skipping record'); // add 16.2.2021
-    // logger.log('error', 'Record typing failed. Skipping record'); // excluded 16.2.2021
-    return false;
+  const {isAudio, isText, textFormat} = getTypeInformation();
+  marcRecord.leader = generateLeader(isAudio, isText, textFormat); // eslint-disable-line functional/immutable-data
+  const generatedFields = await generateFields(isAudio, isText, textFormat);
+  generatedFields.forEach(f => marcRecord.insertField(f));
+
+  if (MarcRecord.isEqual(marcRecord, new MarcRecord())) {
+    throw new NotSupportedError('Record conversion failed. Skipping record');
   }
 
-  return marcRecord;
+  return marcRecord.toObject();
 
   function generateLeader(isAudio, isText) {
     const type = generateType();
@@ -194,7 +192,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         const subfields = generateSubfields();
 
-        function generateSubfields () {
+        function generateSubfields() {
           const fieldA = buildFieldA();
           const fieldX = buildFieldX();
           const fieldV = buildFieldV();
@@ -339,7 +337,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     function generate506() {
 
       if (dataSource === source4Value) {
-      // Field added if NotificationType = 03 with legal deposit
+        // Field added if NotificationType = 03 with legal deposit
 
         const notificType = getValue('NotificationType');
 
@@ -423,7 +421,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     function generate540() {
 
       if (dataSource === source4Value) {
-      // Field added if NotificationType = 03 with legal deposit
+        // Field added if NotificationType = 03 with legal deposit
 
         const notificType = getValue('NotificationType');
 
@@ -895,17 +893,17 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
       if (!recRef) { // eslint-disable-line functional/no-conditional-statement
         logger.log(`No RecordReferenceID found - SKIP`);
-        throw new Error('Unidentified: not audio, not text');
+        throw new Error('Unidentified: not audio, not text. Skipping record');
       }
 
       if (!pfd) { // eslint-disable-line functional/no-conditional-statement
         logger.log(`NOT ANY ProductFormDetail found - SKIP  ${recRef}`);
-        throw new Error('Unidentified: not audio, not text');
+        throw new Error('Unidentified: not audio, not text. Skipping record');
       }
 
       if (pfds && pfds.length > 1) { // eslint-disable-line functional/no-conditional-statement
         logger.log(`Many ProductFormDetails -SKIP  ${recRef}`);
-        throw new Error('Unidentified: not audio, not text');
+        throw new Error('Unidentified: not audio, not text. Skipping record');
       }
 
     }
@@ -928,12 +926,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
     }
 
-    try {
-      throw new Error('Unidentified: not audio, not text');
-    } catch (e) {
-      logger.log('debug', `Exception: TypeInfo.`);
-    }
-
+    throw new Error('Unidentified: not audio, not text. Skipping record');
   }
 
 

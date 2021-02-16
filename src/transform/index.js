@@ -98,17 +98,7 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
           try {
             const obj = await convertToObject(node);
             const convertRecord = await converterPromise;
-
-            /* excluded 16.2.2021
-            if (!convertRecord) { // this 10.2.2021
-              return;
-            }
-            */
-
             const record = await convertRecord(obj);
-
-            // Console.log('   record:\n ', JSON.stringify(record,null,1) );
-            // Console.log('   record:\n ', record);
 
             if (validate === true || fix === true) {
               const result = await validateRecord(record, fix);
