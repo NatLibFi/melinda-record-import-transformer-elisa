@@ -70,7 +70,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     const generatedFields = await generateFields(isAudio, isText, textFormat);
     generatedFields.forEach(f => marcRecord.insertField(f));
   } catch (error) {
-    logger.log('error', 'Record typing failed. Skipping record');
+    throw new NotSupportedError('Record typing failed. Skipping record'); // add 16.2.2021
+    // logger.log('error', 'Record typing failed. Skipping record'); // excluded 16.2.2021
     return false;
   }
 
