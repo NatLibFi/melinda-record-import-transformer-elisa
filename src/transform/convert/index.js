@@ -69,7 +69,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
   const generatedFields = await generateFields(isAudio, isText, textFormat);
   generatedFields.forEach(f => marcRecord.insertField(f));
 
-  if (MarcRecord.isEqual(marcRecord, new MarcRecord())) {
+  if (MarcRecord.isEqual(marcRecord, new MarcRecord())) { // eslint-disable-line functional/no-conditional-statement
     throw new NotSupportedError('Record conversion failed. Skipping record');
   }
 
