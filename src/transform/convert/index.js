@@ -47,14 +47,14 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
   const dataSource = getSource();
 
   if (dataSource === undefined) { // eslint-disable-line functional/no-conditional-statement
-    throw new Error('  No data source found.');
+    throw new NotSupportedError('No data source found.');
   }
 
   checkSupplierData();
 
   function checkSupplierData() {
     if ([dataSource] in sources === false) { // eslint-disable-line functional/no-conditional-statement
-      throw new Error('Exception: please check data source.');
+      throw new NotSupportedError('Exception: please check data source.');
     }
   }
 
@@ -893,17 +893,17 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
       if (!recRef) { // eslint-disable-line functional/no-conditional-statement
         logger.log(`No RecordReferenceID found - SKIP`);
-        throw new Error('Unidentified: not audio, not text. Skipping record');
+        throw new NotSupportedError('Unidentified: not audio, not text. No RecordReferenceID found');
       }
 
       if (!pfd) { // eslint-disable-line functional/no-conditional-statement
         logger.log(`NOT ANY ProductFormDetail found - SKIP  ${recRef}`);
-        throw new Error('Unidentified: not audio, not text. Skipping record');
+        throw new NotSupportedError('Unidentified: not audio, not text. NOT ANY ProductFormDetail found');
       }
 
       if (pfds && pfds.length > 1) { // eslint-disable-line functional/no-conditional-statement
         logger.log(`Many ProductFormDetails -SKIP  ${recRef}`);
-        throw new Error('Unidentified: not audio, not text. Skipping record');
+        throw new NotSupportedError('Unidentified: not audio, not text. Many ProductFormDetails');
       }
 
     }
@@ -926,7 +926,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
     }
 
-    throw new Error('Unidentified: not audio, not text. Skipping record');
+    throw new NotSupportedError('Unidentified: not audio, not text.');
   }
 
 
