@@ -98,6 +98,11 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
           try {
             const obj = await convertToObject(node);
             const convertRecord = await converterPromise;
+
+            if (!convertRecord) { // this 10.2.2021
+              return;
+            }
+
             const record = await convertRecord(obj);
 
             if (validate === true || fix === true) {

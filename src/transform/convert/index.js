@@ -42,7 +42,6 @@ import ISBN from 'isbn3';
 const logger = createLogger();
 
 export default ({source4Value, isLegalDeposit, sources, sender, moment = momentOrig}) => async ({Product: record}) => {
-
   const {getValue, getValues} = createValueInterface(record);
   const dataSource = getSource();
 
@@ -62,8 +61,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     throw new NotSupportedError('Unsupported product identifier type & value');
   }
 
-  const marcRecord = new MarcRecord();
-
+  const marcRecord = new MarcRecord(); // New empty record
+  
   const {isAudio, isText, textFormat} = getTypeInformation();
   marcRecord.leader = generateLeader(isAudio, isText, textFormat); // eslint-disable-line functional/immutable-data
   const generatedFields = await generateFields(isAudio, isText, textFormat);
@@ -73,7 +72,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     throw new NotSupportedError('Record conversion failed. Skipping record');
   }
 
-  return marcRecord.toObject();
+  return marcRecord.toObject(); // toObject removes validation filters
 
   function generateLeader(isAudio, isText) {
     const type = generateType();
@@ -119,7 +118,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
   }
 
   async function generateFields(isAudio, isText, textFormat) {
-
     const authors = getAuthors();
 
     return [
@@ -160,7 +158,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate490() {
-
       const gotTitleElementLevel = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleElementLevel');
       const gotCollectionType = getValue('DescriptiveDetail', 'Collection', 'CollectionType');
       const gotCollectionIDtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
@@ -189,7 +186,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
       function makeFields(element) {
-
         const subfields = generateSubfields();
 
         function generateSubfields() {
@@ -200,7 +196,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
           return aplusx.concat(fieldV);
         }
-
 
         if (subfields.length > 0 && subfields !== undefined) {
           return {tag: '490', ind1: '0', subfields};
@@ -281,9 +276,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate500() {
-
       if (dataSource === source4Value) {
-
         const notificType = getValue('NotificationType');
 
         if (notificType && (notificType === '01' || notificType === '02')) {
@@ -335,10 +328,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate506() {
-
       if (dataSource === source4Value) {
         // Field added if NotificationType = 03 with legal deposit
-
         const notificType = getValue('NotificationType');
 
         if (notificType && notificType === '03' && isLegalDeposit === true) {
@@ -380,9 +371,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate511() {
-
       if (getValue('DescriptiveDetail', 'Contributor', 'PersonName')) {
-
         const theData = getValues('DescriptiveDetail', 'Contributor').filter(filter);
         const dataMapped = theData.map(makeFields);
 
@@ -417,12 +406,9 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       return [];
     }
 
-
     function generate540() {
-
       if (dataSource === source4Value) {
         // Field added if NotificationType = 03 with legal deposit
-
         const notificType = getValue('NotificationType');
 
         if (notificType !== undefined && notificType === '03' && isLegalDeposit === true) {
@@ -462,11 +448,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       //<---  for alternate way
     }
 
-
     function generate594() {
-
       if (dataSource === source4Value) {
-
         const notificType = getValue('NotificationType');
 
         if (notificType === undefined || isLegalDeposit === undefined) {
@@ -500,7 +483,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         }
 
         if (notificType === '03' && isLegalDeposit === false) {
-
           return [
             {
               tag: '594',
@@ -526,9 +508,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       //<---  for alternate way
     }
 
-
     function generate600() {
-
       const getPersonNameInverted = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
 
       if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0 || dataSource !== source4Value) {
@@ -552,7 +532,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate653() {
-
       const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
 
       if (SubScheIde && dataSource === source4Value) {
@@ -563,7 +542,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       return [];
 
       function makeRows(element) {
-
         const value = getData(element);
 
         if (!value) {
@@ -589,7 +567,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return ['20', '64', '71', '72'].includes(SubjectSchemeIdentifier?.[0]);
       }
     }
-
 
     function generate655() {
       // Make always when there is form = AJ & formDetail = A103
@@ -617,7 +594,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
       return [];
     }
-
 
     function generate700() {
       const contribrole = getValue('DescriptiveDetail', 'Contributor', 'ContributorRole');
@@ -718,7 +694,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate884() {
-
       const tellSource = sourceNames();
 
       return [
@@ -823,11 +798,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generateAuthors() {
-
       return authors.map(({name, role}, index) => {
-
         if (index === 0 && role === 'kirjoittaja') {
-
           return {
             tag: '100', ind1: '1',
             subfields: [
@@ -849,7 +821,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
 
     function getAuthors() {
-
       return getValues('DescriptiveDetail', 'Contributor')
         .filter(filter)
         .map(normalize)
@@ -883,12 +854,10 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
   function getTypeInformation() {
-
     const pfd = getValue('DescriptiveDetail', 'ProductFormDetail');
     const pfds = getValues('DescriptiveDetail', 'ProductFormDetail'); // may have many values
 
     if (dataSource === source4Value) {
-
       const recRef = getValue('Product', 'RecordReference');
 
       if (!recRef) { // eslint-disable-line functional/no-conditional-statement
@@ -905,11 +874,9 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         logger.log('debug', `Many ProductFormDetails -SKIP  ${recRef}`);
         throw new NotSupportedError('Unidentified: not audio, not text. Many ProductFormDetails');
       }
-
     }
 
     if (getValue('DescriptiveDetail', 'ProductFormDetail') && getValue('DescriptiveDetail', 'ProductForm')) {
-
       const form = getValue('DescriptiveDetail', 'ProductForm');
       const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
 
@@ -993,11 +960,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     return sender.name;
   }
 
-
   function generateSID() {
-
     if (dataSource === source4Value) {
-
       const recRef = getValue('Product', 'RecordReference');
 
       if (recRef === undefined) {
@@ -1018,8 +982,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     return [];
   }
-
-
 };
 
 
