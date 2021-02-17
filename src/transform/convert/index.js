@@ -892,17 +892,17 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       const recRef = getValue('Product', 'RecordReference');
 
       if (!recRef) { // eslint-disable-line functional/no-conditional-statement
-        logger.log('debug',`No RecordReferenceID found - SKIP`);
+        logger.log('debug', `No RecordReferenceID found - SKIP`);
         throw new NotSupportedError('Unidentified: not audio, not text. No RecordReferenceID found');
       }
 
       if (!pfd) { // eslint-disable-line functional/no-conditional-statement
-        logger.log('debug',`NOT ANY ProductFormDetail found - SKIP  ${recRef}`);
+        logger.log('debug', `NOT ANY ProductFormDetail found - SKIP  ${recRef}`);
         throw new NotSupportedError('Unidentified: not audio, not text. NOT ANY ProductFormDetail found');
       }
 
       if (pfds && pfds.length > 1) { // eslint-disable-line functional/no-conditional-statement
-        logger.log('debug',`Many ProductFormDetails -SKIP  ${recRef}`);
+        logger.log('debug', `Many ProductFormDetails -SKIP  ${recRef}`);
         throw new NotSupportedError('Unidentified: not audio, not text. Many ProductFormDetails');
       }
 
