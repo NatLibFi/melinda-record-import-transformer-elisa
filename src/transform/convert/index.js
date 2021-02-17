@@ -62,7 +62,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
   }
 
   const marcRecord = new MarcRecord(); // New empty record
-  
+
   const {isAudio, isText, textFormat} = getTypeInformation();
   marcRecord.leader = generateLeader(isAudio, isText, textFormat); // eslint-disable-line functional/immutable-data
   const generatedFields = await generateFields(isAudio, isText, textFormat);
