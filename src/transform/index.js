@@ -105,9 +105,6 @@ export default options => (stream, {validate = true, fix = true} = {}) => {
 
             const record = await convertRecord(obj);
 
-            // Console.log('   record:\n ', JSON.stringify(record,null,1) );
-            // Console.log('   record:\n ', record);
-
             if (validate === true || fix === true) {
               const result = await validateRecord(record, fix);
 

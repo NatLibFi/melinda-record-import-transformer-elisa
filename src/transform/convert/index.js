@@ -42,19 +42,18 @@ import ISBN from 'isbn3';
 const logger = createLogger();
 
 export default ({source4Value, isLegalDeposit, sources, sender, moment = momentOrig}) => async ({Product: record}) => {
-
   const {getValue, getValues} = createValueInterface(record);
   const dataSource = getSource();
 
   if (dataSource === undefined) { // eslint-disable-line functional/no-conditional-statement
-    throw new Error('  No data source found.');
+    throw new NotSupportedError('No data source found.');
   }
 
   checkSupplierData();
 
   function checkSupplierData() {
     if ([dataSource] in sources === false) { // eslint-disable-line functional/no-conditional-statement
-      throw new Error('Exception: please check data source.');
+      throw new NotSupportedError('Exception: please check data source.');
     }
   }
 
@@ -62,19 +61,18 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     throw new NotSupportedError('Unsupported product identifier type & value');
   }
 
-  const marcRecord = new MarcRecord();
+  const marcRecord = new MarcRecord(); // New empty record
+  
+  const {isAudio, isText, textFormat} = getTypeInformation();
+  marcRecord.leader = generateLeader(isAudio, isText, textFormat); // eslint-disable-line functional/immutable-data
+  const generatedFields = await generateFields(isAudio, isText, textFormat);
+  generatedFields.forEach(f => marcRecord.insertField(f));
 
-  try {
-    const {isAudio, isText, textFormat} = getTypeInformation();
-    marcRecord.leader = generateLeader(isAudio, isText, textFormat); // eslint-disable-line functional/immutable-data
-    const generatedFields = await generateFields(isAudio, isText, textFormat);
-    generatedFields.forEach(f => marcRecord.insertField(f));
-  } catch (error) {
-    logger.log('error', 'Record typing failed. Skipping record');
-    return false;
+  if (MarcRecord.isEqual(marcRecord, new MarcRecord())) { // eslint-disable-line functional/no-conditional-statement
+    throw new NotSupportedError('Record conversion failed. Skipping record');
   }
 
-  return marcRecord;
+  return marcRecord.toObject(); // toObject removes validation filters
 
   function generateLeader(isAudio, isText) {
     const type = generateType();
@@ -120,7 +118,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
   }
 
   async function generateFields(isAudio, isText, textFormat) {
-
     const authors = getAuthors();
 
     return [
@@ -161,7 +158,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate490() {
-
       const gotTitleElementLevel = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'TitleElementLevel');
       const gotCollectionType = getValue('DescriptiveDetail', 'Collection', 'CollectionType');
       const gotCollectionIDtype = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'CollectionIdtype');
@@ -190,10 +186,9 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
       function makeFields(element) {
-
         const subfields = generateSubfields();
 
-        function generateSubfields () {
+        function generateSubfields() {
           const fieldA = buildFieldA();
           const fieldX = buildFieldX();
           const fieldV = buildFieldV();
@@ -201,7 +196,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
           return aplusx.concat(fieldV);
         }
-
 
         if (subfields.length > 0 && subfields !== undefined) {
           return {tag: '490', ind1: '0', subfields};
@@ -282,9 +276,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate500() {
-
       if (dataSource === source4Value) {
-
         const notificType = getValue('NotificationType');
 
         if (notificType && (notificType === '01' || notificType === '02')) {
@@ -336,10 +328,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate506() {
-
       if (dataSource === source4Value) {
-      // Field added if NotificationType = 03 with legal deposit
-
+        // Field added if NotificationType = 03 with legal deposit
         const notificType = getValue('NotificationType');
 
         if (notificType && notificType === '03' && isLegalDeposit === true) {
@@ -381,9 +371,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate511() {
-
       if (getValue('DescriptiveDetail', 'Contributor', 'PersonName')) {
-
         const theData = getValues('DescriptiveDetail', 'Contributor').filter(filter);
         const dataMapped = theData.map(makeFields);
 
@@ -418,12 +406,9 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       return [];
     }
 
-
     function generate540() {
-
       if (dataSource === source4Value) {
-      // Field added if NotificationType = 03 with legal deposit
-
+        // Field added if NotificationType = 03 with legal deposit
         const notificType = getValue('NotificationType');
 
         if (notificType !== undefined && notificType === '03' && isLegalDeposit === true) {
@@ -463,11 +448,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       //<---  for alternate way
     }
 
-
     function generate594() {
-
       if (dataSource === source4Value) {
-
         const notificType = getValue('NotificationType');
 
         if (notificType === undefined || isLegalDeposit === undefined) {
@@ -501,7 +483,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         }
 
         if (notificType === '03' && isLegalDeposit === false) {
-
           return [
             {
               tag: '594',
@@ -527,9 +508,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       //<---  for alternate way
     }
 
-
     function generate600() {
-
       const getPersonNameInverted = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
 
       if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0 || dataSource !== source4Value) {
@@ -553,7 +532,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate653() {
-
       const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
 
       if (SubScheIde && dataSource === source4Value) {
@@ -564,7 +542,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       return [];
 
       function makeRows(element) {
-
         const value = getData(element);
 
         if (!value) {
@@ -590,7 +567,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return ['20', '64', '71', '72'].includes(SubjectSchemeIdentifier?.[0]);
       }
     }
-
 
     function generate655() {
       // Make always when there is form = AJ & formDetail = A103
@@ -618,7 +594,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
       return [];
     }
-
 
     function generate700() {
       const contribrole = getValue('DescriptiveDetail', 'Contributor', 'ContributorRole');
@@ -719,7 +694,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generate884() {
-
       const tellSource = sourceNames();
 
       return [
@@ -824,11 +798,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generateAuthors() {
-
       return authors.map(({name, role}, index) => {
-
         if (index === 0 && role === 'kirjoittaja') {
-
           return {
             tag: '100', ind1: '1',
             subfields: [
@@ -850,7 +821,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
 
     function getAuthors() {
-
       return getValues('DescriptiveDetail', 'Contributor')
         .filter(filter)
         .map(normalize)
@@ -884,33 +854,29 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
   function getTypeInformation() {
-
     const pfd = getValue('DescriptiveDetail', 'ProductFormDetail');
     const pfds = getValues('DescriptiveDetail', 'ProductFormDetail'); // may have many values
 
     if (dataSource === source4Value) {
-
       const recRef = getValue('Product', 'RecordReference');
 
       if (!recRef) { // eslint-disable-line functional/no-conditional-statement
-        logger.log(`No RecordReferenceID found - SKIP`);
-        throw new Error('Unidentified: not audio, not text');
+        logger.log('debug', `No RecordReferenceID found - SKIP`);
+        throw new NotSupportedError('Unidentified: not audio, not text. No RecordReferenceID found');
       }
 
       if (!pfd) { // eslint-disable-line functional/no-conditional-statement
-        logger.log(`NOT ANY ProductFormDetail found - SKIP  ${recRef}`);
-        throw new Error('Unidentified: not audio, not text');
+        logger.log('debug', `NOT ANY ProductFormDetail found - SKIP  ${recRef}`);
+        throw new NotSupportedError('Unidentified: not audio, not text. NOT ANY ProductFormDetail found');
       }
 
       if (pfds && pfds.length > 1) { // eslint-disable-line functional/no-conditional-statement
-        logger.log(`Many ProductFormDetails -SKIP  ${recRef}`);
-        throw new Error('Unidentified: not audio, not text');
+        logger.log('debug', `Many ProductFormDetails -SKIP  ${recRef}`);
+        throw new NotSupportedError('Unidentified: not audio, not text. Many ProductFormDetails');
       }
-
     }
 
     if (getValue('DescriptiveDetail', 'ProductFormDetail') && getValue('DescriptiveDetail', 'ProductForm')) {
-
       const form = getValue('DescriptiveDetail', 'ProductForm');
       const formDetail = getValue('DescriptiveDetail', 'ProductFormDetail');
 
@@ -927,12 +893,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
     }
 
-    try {
-      throw new Error('Unidentified: not audio, not text');
-    } catch (e) {
-      logger.log('debug', `Exception: TypeInfo.`);
-    }
-
+    throw new NotSupportedError('Unidentified: not audio, not text. TEST');
   }
 
 
@@ -999,11 +960,8 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     return sender.name;
   }
 
-
   function generateSID() {
-
     if (dataSource === source4Value) {
-
       const recRef = getValue('Product', 'RecordReference');
 
       if (recRef === undefined) {
@@ -1024,8 +982,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
     return [];
   }
-
-
 };
 
 
