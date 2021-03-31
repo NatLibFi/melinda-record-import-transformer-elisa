@@ -334,7 +334,11 @@
           {
             "code": "a",
             "value": "isät"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -345,7 +349,11 @@
           {
             "code": "a",
             "value": "julkisuuden henkilöt"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -356,7 +364,11 @@
           {
             "code": "a",
             "value": "koulunkäynti"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -367,7 +379,11 @@
           {
             "code": "a",
             "value": "nörtit"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -378,7 +394,11 @@
           {
             "code": "a",
             "value": "suosio"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -389,7 +409,11 @@
           {
             "code": "a",
             "value": "tyttäret"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -400,7 +424,11 @@
           {
             "code": "a",
             "value": "tytöt"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -411,7 +439,11 @@
           {
             "code": "a",
             "value": "äitipuolet"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "

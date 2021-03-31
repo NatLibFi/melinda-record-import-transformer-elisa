@@ -261,7 +261,11 @@
           {
             "code": "a",
             "value": "dekkarit"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -272,7 +276,11 @@
           {
             "code": "a",
             "value": "rikoskirjallisuus"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
