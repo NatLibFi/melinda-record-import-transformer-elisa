@@ -343,7 +343,11 @@
           {
             "code": "a",
             "value": "Eläimet ja luonto"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -354,7 +358,11 @@
           {
             "code": "a",
             "value": "Romaanit"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -365,7 +373,11 @@
           {
             "code": "a",
             "value": "Jännitys"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -376,7 +388,11 @@
           {
             "code": "a",
             "value": "rikos"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -387,7 +403,11 @@
           {
             "code": "a",
             "value": "dekkari"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -398,7 +418,11 @@
           {
             "code": "a",
             "value": "Perhe"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -409,7 +433,11 @@
           {
             "code": "a",
             "value": "parisuhteet"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -420,7 +448,11 @@
           {
             "code": "a",
             "value": "ihmissuhteet"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "
@@ -431,7 +463,11 @@
           {
             "code": "a",
             "value": "Maantiede"
-          }
+          },
+          {
+            "code": "g",
+            "value": "ENNAKKOTIETO"
+            }
         ],
         "ind1": " ",
         "ind2": " "

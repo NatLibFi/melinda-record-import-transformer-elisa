@@ -143,6 +143,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       generate540(),
       generate594(),
       generate600(),
+      generate650(), // 650 added 26.3.2021
       generate653(),
       generate655(),
       generate700(),
@@ -531,6 +532,52 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
 
 
+    function generate650() { // add 26.3.2021 !
+      const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
+
+      if (SubScheIde && dataSource === source4Value) {
+        const values = getValues('DescriptiveDetail', 'Subject').filter(filter).map(makeRows);
+        return values.filter(value => value !== false);
+      }
+
+      return [];
+
+      function makeRows(element) {
+        const value = getData(element);
+
+        if (!value) {
+          return false;
+        }
+
+        return {
+          tag: '650',
+          ind1: ' ',
+          ind2: '7',
+
+          subfields: [
+            {code: 'a', value},
+            {code: '2', value: 'yso/fin'},
+            {code: 'g', value: 'ENNAKKOTIETO'}
+          ]
+
+        };
+
+        function getData() {
+          if (element.SubjectHeadingText === undefined) {
+            logger.log('debug', 'Exception: 650 - element.SubjectHeadingText');
+            return false;
+          }
+
+          return element.SubjectHeadingText[0];
+        }
+      }
+
+      function filter({SubjectSchemeIdentifier}) {
+        return ['71'].includes(SubjectSchemeIdentifier?.[0]);
+      }
+    }
+
+
     function generate653() {
       const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
 
@@ -550,7 +597,10 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         return {
           tag: '653',
-          subfields: [{code: 'a', value}]
+          subfields: [
+            {code: 'a', value},
+            {code: 'g', value: 'ENNAKKOTIETO'}
+          ]
         };
 
         function getData() {
@@ -564,7 +614,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       }
 
       function filter({SubjectSchemeIdentifier}) {
-        return ['20', '64', '71', '72'].includes(SubjectSchemeIdentifier?.[0]);
+        return ['20', '64', '72'].includes(SubjectSchemeIdentifier?.[0]); // '71', moved to 650! 26.3.2021
       }
     }
 
