@@ -532,7 +532,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
 
 
-    function generate650() { // add 26.3.2021 !
+    function generate650() {
       const SubScheIde = getValue('DescriptiveDetail', 'Subject', 'SubjectSchemeIdentifier');
 
       if (SubScheIde && dataSource === source4Value) {
@@ -754,7 +754,9 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             {code: 'g', value: moment().format('YYYYMMDD')},
             // {code: 'k', value: sources[dataSource]},
             {code: 'k', value: tellSource}, // 6.11.2020
-            {code: 'q', value: 'FI-NL'}
+            {code: 'q', value: 'FI-NL'},
+            {code: '5', value: 'MELINDA'},
+            {code: '5', value: 'FENNI'}
           ]
         }
       ];
