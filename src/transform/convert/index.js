@@ -143,7 +143,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       generate540(),
       generate594(),
       generate600(),
-      generate650(), // 650 added 26.3.2021
+      generate650(),
       generate653(),
       generate655(),
       generate700(),
@@ -166,7 +166,6 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       const gotIDValue = getValue('DescriptiveDetail', 'Collection', 'CollectionIdentifier', 'IDValue');
       const gotPartNumber = getValue('Product', 'DescriptiveDetail', 'Collection', 'TitleDetail', 'TitleElement', 'PartNumber');
 
-      // SKIP if none required fields exist
       if (!gotCollectionType && !gotTitleElementLevel && !gotCollectionIDtype) {
         return [];
       }
@@ -304,10 +303,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           return [
             {
               tag: '500',
-              subfields: [
-                {code: 'a', value: 'Koneellisesti tuotettu tietue.'}
-                //{code: '9', value: 'FENNI<KEEP>'} // 18.11.2020
-              ]
+              subfields: [{code: 'a', value: 'Koneellisesti tuotettu tietue.'}]
             }
           ];
 
@@ -432,7 +428,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         return [];
       }
 
-      //--->  for alternate way
+      //--->  alternate way
       return [
         {
           tag: '540',
@@ -446,7 +442,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
           ]
         }
       ];
-      //<---  for alternate way
+      //<---  alternate way
     }
 
     function generate594() {
@@ -459,7 +455,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
         if (notificType === '03' && isLegalDeposit === true) {
           // return []; //  Field is left out if NotificationType = 03 with legal deposit
-          //<- left out; was before 18.11.2020 !
+
           return [
             {
               tag: '594',
@@ -509,26 +505,57 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       //<---  for alternate way
     }
 
+
     function generate600() {
+
       const getPersonNameInverted = getValues('DescriptiveDetail', 'NameAsSubject', 'PersonNameInverted');
+      // Refers to PersonNameInverted of NameAsSubject!
 
       if (getPersonNameInverted === undefined || getPersonNameInverted.length === 0 || dataSource !== source4Value) {
         return [];
       }
 
-      return getPersonNameInverted.map(getNames);
+      const output = getValues('DescriptiveDetail', 'NameAsSubject').map(makeFields);
+      const filtered = output.filter((rw) => rw !== undefined);
+      return filtered;
 
-      function getNames(element) {
-        return {
-          tag: '600',
-          ind1: '1',
-          ind2: '4',
-          subfields: [
-            {code: 'a', value: element},
-            {code: '9', value: 'FENNI<KEEP>'}
-          ]
-        };
+      function makeFields(element) {
+
+        const subfields = generateSubfields();
+
+        if (subfields.length > 0 && subfields !== undefined) {
+          return {tag: '600',
+            ind1: '1',
+            ind2: '4',
+            subfields};
+        }
+
+        function generateSubfields() {
+          const writeBasics = basics();
+
+          if (element.NameIdentifier === undefined) {
+            return writeBasics;
+          }
+
+          if (element.NameIdentifier !== undefined) {
+            const writeIsni = isni();
+            return writeBasics.concat(writeIsni);
+          }
+
+          return [];
+
+          function basics () {
+            return [{code: 'a', value: getPersonNameInverted[0]}];
+          }
+
+          function isni () {
+            return [{code: '0', value: `https://isni.org/isni/${element.NameIdentifier[0].IDValue}`}];
+          }
+
+        }
+
       }
+
     }
 
 
@@ -646,8 +673,9 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
 
     function generate700() {
-      const contribrole = getValue('DescriptiveDetail', 'Contributor', 'ContributorRole');
-      const personNameInverted = getValue('DescriptiveDetail', 'Contributor', 'PersonNameInverted');
+
+      const contribrole = getValues('DescriptiveDetail', 'Contributor', 'ContributorRole');
+      const personNameInverted = getValues('DescriptiveDetail', 'Contributor', 'PersonNameInverted');
 
       if (contribrole && personNameInverted) {
         return getValues('DescriptiveDetail', 'Contributor').filter(filter).map(makeRows);
@@ -656,6 +684,21 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
       return [];
 
       function makeRows(element) {
+
+        if (element.NameIdentifier !== undefined) {
+          return {
+            tag: '700',
+            ind1: '1',
+            ind2: ' ',
+            subfields: [
+              {code: 'a', value: getName(element)},
+              {code: 'e', value: changeValues(element.ContributorRole[0])},
+              {code: '0', value: buildIsni()}
+            ]
+          };
+        }
+
+
         return {
           tag: '700',
           ind1: '1',
@@ -671,6 +714,10 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
             return element.PersonNameInverted[0];
           }
           return 'Unnamed person';
+        }
+
+        function buildIsni() {
+          return `https://isni.org/isni/${element.NameIdentifier[0].IDValue}`;
         }
 
       }
@@ -695,6 +742,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
         }
         return value;
       }
+
     }
 
 
@@ -783,7 +831,7 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
     }
 
     function generate974() {
-      // Get IDValue from      Product/RelatedMaterial/RelatedWork/WorkIdentifier/IDValue
+      // Get IDValue from   Product/RelatedMaterial/RelatedWork/WorkIdentifier/IDValue
       const getIdvalue = getValue('RelatedMaterial', 'RelatedWork', 'WorkIdentifier', 'IDValue');
       const gids = getValues('RelatedMaterial', 'RelatedWork', 'WorkIdentifier');
 
@@ -850,27 +898,141 @@ export default ({source4Value, isLegalDeposit, sources, sender, moment = momentO
 
 
     function generateAuthors() {
-      return authors.map(({name, role}, index) => {
-        if (index === 0 && role === 'kirjoittaja') {
-          return {
-            tag: '100', ind1: '1',
-            subfields: [
-              {code: 'a', value: name},
-              {code: 'e', value: role}
-            ]
-          };
+
+      const mappedRows = getValues('DescriptiveDetail', 'Contributor').filter(filter).map((row) => {
+
+        // check if toimittaja
+        if (row.PersonNameInverted) {
+          const pattern = /\s?\(toim\.\)|Toimittanut /u;
+          const [name] = row.PersonNameInverted;
+
+          if (pattern.test(name)) {
+            return {
+              tag: '700',
+              ind1: '1',
+              ind2: ' ',
+              subfields: [
+                {code: 'a', value: getName(row.PersonNameInverted[0])},
+                {code: 'e', value: 'toimittaja'}
+              ]
+            };
+          }
+
         }
 
-        return {
-          tag: '700', ind1: '1',
-          subfields: [
-            {code: 'a', value: name},
-            {code: 'e', value: `${role}.`}
-          ]
-        };
 
+        if (row.SequenceNumber) { // alternate A01-cases, i.e. second, third etc; both isni & non-isni ->
+          const [sequenceNumberValue] = row.SequenceNumber;
+          const [contributorRoleValue] = row.ContributorRole;
+
+          if (contributorRoleValue === 'A01' && sequenceNumberValue !== '1') { // --> second A01 goes to 700 field
+
+            if (row.NameIdentifier !== undefined) {
+              return {
+                tag: '700',
+                ind1: '1',
+                ind2: ' ',
+                subfields: [
+                  {code: 'a', value: getName(row.PersonNameInverted[0])},
+                  {code: 'e', value: changeRoleValues(row.ContributorRole[0])},
+                  {code: '0', value: `https://isni.org/isni/${row.NameIdentifier[0].IDValue}`}
+                ]
+              };
+            }
+
+            if (row.NameIdentifier === undefined) {
+              return {
+                tag: '700',
+                ind1: '1',
+                ind2: ' ',
+                subfields: [
+                  {code: 'a', value: getName(row.PersonNameInverted[0])},
+                  {code: 'e', value: changeRoleValues(row.ContributorRole[0])}
+                ]
+              };
+            }
+
+            return false;
+          }
+
+        }
+
+
+        if (row.NameIdentifier !== undefined) {
+          return {
+            tag: changeTagValues(row.ContributorRole[0]),
+            ind1: '1',
+            ind2: ' ',
+            subfields: [
+              {code: 'a', value: getName(row.PersonNameInverted[0])},
+              {code: 'e', value: changeRoleValues(row.ContributorRole[0])},
+              {code: '0', value: `https://isni.org/isni/${row.NameIdentifier[0].IDValue}`}
+            ]
+          };
+
+        }
+
+
+        if (row.NameIdentifier === undefined && row.PersonNameInverted !== undefined) {
+          return {
+            tag: changeTagValues(row.ContributorRole[0]),
+            ind1: '1',
+            ind2: ' ',
+            subfields: [
+              {code: 'a', value: getName(row.PersonNameInverted[0])},
+              {code: 'e', value: changeRoleValues(row.ContributorRole[0])}
+            ]
+          };
+
+        }
+
+        return false;
       });
+
+      return mappedRows.filter(value => value !== false);
+
+
+      function filter({ContributorRole}) {
+        const [firstContributorRole] = ContributorRole;
+        return ['A01', 'E07'].includes(firstContributorRole); // Only these roles here
+      }
+
+
+      function changeRoleValues(value) {
+        if (value === 'A01') {
+          return 'kirjoittaja.';
+        }
+        if (value === 'E07') {
+          return 'lukija.';
+        }
+        if (value === 'B01') {
+          return 'toimittaja.';
+        }
+        return value;
+      }
+
+      function getName(value) {
+        if (value !== undefined) {
+          return value;
+        }
+        return 'Unnamed person';
+      }
+
+      function changeTagValues(value) {
+        if (value === 'A01') {
+          return '100';
+        }
+        if (value === 'B01') {
+          return '100';
+        }
+        if (value === 'E07') {
+          return '700';
+        }
+        return value;
+      }
+
     }
+
 
     function getAuthors() {
       return getValues('DescriptiveDetail', 'Contributor')

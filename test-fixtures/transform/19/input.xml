@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
+	<Header>
+		<Sender>
+			<SenderName>barfoo</SenderName>
+			<ContactName>ContactPersonName</ContactName>
+			<EmailAddress>email@foobar.fi</EmailAddress>
+		</Sender>
+		<Addressee>
+			<AddresseeName>ADDRESSEE</AddresseeName>
+		</Addressee>
+		<SentDateTime>20200409</SentDateTime>
+		<MessageNote>foobar tuotesanoma</MessageNote>
+	</Header>
+	<Product>
+		<RecordReference>ABC1111111</RecordReference>
+		<NotificationType>03</NotificationType>
+		<ProductIdentifier>
+			<ProductIDType>03</ProductIDType>
+			<IDValue>9789522647306</IDValue>
+		</ProductIdentifier>
+		<ProductIdentifier>
+			<ProductIDType>15</ProductIDType>
+			<IDValue>9789522647306</IDValue>
+		</ProductIdentifier>
+		<ProductIdentifier>
+			<ProductIDType>01</ProductIDType>
+			<IDTypeName>ABC tuotenumero</IDTypeName>
+			<IDValue>2222222222222</IDValue>
+		</ProductIdentifier>
+		<DescriptiveDetail>
+			<ProductComposition>00</ProductComposition>
+			<ProductForm>AJ</ProductForm>
+			<ProductFormDetail>A103</ProductFormDetail>
+			<PrimaryContentType>01</PrimaryContentType>
+			<EpubTechnicalProtection>02</EpubTechnicalProtection>
+			<TitleDetail>
+				<TitleType>01</TitleType>
+				<TitleElement>
+					<TitleElementLevel>01</TitleElementLevel>
+					<TitleText>Yksi tappava syrjähyppy</TitleText>
+				</TitleElement>
+			</TitleDetail>	
+			<Contributor>
+				<SequenceNumber>2</SequenceNumber>
+				<ContributorRole>B06</ContributorRole>
+					<NameIdentifier>
+				      <NameIDType>16</NameIDType>
+				      <IDValue>0000000000000001</IDValue>
+				     </NameIdentifier>
+				<PersonName>Kirsti Kääntäjä</PersonName>
+				<PersonNameInverted>Kääntäjä, Kirsti</PersonNameInverted>
+				<NamesBeforeKey>Kirsti</NamesBeforeKey>
+				<KeyNames>Kääntäjä</KeyNames>
+			</Contributor>				
+	<Contributor>
+	     <SequenceNumber>4</SequenceNumber>
+	     <ContributorRole>A12</ContributorRole>
+	     <NameIdentifier>
+	      <NameIDType>16</NameIDType>
+	      <IDValue>0000000121021001</IDValue>
+	     </NameIdentifier>
+	     <PersonName>Kauko Kuvittaja</PersonName>
+	     <PersonNameInverted>Kuvittaja, Kauko</PersonNameInverted>
+	     <NamesBeforeKey>Kauko</NamesBeforeKey>
+	     <KeyNames>Kuvittaja</KeyNames>
+	 </Contributor>					
+			<Contributor>
+				<SequenceNumber>1</SequenceNumber>
+				<ContributorRole>A01</ContributorRole>
+					<NameIdentifier>
+				      <NameIDType>16</NameIDType>
+				      <IDValue>0000000000000003</IDValue>
+				     </NameIdentifier>
+				<PersonName>Denise Rudberg</PersonName>
+				<PersonNameInverted>Rudberg, Denise</PersonNameInverted>
+				<NamesBeforeKey>Denise</NamesBeforeKey>
+				<KeyNames>Rudberg</KeyNames>
+			</Contributor>					
+			<Contributor>
+				<SequenceNumber>3</SequenceNumber>
+				<ContributorRole>E07</ContributorRole>
+						<NameIdentifier>
+				      <NameIDType>16</NameIDType>
+				      <IDValue>0000000000000004</IDValue>
+				     </NameIdentifier>
+				<PersonName>Erja Manto</PersonName>
+				<PersonNameInverted>Manto, Erja</PersonNameInverted>
+				<NamesBeforeKey>Erja</NamesBeforeKey>
+				<KeyNames>Manto</KeyNames>
+			</Contributor>				
+			<Language>
+				<LanguageRole>01</LanguageRole>
+				<LanguageCode>fin</LanguageCode>
+			</Language>
+			<Subject>
+				<SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
+				<SubjectSchemeName>YKL</SubjectSchemeName>
+				<SubjectCode>84.2</SubjectCode>
+			</Subject>
+			<Subject>
+				<SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
+				<SubjectSchemeName>ABC tuoteryhmä</SubjectSchemeName>
+				<SubjectCode>01</SubjectCode>
+				<SubjectHeadingText>käännetty kaunokirjallisuus</SubjectHeadingText>
+			</Subject>
+			<Subject>
+				<MainSubject/>
+				<SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+				<SubjectCode>FF</SubjectCode>
+			</Subject>
+			<Subject>
+				<SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+				<SubjectCode>FYT</SubjectCode>
+			</Subject>
+		</DescriptiveDetail>
+		<CollateralDetail>
+			<TextContent>
+				<TextType>03</TextType>
+				<ContentAudience>00</ContentAudience>
+				<Text>Some text here.</Text>
+			</TextContent>
+			<SupportingResource>
+				<ResourceContentType>01</ResourceContentType>
+				<ContentAudience>00</ContentAudience>
+				<ResourceMode>03</ResourceMode>
+				<ResourceVersion>
+					<ResourceForm>02</ResourceForm>
+					<ResourceLink>https://abc.fi/onix/linkki</ResourceLink>
+					<ContentDate>
+						<ContentDateRole>17</ContentDateRole>
+						<Date>20190109</Date>
+					</ContentDate>
+				</ResourceVersion>
+			</SupportingResource>
+		</CollateralDetail>
+		<PublishingDetail>
+			<Publisher>
+				<PublishingRole>01</PublishingRole>
+				<PublisherIdentifier>
+					<PublisherIDType>01</PublisherIDType>
+					<IDTypeName>ABC kustantajanumero</IDTypeName>
+					<IDValue>88888</IDValue>
+				</PublisherIdentifier>
+				<PublisherName>Into Kustannus</PublisherName>
+			</Publisher>
+			<CountryOfPublication>FI</CountryOfPublication>
+			<PublishingStatus>07</PublishingStatus>
+			<PublishingStatusNote>Loppuunmyyty</PublishingStatusNote>
+			<PublishingDate>
+				<PublishingDateRole>01</PublishingDateRole>
+				<Date>2016</Date>
+			</PublishingDate>
+			<PublishingDate>
+				<PublishingDateRole>12</PublishingDateRole>
+				<Date>2016</Date>
+			</PublishingDate>
+		</PublishingDetail>
+		<RelatedMaterial>
+			<RelatedWork>
+				<WorkRelationCode>01</WorkRelationCode>
+				<WorkIdentifier>
+					<WorkIDType>01</WorkIDType>
+					<IDTypeName>ABC teostunniste</IDTypeName>
+					<IDValue>TT1212121</IDValue>
+				</WorkIdentifier>
+			</RelatedWork>
+		</RelatedMaterial>
+	</Product>
+</ONIXMessage>
