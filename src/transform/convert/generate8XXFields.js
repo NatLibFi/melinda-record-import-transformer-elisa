@@ -32,9 +32,7 @@ export function generate856(record, dataSource, source4Value, isLegalDeposit) {
     }
 
     return [];
-
   }
-
 
   //--->  for alternate way
   return [
@@ -50,7 +48,6 @@ export function generate856(record, dataSource, source4Value, isLegalDeposit) {
     }
   ];
   //<---  for alternate way
-
 
   // ---------->
   function getIsbn() {
@@ -92,18 +89,12 @@ export function generate856(record, dataSource, source4Value, isLegalDeposit) {
       const {isbn10, isbn10h, isbn13, isbn13h} = ISBN.parse(fromType02.IDValue[0]);
       return {isbn10, isbn10h, isbn13, isbn13h};
     }
-
     return false;
   }
-
   // <----------
-
 }
 
-
 export function generate884(sources, dataSource, moment) {
-
-  //const {getValue, getValues} = createValueInterface(record);
 
   const tellSource = sourceNames();
 
@@ -113,7 +104,6 @@ export function generate884(sources, dataSource, moment) {
       subfields: [
         {code: 'a', value: 'ONIX3 to MARC transformation'},
         {code: 'g', value: moment().format('YYYYMMDD')},
-        // {code: 'k', value: sources[dataSource]},
         {code: 'k', value: tellSource}, // 6.11.2020
         {code: 'q', value: 'FI-NL'},
         {code: '5', value: 'MELINDA'},

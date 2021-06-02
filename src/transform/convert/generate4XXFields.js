@@ -1,6 +1,5 @@
 import {createValueInterface} from './common';
 
-
 export function generate490(record) {
 
   const {getValue, getValues} = createValueInterface(record);
@@ -74,7 +73,6 @@ export function generate490(record) {
         return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]}`}]; // plain
       }
       // <---
-
 
       return [{code: 'a', value: `${element.TitleDetail[0].TitleElement[0].TitleText[0]} ;`}];
     }

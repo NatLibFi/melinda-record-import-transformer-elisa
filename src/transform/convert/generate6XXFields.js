@@ -57,7 +57,6 @@ export function generate600(record, dataSource, source4Value) {
 
 }
 
-
 export function generate650(record, dataSource, source4Value) {
 
   const {getValue, getValues} = createValueInterface(record);
@@ -106,7 +105,6 @@ export function generate650(record, dataSource, source4Value) {
   }
 }
 
-
 export function generate653(record, dataSource, source4Value) {
 
   const {getValue, getValues} = createValueInterface(record);
@@ -149,7 +147,6 @@ export function generate653(record, dataSource, source4Value) {
     return ['20', '64', '72'].includes(SubjectSchemeIdentifier?.[0]); // '71', moved to 650! 26.3.2021
   }
 }
-
 
 export function generate655(record, dataSource, source4Value) {
   // Make always when there is form = AJ & formDetail = A103

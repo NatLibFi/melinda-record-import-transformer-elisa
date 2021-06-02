@@ -1,6 +1,5 @@
 import {createValueInterface} from './common';
 
-
 export function generate500(record, dataSource, source4Value, isLegalDeposit) {
 
   const {getValue} = createValueInterface(record);
@@ -37,7 +36,6 @@ export function generate500(record, dataSource, source4Value, isLegalDeposit) {
       ];
 
     }
-
   }
 
   // All others --->
@@ -51,7 +49,6 @@ export function generate500(record, dataSource, source4Value, isLegalDeposit) {
   ];
   // All others <---
 }
-
 
 export function generate506(record, dataSource, source4Value, isLegalDeposit) {
 
@@ -80,7 +77,6 @@ export function generate506(record, dataSource, source4Value, isLegalDeposit) {
     return [];
   }
 
-
   //--->  for alternate way
   return [
     {
@@ -98,7 +94,6 @@ export function generate506(record, dataSource, source4Value, isLegalDeposit) {
   //<---  for alternate way
 }
 
-
 export function generate511(record) {
 
   const {getValue, getValues} = createValueInterface(record);
@@ -113,7 +108,6 @@ export function generate511(record) {
   function filter({ContributorRole}) {
     return ['E07'].includes(ContributorRole?.[0]);
   }
-
 
   function makeFields(element) {
 
@@ -133,11 +127,10 @@ export function generate511(record) {
         {code: '9', value: 'FENNI<KEEP>'}
       ]
     };
-  }
 
+  }
   return [];
 }
-
 
 export function generate540(record, dataSource, source4Value, isLegalDeposit) {
 
@@ -183,7 +176,6 @@ export function generate540(record, dataSource, source4Value, isLegalDeposit) {
   ];
   //<---  alternate way
 }
-
 
 export function generate594(record, dataSource, source4Value, isLegalDeposit) {
 

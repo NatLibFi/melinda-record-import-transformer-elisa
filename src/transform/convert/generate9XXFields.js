@@ -1,6 +1,5 @@
 import {createValueInterface} from './common';
 
-
 export function generate974(record, dataSource, source4Value) {
   // Get IDValue from   Product/RelatedMaterial/RelatedWork/WorkIdentifier/IDValue
 

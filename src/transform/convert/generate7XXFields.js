@@ -1,6 +1,5 @@
 import {createValueInterface} from './common';
 
-
 export function generate700(record) {
 
   const {getValues} = createValueInterface(record);
@@ -29,7 +28,6 @@ export function generate700(record) {
       };
     }
 
-
     return {
       tag: '700',
       ind1: '1',
@@ -52,7 +50,6 @@ export function generate700(record) {
     }
 
   }
-
 
   function filter({ContributorRole}) {
     return ['B06', 'A12', 'B01'].includes(ContributorRole?.[0]); // Excluded 'E07', generateAuthors makes it already
