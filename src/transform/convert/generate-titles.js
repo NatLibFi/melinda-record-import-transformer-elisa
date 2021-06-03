@@ -88,7 +88,7 @@ export default (record, authors) => {
       return {
         tag: '245', ind1, ind2: '0',
         subfields: [
-          {code: 'a', value: `${title}:`},
+          {code: 'a', value: `${title} :`},
           {code: 'b', value: subTitle}
         ]
       };
@@ -100,7 +100,7 @@ export default (record, authors) => {
       return {
         tag: '245', ind1, ind2: '0',
         subfields: [
-          {code: 'a', value: `${mainTitle}:`},
+          {code: 'a', value: `${mainTitle} :`},
           {code: 'b', value: remainder}
         ]
       };
