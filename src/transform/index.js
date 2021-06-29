@@ -33,9 +33,9 @@ import {Parser} from 'xml2js';
 import createConverter from './convert';
 import createValidator from './validate';
 import NotSupportedError from './../error';
+
 export default options => (stream, {validate = true, fix = true} = {}) => {
   MarcRecord.setValidationOptions({subfieldValues: false});
-
   const emitter = new class extends EventEmitter {}();
 
   start();

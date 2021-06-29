@@ -33,7 +33,6 @@ import generateTests from '@natlibfi/fixugen';
 import {parseBoolean} from '@natlibfi/melinda-commons';
 import createTransformer from '.';
 
-
 generateTests({callback,
   path: [__dirname, '..', '..', 'test-fixtures', 'transform'],
   recurse: false,
