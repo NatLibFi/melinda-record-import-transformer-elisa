@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ONIXMessage release="3.0" xmlns="http://ns.editeur.org/onix/3.0/reference">
+	<Header>
+		<Sender>
+			<SenderName>barfoo</SenderName>
+			<ContactName>ContactPersonName</ContactName>
+			<EmailAddress>email@foobar.fi</EmailAddress>
+		</Sender>
+		<Addressee>
+			<AddresseeName>ADDRESSEE</AddresseeName>
+		</Addressee>
+		<SentDateTime>20200409</SentDateTime>
+		<MessageNote>foobar tuotesanoma</MessageNote>
+	</Header>
+	<Product>
+		<RecordReference>ABC1234567</RecordReference>
+		<NotificationType>03</NotificationType>
+		<ProductIdentifier>
+			<ProductIDType>03</ProductIDType>
+			<IDValue>9789522647306</IDValue>
+		</ProductIdentifier>
+		<ProductIdentifier>
+			<ProductIDType>15</ProductIDType>
+			<IDValue>9789522647306</IDValue>
+		</ProductIdentifier>
+		<ProductIdentifier>
+			<ProductIDType>01</ProductIDType>
+			<IDTypeName>ABC tuotenumero</IDTypeName>
+			<IDValue>1234567890123</IDValue>
+		</ProductIdentifier>
+		<DescriptiveDetail>
+			<ProductComposition>00</ProductComposition>
+			<ProductForm>AJ</ProductForm>
+			<ProductFormDetail>A103</ProductFormDetail>
+			<PrimaryContentType>01</PrimaryContentType>
+			<EpubTechnicalProtection>02</EpubTechnicalProtection>
+			<TitleDetail>
+				<TitleType>01</TitleType>
+				<TitleElement>
+					<TitleElementLevel>01</TitleElementLevel>
+					<TitleText>Yksi tappava syrjähyppy</TitleText>
+				</TitleElement>
+			</TitleDetail>				
+			<Contributor>
+				<SequenceNumber>1</SequenceNumber>
+				<ContributorRole>A01</ContributorRole>
+				<PersonName>Denise Rudberg</PersonName>
+				<PersonNameInverted>Rudberg, Denise</PersonNameInverted>
+				<NamesBeforeKey>Denise</NamesBeforeKey>
+				<KeyNames>Rudberg</KeyNames>
+			</Contributor>				
+			<Contributor>
+				<SequenceNumber>2</SequenceNumber>
+				<ContributorRole>B06</ContributorRole>
+				<PersonName>Anu Koivunen</PersonName>
+				<PersonNameInverted>Koivunen, Anu</PersonNameInverted>
+				<NamesBeforeKey>Anu</NamesBeforeKey>
+				<KeyNames>Koivunen</KeyNames>
+			</Contributor>
+			<Contributor>
+				<SequenceNumber>3</SequenceNumber>
+				<ContributorRole>E07</ContributorRole>
+				<PersonName>Tauno Toimittaja</PersonName>
+				<PersonNameInverted>Toimittanut Tauno Toimittaja</PersonNameInverted>
+				<NamesBeforeKey>Tauno</NamesBeforeKey>
+				<KeyNames>Toimittaja</KeyNames>
+			</Contributor>				
+			<Language>
+				<LanguageRole>01</LanguageRole>
+				<LanguageCode>fin</LanguageCode>
+			</Language>
+			<Subject>
+				<SubjectSchemeIdentifier>66</SubjectSchemeIdentifier>
+				<SubjectSchemeName>YKL</SubjectSchemeName>
+				<SubjectCode>84.2</SubjectCode>
+			</Subject>
+			<Subject>
+				<SubjectSchemeIdentifier>24</SubjectSchemeIdentifier>
+				<SubjectSchemeName>ABC tuoteryhmä</SubjectSchemeName>
+				<SubjectCode>01</SubjectCode>
+				<SubjectHeadingText>käännetty kaunokirjallisuus</SubjectHeadingText>
+			</Subject>
+			<Subject>
+				<MainSubject/>
+				<SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+				<SubjectCode>FF</SubjectCode>
+			</Subject>
+			<Subject>
+				<SubjectSchemeIdentifier>93</SubjectSchemeIdentifier>
+				<SubjectCode>FYT</SubjectCode>
+			</Subject>
+		</DescriptiveDetail>
+		<CollateralDetail>
+			<TextContent>
+				<TextType>03</TextType>
+				<ContentAudience>00</ContentAudience>
+				<Text>Some text here now.</Text>
+			</TextContent>
+			<SupportingResource>
+				<ResourceContentType>01</ResourceContentType>
+				<ContentAudience>00</ContentAudience>
+				<ResourceMode>03</ResourceMode>
+				<ResourceVersion>
+					<ResourceForm>02</ResourceForm>
+					<ResourceLink>https://abc.fi/onix/media/linkki</ResourceLink>
+					<ContentDate>
+						<ContentDateRole>17</ContentDateRole>
+						<Date>20190109</Date>
+					</ContentDate>
+				</ResourceVersion>
+			</SupportingResource>
+		</CollateralDetail>
+		<PublishingDetail>
+			<Publisher>
+				<PublishingRole>01</PublishingRole>
+				<PublisherIdentifier>
+					<PublisherIDType>01</PublisherIDType>
+					<IDTypeName>ABC kustantajanumero</IDTypeName>
+					<IDValue>77777</IDValue>
+				</PublisherIdentifier>
+				<PublisherName>Into Kustannus</PublisherName>
+			</Publisher>
+			<CountryOfPublication>FI</CountryOfPublication>
+			<PublishingStatus>07</PublishingStatus>
+			<PublishingStatusNote>Loppuunmyyty</PublishingStatusNote>
+			<PublishingDate>
+				<PublishingDateRole>01</PublishingDateRole>
+				<Date>2016</Date>
+			</PublishingDate>
+			<PublishingDate>
+				<PublishingDateRole>12</PublishingDateRole>
+				<Date>2016</Date>
+			</PublishingDate>
+		</PublishingDetail>
+		<RelatedMaterial>
+			<RelatedWork>
+				<WorkRelationCode>01</WorkRelationCode>
+				<WorkIdentifier>
+					<WorkIDType>01</WorkIDType>
+					<IDTypeName>ABC teostunniste</IDTypeName>
+					<IDValue>AA1234567</IDValue>
+				</WorkIdentifier>
+			</RelatedWork>
+		</RelatedMaterial>
+	</Product>
+</ONIXMessage>
